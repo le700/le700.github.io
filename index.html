@@ -609,32 +609,6 @@
       50% { opacity: 0.5; }
     }
 
-    /* ===== SHARE ===== */
-    .share-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 56px;
-      height: 56px;
-      background: var(--accent);
-      border: none;
-      border-radius: 50%;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(0,113,227,0.3);
-      transition: all 0.3s var(--ease-spring);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .share-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 12px 32px rgba(0,113,227,0.4);
-    }
-
     /* ===== FOOTER ===== */
     footer {
       padding: 40px 24px;
@@ -998,9 +972,6 @@
     <p>岳金豪</p>
   </footer>
 
-  <!-- Share Button -->
-  <button class="share-btn" onclick="sharePage()" title="分享">↗</button>
-
   <script>
     // ===== ENTRANCE ANIMATION =====
     document.addEventListener('DOMContentLoaded', () => {
@@ -1095,31 +1066,6 @@
     }
 
     updateVisitorCount();
-
-    // ===== SHARE FUNCTION =====
-    async function sharePage() {
-      const shareData = {
-        title: '岳金豪 - Developer',
-        text: '嵌入式开发与机器人算法工程师',
-        url: window.location.href
-      };
-
-      if (navigator.share) {
-        try {
-          await navigator.share(shareData);
-        } catch (err) {
-          console.log('Share cancelled');
-        }
-      } else {
-        // Fallback: copy to clipboard
-        try {
-          await navigator.clipboard.writeText(window.location.href);
-          alert('链接已复制到剪贴板');
-        } catch (err) {
-          console.log('Copy failed');
-        }
-      }
-    }
 
     // ===== SMOOTH SCROLL =====
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
