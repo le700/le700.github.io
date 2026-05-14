@@ -643,8 +643,14 @@
 </head>
 <body>
 
-  <!-- Stats -->
-  <div class="stats-bar" id="visitorCount">加载中...</div>
+  <!-- Stats - 不蒜子 -->
+  <div class="stats-bar">
+    <span id="busuanzi_container_site_pv">总访问 <span id="busuanzi_value_site_pv">-</span></span>
+    <span style="color:var(--border)">|</span>
+    <span id="busuanzi_container_page_pv">本页 <span id="busuanzi_value_page_pv">-</span></span>
+  </div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
   <!-- Hero -->
   <section class="hero">
@@ -1043,29 +1049,6 @@
         ticking = true;
       }
     }, { passive: true });
-
-    // ===== VISITOR COUNT =====
-    async function updateVisitorCount() {
-      const countEl = document.getElementById('visitorCount');
-      
-      try {
-        // Use a simple counter with localStorage
-        let count = parseInt(localStorage.getItem('visitorCount') || '0');
-        
-        // Check if this is a new session
-        if (!sessionStorage.getItem('visited')) {
-          count++;
-          localStorage.setItem('visitorCount', count.toString());
-          sessionStorage.setItem('visited', 'true');
-        }
-        
-        countEl.textContent = `${count.toLocaleString()} 次访问`;
-      } catch (e) {
-        countEl.style.display = 'none';
-      }
-    }
-
-    updateVisitorCount();
 
     // ===== SMOOTH SCROLL =====
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
