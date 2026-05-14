@@ -220,19 +220,31 @@
       border-radius: 24px;
       border: 1px solid var(--border);
       overflow: hidden;
-      transition: all 0.5s var(--ease-spring);
+      transition: box-shadow 0.3s, border-color 0.3s;
       opacity: 0;
-      transform: translateY(40px) scale(0.98);
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      will-change: transform;
     }
 
     .project-card.visible {
       opacity: 1;
-      transform: translateY(0) scale(1);
     }
 
     .project-card:hover {
-      transform: translateY(-8px);
       box-shadow: 0 32px 64px -12px var(--shadow-hover);
+    }
+
+    .project-card .bounce-click {
+      animation: bounceClick 0.6s var(--ease-spring);
+    }
+
+    @keyframes bounceClick {
+      0% { transform: var(--tilt) scale(1); }
+      30% { transform: var(--tilt) scale(0.95); }
+      50% { transform: var(--tilt) scale(1.05); }
+      70% { transform: var(--tilt) scale(0.98); }
+      100% { transform: var(--tilt) scale(1); }
     }
 
     .project-header {
@@ -363,9 +375,15 @@
       color: var(--text);
       font-weight: 500;
       transition: all 0.3s var(--ease-spring);
-      cursor: default;
+      cursor: grab;
       opacity: 0;
       transform: scale(0.8);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .skill-tag-cloud:active {
+      cursor: grabbing;
     }
 
     .skill-tag-cloud.visible {
@@ -378,6 +396,31 @@
       color: white;
       border-color: var(--accent);
       transform: scale(1.1);
+    }
+
+    .skill-tag-cloud.dragging {
+      opacity: 0.5;
+      transform: scale(1.15) rotate(2deg);
+      box-shadow: 0 16px 32px var(--shadow-hover);
+      z-index: 100;
+    }
+
+    .skill-tag-cloud.drag-over {
+      transform: scale(1.15);
+      border-color: var(--accent);
+      border-style: dashed;
+    }
+
+    .skill-tag-cloud.bounce-click {
+      animation: tagBounce 0.5s var(--ease-spring);
+    }
+
+    @keyframes tagBounce {
+      0% { transform: scale(1); }
+      25% { transform: scale(0.85); }
+      50% { transform: scale(1.15); }
+      75% { transform: scale(0.95); }
+      100% { transform: scale(1); }
     }
 
     /* Tag sizes based on importance */
@@ -424,17 +467,29 @@
       border-radius: 16px;
       transition: all 0.4s var(--ease-spring);
       opacity: 0;
-      transform: translateX(-30px);
+      will-change: transform;
     }
 
     .award-item.visible {
       opacity: 1;
-      transform: translateX(0);
+      transform: translate(0, 0) rotate(0deg) scale(1);
     }
 
     .award-item:hover {
       transform: translateX(8px);
       border-color: var(--accent);
+    }
+
+    .award-item.bounce-click {
+      animation: awardBounce 0.5s var(--ease-spring);
+    }
+
+    @keyframes awardBounce {
+      0% { transform: translateX(8px) scale(1); }
+      30% { transform: translateX(8px) scale(0.95); }
+      50% { transform: translateX(8px) scale(1.06); }
+      70% { transform: translateX(8px) scale(0.98); }
+      100% { transform: translateX(8px) scale(1); }
     }
 
     .award-trophy {
@@ -1008,9 +1063,69 @@
       });
     }, observerOptions);
 
-    // Observe all animated elements
+    // ===== MULTI-DIRECTION FLY-IN =====
+    const flyDirections = [
+      { x: -60, y: 0, r: -5 },   // from left
+      { x: 60, y: 0, r: 5 },    // from right
+      { x: 0, y: -60, r: -3 },   // from top
+      { x: 0, y: 60, r: 3 },    // from bottom
+      { x: -40, y: -40, r: -4 }, // from top-left
+      { x: 40, y: 40, r: 4 },   // from bottom-right
+      { x: -50, y: 30, r: -6 },  // from bottom-left
+      { x: 50, y: -30, r: 6 },  // from top-right
+    ];
+
+    // Set initial transforms for fly-in
+    document.querySelectorAll('.project-card').forEach((card, i) => {
+      const dir = flyDirections[i % flyDirections.length];
+      card.style.transform = `translate(${dir.x}px, ${dir.y}px) rotate(${dir.r}deg) scale(0.95)`;
+      card.style.transition = 'none';
+      card.dataset.dirIndex = i % flyDirections.length;
+    });
+
+    document.querySelectorAll('.award-item').forEach((item, i) => {
+      const dir = flyDirections[(i + 3) % flyDirections.length];
+      item.style.transform = `translate(${dir.x}px, ${dir.y}px) rotate(${dir.r}deg) scale(0.95)`;
+      item.style.transition = 'none';
+    });
+
+    document.querySelectorAll('.skill-tag-cloud').forEach((tag, i) => {
+      const dir = flyDirections[(i + 5) % flyDirections.length];
+      tag.style.transform = `translate(${dir.x * 0.5}px, ${dir.y * 0.5}px) rotate(${dir.r}deg) scale(0.7)`;
+      tag.style.transition = 'none';
+    });
+
+    document.querySelectorAll('.volunteer-card, .contact-card').forEach((el, i) => {
+      const dir = flyDirections[(i + 2) % flyDirections.length];
+      el.style.transform = `translate(${dir.x}px, ${dir.y}px) rotate(${dir.r}deg) scale(0.95)`;
+      el.style.transition = 'none';
+    });
+
+    // Override observer to handle fly-in
+    const flyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const delay = parseFloat(el.style.transitionDelay) || 0;
+          
+          setTimeout(() => {
+            el.style.transition = 'all 0.8s var(--ease-out)';
+            el.classList.add('visible');
+            
+            // Clean up inline transform after animation
+            setTimeout(() => {
+              el.style.transform = '';
+              el.style.transition = '';
+            }, 900);
+          }, delay * 1000);
+          
+          flyObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
     document.querySelectorAll('.project-card, .skill-tag-cloud, .award-item, .volunteer-card, .contact-card').forEach(el => {
-      observer.observe(el);
+      flyObserver.observe(el);
     });
 
     // Stagger skill tags
@@ -1026,6 +1141,138 @@
     // Stagger projects
     document.querySelectorAll('.project-card').forEach((card, i) => {
       card.style.transitionDelay = `${i * 0.1}s`;
+    });
+
+    // ===== 3D TILT FOR PROJECT CARDS =====
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        if (!card.classList.contains('visible')) return;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((y - centerY) / centerY) * -20;
+        const rotateY = ((x - centerX) / centerX) * 20;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        card.style.setProperty('--tilt', `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
+        card.style.transition = 'transform 0.1s ease-out';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.setProperty('--tilt', '');
+        card.style.transition = 'transform 0.5s var(--ease-out)';
+      });
+    });
+
+    // ===== BOUNCE CLICK FEEDBACK =====
+    function addBounce(el, className) {
+      el.addEventListener('click', () => {
+        el.classList.remove(className);
+        void el.offsetWidth; // force reflow
+        el.classList.add(className);
+        setTimeout(() => el.classList.remove(className), 600);
+      });
+    }
+
+    document.querySelectorAll('.project-card').forEach(card => addBounce(card, 'bounce-click'));
+    document.querySelectorAll('.skill-tag-cloud').forEach(tag => addBounce(tag, 'bounce-click'));
+    document.querySelectorAll('.award-item').forEach(item => addBounce(item, 'bounce-click'));
+    document.querySelectorAll('.contact-card').forEach(card => addBounce(card, 'bounce-click'));
+    document.querySelectorAll('.volunteer-card').forEach(card => addBounce(card, 'bounce-click'));
+
+    // ===== DRAGGABLE SKILL TAGS =====
+    const skillsCloud = document.querySelector('.skills-cloud');
+    let draggedTag = null;
+
+    document.querySelectorAll('.skill-tag-cloud').forEach(tag => {
+      tag.setAttribute('draggable', 'true');
+
+      tag.addEventListener('dragstart', (e) => {
+        draggedTag = tag;
+        tag.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      tag.addEventListener('dragend', () => {
+        tag.classList.remove('dragging');
+        document.querySelectorAll('.skill-tag-cloud').forEach(t => t.classList.remove('drag-over'));
+        draggedTag = null;
+      });
+
+      tag.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (tag !== draggedTag) {
+          tag.classList.add('drag-over');
+        }
+      });
+
+      tag.addEventListener('dragleave', () => {
+        tag.classList.remove('drag-over');
+      });
+
+      tag.addEventListener('drop', (e) => {
+        e.preventDefault();
+        tag.classList.remove('drag-over');
+        
+        if (draggedTag && draggedTag !== tag) {
+          const allTags = Array.from(skillsCloud.children);
+          const fromIndex = allTags.indexOf(draggedTag);
+          const toIndex = allTags.indexOf(tag);
+          
+          if (fromIndex < toIndex) {
+            skillsCloud.insertBefore(draggedTag, tag.nextSibling);
+          } else {
+            skillsCloud.insertBefore(draggedTag, tag);
+          }
+        }
+      });
+
+      // Touch support for mobile
+      let touchStartY = 0;
+      let touchClone = null;
+
+      tag.addEventListener('touchstart', (e) => {
+        draggedTag = tag;
+        touchStartY = e.touches[0].clientY;
+        tag.classList.add('dragging');
+      }, { passive: true });
+
+      tag.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        
+        document.querySelectorAll('.skill-tag-cloud').forEach(t => t.classList.remove('drag-over'));
+        if (target && target.classList.contains('skill-tag-cloud') && target !== draggedTag) {
+          target.classList.add('drag-over');
+        }
+      }, { passive: false });
+
+      tag.addEventListener('touchend', (e) => {
+        tag.classList.remove('dragging');
+        const touch = e.changedTouches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        
+        if (target && target.classList.contains('skill-tag-cloud') && target !== draggedTag) {
+          const allTags = Array.from(skillsCloud.children);
+          const fromIndex = allTags.indexOf(draggedTag);
+          const toIndex = allTags.indexOf(target);
+          
+          if (fromIndex < toIndex) {
+            skillsCloud.insertBefore(draggedTag, target.nextSibling);
+          } else {
+            skillsCloud.insertBefore(draggedTag, target);
+          }
+        }
+        
+        document.querySelectorAll('.skill-tag-cloud').forEach(t => t.classList.remove('drag-over'));
+        draggedTag = null;
+      });
     });
 
     // ===== PARALLAX EFFECT =====
