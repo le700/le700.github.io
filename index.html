@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>岳金豪 | 嵌入式开发工程师</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0f;
+      --bg-card: rgba(20, 20, 30, 0.6);
+      --accent-cyan: #00d4ff;
+      --accent-purple: #8b5cf6;
+      --accent-orange: #f97316;
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans SC', 'Space Grotesk', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Particle Canvas */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    nav .nav-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: var(--accent-cyan);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent-cyan);
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Sections */
+    section {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .avatar-container {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-orange));
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.3); }
+      50% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.6); }
+    }
+
+    .avatar-container img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .subtitle {
+      font-size: 1.5rem;
+      color: var(--accent-cyan);
+      font-weight: 500;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+
+    .hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      padding: 0.875rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent-cyan);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+      40% { transform: translateX(-50%) translateY(-10px); }
+      60% { transform: translateX(-50%) translateY(-5px); }
+    }
+
+    /* Section Titles */
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-title::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 0.875rem;
+      color: var(--accent-cyan);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      margin: 1rem auto 0;
+      border-radius: 2px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* About Section */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .info-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .info-content h4 {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+
+    .info-content p {
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    /* Skills Section */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-category {
+      margin-bottom: 1.5rem;
+    }
+
+    .skill-category h4 {
+      font-size: 0.875rem;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .skill-tag {
+      padding: 0.5rem 1rem;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 20px;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      transition: all 0.3s;
+    }
+
+    .skill-tag:hover {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: var(--accent-cyan);
+      transform: scale(1.05);
+    }
+
+    /* Projects Section */
+    .projects-grid {
+      display: grid;
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-purple);
+      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+    }
+
+    .project-header {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .project-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-meta {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .project-link {
+      color: var(--accent-cyan);
+      font-size: 1.5rem;
+      transition: transform 0.3s;
+    }
+
+    .project-link:hover {
+      transform: scale(1.2);
+    }
+
+    .project-body {
+      padding: 1.5rem;
+    }
+
+    .project-desc {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .project-results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .result-tag {
+      padding: 0.375rem 0.75rem;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1));
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--accent-orange);
+    }
+
+    /* Contact Section */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .contact-item {
+      padding: 2rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      transition: all 0.3s;
+    }
+
+    .contact-item:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-cyan);
+    }
+
+    .contact-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-value {
+      font-size: 1rem;
+      color: var(--text-primary);
+      word-break: break-all;
+    }
+
+    .contact-value a {
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .contact-value a:hover {
+      color: var(--accent-cyan);
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero .subtitle {
+        font-size: 1.25rem;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav ul {
+        display: none;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    /* Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeIn 0.8s forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-content > * {
+      opacity: 0;
+      animation: fadeIn 0.8s forwards;
+    }
+
+    .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+    .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+  </style>
+</head>
+<body>
+  <!-- Particle Background -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-content">
+      <div class="logo">YUE JINHAO</div>
+      <ul>
+        <li><a href="#about">关于</a></li>
+        <li><a href="#skills">技能</a></li>
+        <li><a href="#projects">项目</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="container hero-content">
+      <div class="avatar-container">
+        <img src="assets/resume-photo.png" alt="岳金豪">
+      </div>
+      <h1>岳金豪</h1>
+      <div class="subtitle">嵌入式开发工程师 · 机器人算法工程师</div>
+      <p class="tagline">
+        北京石油化工学院 · 电气工程及其自动化专业<br>
+        热爱技术，专注于嵌入式开发与机器人算法，喜欢用代码创造价值
+      </p>
+      <div class="cta-buttons">
+        <a href="#contact" class="btn btn-primary">获取联系方式</a>
+        <a href="#projects" class="btn btn-secondary">查看项目</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title" data-label="01 / ABOUT">关于我</h2>
+      <div class="card fade-in">
+        <div class="about-grid">
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-content">
+              <h4>所在地</h4>
+              <p>河南许昌</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">🎓</div>
+            <div class="info-content">
+              <h4>教育背景</h4>
+              <p>北京石油化工学院 · 电气工程及其自动化</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">📊</div>
+            <div class="info-content">
+              <h4> GPA</h4>
+              <p>3.36 / 4.0</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">🏆</div>
+            <div class="info-content">
+              <h4>荣誉</h4>
+              <p>同心圆慈善基金会志愿服务 100+ 课时</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-title" data-label="02 / SKILLS">专业技能</h2>
+      <div class="skills-grid">
+        <div class="card fade-in">
+          <div class="skill-category">
+            <h4>🔧 编程语言</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">C/C++</span>
+              <span class="skill-tag">Python</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <h4>👁️ 计算机视觉</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">OpenCV</span>
+              <span class="skill-tag">YOLOv5</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <h4>⚡ 嵌入式开发</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">树莓派</span>
+              <span class="skill-tag">STM32</span>
+              <span class="skill-tag">51单片机</span>
+            </div>
+          </div>
+        </div>
+        <div class="card fade-in">
+          <div class="skill-category">
+            <h4>📐 设计工具</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">SolidWorks</span>
+              <span class="skill-tag">MATLAB</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <h4>🐳 开发环境</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Linux</span>
+              <span class="skill-tag">Docker</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <h4>🤖 机器人开发</h4>
+            <div class="skill-tags">
+              <span class="skill-tag">ROS</span>
+              <span class="skill-tag">机器人算法</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-title" data-label="03 / PROJECTS">项目经历</h2>
+      <div class="projects-grid">
+        <div class="project-card fade-in">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">🏆 ROS2 机器人导航系统</h3>
+              <div class="project-meta">项目负责人 · 省级一等奖</div>
+            </div>
+            <a href="#" class="project-link">🔗</a>
+          </div>
+          <div class="project-body">
+            <p class="project-desc">
+              作为项目负责人，制定整体技术架构，协调团队完成基于 ROS2 的移动机器人自主导航系统开发。实现 SLAM 建图、路径规划与动态避障等功能，系统运行稳定，导航精度达到厘米级。
+            </p>
+            <div class="project-results">
+              <span class="result-tag">省级一等奖</span>
+              <span class="result-tag">ROS2</span>
+              <span class="result-tag">SLAM</span>
+              <span class="result-tag">路径规划</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">📹 危化品仓储监控系统</h3>
+              <div class="project-meta">项目成员 · 市级科研项目</div>
+            </div>
+            <a href="#" class="project-link">🔗</a>
+          </div>
+          <div class="project-body">
+            <p class="project-desc">
+              市级科研项目，开发基于计算机视觉的危化品仓储监控系统。实现危化品识别与安全预警功能，采用 YOLOv5 算法进行目标检测，配合 STM32 实现硬件联动报警系统。
+            </p>
+            <div class="project-results">
+              <span class="result-tag">市级科研</span>
+              <span class="result-tag">YOLOv5</span>
+              <span class="result-tag">STM32</span>
+              <span class="result-tag">计算机视觉</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">🤖 仿生机器人控制</h3>
+              <div class="project-meta">项目成员</div>
+            </div>
+            <a href="#" class="project-link">🔗</a>
+          </div>
+          <div class="project-body">
+            <p class="project-desc">
+              参与仿生机器人控制系统开发，使用松延动力小顽童系列机器人。负责运动学建模与步态算法优化，实现复杂的动作序列与稳定的动态平衡控制。
+            </p>
+            <div class="project-results">
+              <span class="result-tag">机器人控制</span>
+              <span class="result-tag">运动学</span>
+              <span class="result-tag">步态算法</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title" data-label="04 / CONTACT">联系我</h2>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <div class="contact-label">电话</div>
+          <div class="contact-value">18637473189</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-label">邮箱</div>
+          <div class="contact-value">
+            <a href="mailto:3189311520@qq.com">3189311520@qq.com</a><br>
+            <a href="mailto:manbujingxindele@gmail.com">manbujingxindele@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💻</div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value">
+            <a href="https://github.com/le700" target="_blank">github.com/le700</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Made with ❤️ by 岳金豪 · 2024</p>
+  </footer>
+
+  <!-- Particle Animation Script -->
+  <script>
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+    const particleCount = 80;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.color = Math.random() > 0.5 ? '0, 212, 255' : '139, 92, 246';
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      resize();
+      particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function connectParticles() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance / 150)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      connectParticles();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    init();
+    animate();
+  </script>
+</body>
+</html>
