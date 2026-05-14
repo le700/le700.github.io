@@ -724,6 +724,32 @@
       margin-bottom: 8px;
     }
 
+    .volunteer-link {
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .volunteer-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--link);
+      transition: width 0.3s var(--ease-out);
+    }
+
+    .volunteer-link:hover {
+      color: var(--link);
+    }
+
+    .volunteer-link:hover::after {
+      width: 100%;
+    }
+
     .volunteer-content p {
       font-size: 15px;
       color: var(--text-secondary);
@@ -1221,8 +1247,8 @@
     <div class="volunteer-card">
       <div class="volunteer-icon">❤️</div>
       <div class="volunteer-content">
-        <h3>同心圆慈善基金会</h3>
-        <p>线上支教与线下教学 10+ 课时 · 志愿服务 70+ 小时</p>
+        <h3><a href="http://www.oneheartsphere.com/" target="_blank" class="volunteer-link">同心圆慈善基金会</a></h3>
+        <p>参与同心圆慈善基金会的线上支教与线下教学 10+ 课时，累积志愿服务 70+ 小时</p>
       </div>
     </div>
   </section>
