@@ -4,23 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>岳金豪</title>
+  <meta name="description" content="岳金豪 - 嵌入式开发与机器人算法">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --white: #ffffff;
-      --bg: #fbfbfd;
-      --bg-alt: #f5f5f7;
+      /* Light Theme */
+      --bg: #ffffff;
+      --bg-secondary: #f5f5f7;
+      --bg-tertiary: #fafafa;
       --text: #1d1d1f;
       --text-secondary: #6e6e73;
       --text-tertiary: #86868b;
-      --link: #0066cc;
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
       --border: rgba(0,0,0,0.08);
-      --card-bg: #ffffff;
+      --card: #ffffff;
+      --shadow: rgba(0,0,0,0.04);
+      --shadow-hover: rgba(0,0,0,0.08);
+      --code-bg: #f4f4f5;
+      --success: #34c759;
+      --warning: #ff9500;
+      
+      /* Easing */
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --bg-secondary: #141414;
+        --bg-tertiary: #0d0d0d;
+        --text: #f5f5f7;
+        --text-secondary: #86868b;
+        --text-tertiary: #6e6e73;
+        --accent: #2997ff;
+        --accent-hover: #0077ed;
+        --border: rgba(255,255,255,0.08);
+        --card: rgba(255,255,255,0.05);
+        --shadow: rgba(0,0,0,0.3);
+        --shadow-hover: rgba(0,0,0,0.5);
+        --code-bg: rgba(255,255,255,0.08);
+      }
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,67 +59,18 @@
     }
 
     body {
-      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
-      background: var(--white);
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
       color: var(--text);
       line-height: 1.5;
       font-weight: 400;
       letter-spacing: -0.01em;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
     }
 
-    /* ===== NAVIGATION ===== */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 48px;
-      z-index: 9999;
-      background: rgba(251,251,253,0.72);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 0.5px solid var(--border);
-      transition: background 0.4s;
-    }
-
-    .nav.scrolled {
-      background: rgba(251,251,253,0.92);
-    }
-
-    .nav-inner {
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-logo {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-links { display: flex; gap: 32px; }
-
-    .nav-links a {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover { color: var(--text); }
-
-    /* ===== HERO ===== */
+    /* ===== HERO - EXTREME MINIMAL ===== */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -99,420 +78,203 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 120px 24px 80px;
+      padding: 40px 24px;
       position: relative;
-      background: var(--white);
+      background: var(--bg);
+      overflow: hidden;
     }
 
-    .hero-content { max-width: 680px; }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,113,227,0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,113,227,0.04), transparent);
+      pointer-events: none;
+    }
 
-    .hero-avatar {
-      width: 128px;
-      height: 128px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 32px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-name {
+      font-size: clamp(64px, 15vw, 120px);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+      margin-bottom: 24px;
       opacity: 0;
-      transform: scale(0.92);
-      animation: heroFadeIn 1s var(--ease-out) 0.1s forwards;
+      transform: translateY(40px);
     }
 
-    @keyframes heroFadeIn {
-      to { opacity: 1; transform: scale(1); }
+    .hero-name.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 1.2s var(--ease-out);
     }
 
-    .hero h1 {
-      font-size: clamp(48px, 10vw, 80px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      margin-bottom: 16px;
-      opacity: 0;
-      transform: translateY(24px);
-      animation: heroSlideIn 1s var(--ease-out) 0.25s forwards;
-    }
-
-    @keyframes heroSlideIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero-subtitle {
-      font-size: clamp(19px, 3.5vw, 24px);
-      color: var(--text-secondary);
+    .hero-slogan {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(14px, 2.5vw, 18px);
       font-weight: 400;
-      line-height: 1.4;
-      margin-bottom: 32px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       opacity: 0;
-      transform: translateY(20px);
-      animation: heroSlideIn 1s var(--ease-out) 0.4s forwards;
     }
 
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: heroSlideIn 1s var(--ease-out) 0.55s forwards;
+    .hero-slogan.revealed {
+      opacity: 1;
+      transition: opacity 1s var(--ease-out) 0.6s;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 12px 28px;
-      border-radius: 980px;
-      font-size: 15px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.3s var(--ease-apple);
-      cursor: pointer;
-      border: none;
+    .hero-slogan::before {
+      content: '<';
+      margin-right: 8px;
+      color: var(--text-tertiary);
     }
 
-    .btn-primary {
-      background: var(--link);
-      color: var(--white);
+    .hero-slogan::after {
+      content: '/>';
+      margin-left: 8px;
+      color: var(--text-tertiary);
     }
 
-    .btn-primary:hover { background: #004999; }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--link);
-      border: 1px solid var(--link);
-    }
-
-    .btn-secondary:hover {
-      background: var(--link);
-      color: var(--white);
-    }
-
-    .scroll-hint {
+    .scroll-indicator {
       position: absolute;
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
       opacity: 0;
-      animation: heroFadeIn 1s ease 1.2s forwards;
     }
 
-    .scroll-hint svg {
-      width: 20px;
-      height: 20px;
+    .scroll-indicator.revealed {
+      opacity: 1;
+      transition: opacity 1s var(--ease-out) 1.2s;
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
       color: var(--text-tertiary);
-      animation: scrollBounce 2s ease-in-out infinite;
+      animation: bounce 2s ease-in-out infinite;
     }
 
-    @keyframes scrollBounce {
-      0%, 100% { transform: translateY(0); opacity: 0.4; }
-      50% { transform: translateY(6px); opacity: 1; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
     }
 
-    /* ===== FULL-SCREEN SECTIONS ===== */
-    .fullscreen-section {
+    /* ===== SECTIONS ===== */
+    .section {
       min-height: 100vh;
+      padding: 100px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 120px 24px;
       position: relative;
     }
 
-    .fullscreen-section:nth-child(even) {
-      background: var(--bg-alt);
+    .section:nth-child(odd) {
+      background: var(--bg-secondary);
     }
 
     .section-inner {
-      max-width: 980px;
+      max-width: 1000px;
       width: 100%;
     }
 
-    /* Section Header */
-    .section-eyebrow {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--link);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
-    }
-
-    .section-headline {
-      font-size: clamp(36px, 6vw, 56px);
-      font-weight: 700;
-      line-height: 1.08;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
-
-    .section-desc {
-      font-size: 19px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      max-width: 600px;
-    }
-
     .section-header {
+      margin-bottom: 60px;
       text-align: center;
-      margin-bottom: 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
-    /* ===== ABOUT ===== */
-    .about-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      margin-bottom: 48px;
-    }
-
-    .stat-card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 32px 20px;
-      text-align: center;
-      border: 0.5px solid var(--border);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      transition: all 0.4s var(--ease-spring);
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .stat-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .stat-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-
-    .stat-value {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-
-    .edu-card {
-      background: var(--card-bg);
-      border-radius: 24px;
-      padding: 48px;
-      border: 0.5px solid var(--border);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 32px;
-      align-items: start;
-      transition: all 0.5s var(--ease-spring);
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .edu-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .edu-icon {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #007aff, #5856d6);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      box-shadow: 0 8px 24px rgba(0,122,255,0.2);
-    }
-
-    .edu-info h3 {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      letter-spacing: -0.02em;
-    }
-
-    .edu-info .major {
-      font-size: 17px;
-      color: var(--text-secondary);
-      margin-bottom: 4px;
-    }
-
-    .edu-info .period {
-      font-size: 14px;
-      color: var(--text-tertiary);
-      margin-bottom: 20px;
-    }
-
-    .course-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .course-tag {
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
-      padding: 6px 14px;
-      background: var(--bg-alt);
-      border-radius: 100px;
-      color: var(--text-secondary);
       font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .course-tag:hover {
-      background: #e8e8ed;
-      color: var(--text);
-    }
-
-    /* ===== SKILLS ===== */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .skill-card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 32px;
-      border: 0.5px solid var(--border);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
-      transition: all 0.4s var(--ease-spring);
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .skill-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .skill-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.08);
-    }
-
-    .skill-card-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-tertiary);
+      color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.15em;
       margin-bottom: 16px;
     }
 
-    .skill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    .section-title {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
     }
 
-    .skill-tag {
-      font-size: 15px;
-      padding: 8px 16px;
-      background: var(--bg-alt);
-      border-radius: 100px;
-      color: var(--text);
-      font-weight: 500;
-      transition: all 0.3s var(--ease-spring);
-    }
-
-    .skill-tag:hover {
-      background: var(--text);
-      color: var(--white);
-      transform: scale(1.05);
-    }
-
-    /* ===== PROJECTS ===== */
+    /* ===== PROJECTS - IMPORTANCE ORDERED ===== */
     .projects-list {
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      gap: 32px;
     }
 
     .project-card {
-      background: var(--card-bg);
-      border-radius: 28px;
+      background: var(--card);
+      border-radius: 24px;
+      border: 1px solid var(--border);
       overflow: hidden;
-      border: 0.5px solid var(--border);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-      transition: all 0.6s var(--ease-spring);
+      transition: all 0.5s var(--ease-spring);
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(40px) scale(0.98);
     }
 
     .project-card.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
 
     .project-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.1);
+      box-shadow: 0 32px 64px -12px var(--shadow-hover);
     }
 
-    .project-top {
-      padding: 36px 40px 28px;
-      border-bottom: 0.5px solid var(--border);
+    .project-header {
+      padding: 32px 36px 24px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, transparent, rgba(0,113,227,0.03));
     }
 
-    .project-meta-row {
-      display: flex;
+    .project-rank {
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 12px;
     }
 
-    .project-badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 5px 12px;
-      background: rgba(0,122,255,0.08);
-      color: var(--link);
-      border-radius: 100px;
-    }
-
-    .project-date {
-      font-size: 13px;
-      color: var(--text-tertiary);
+    .project-rank::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
     }
 
     .project-title {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       letter-spacing: -0.02em;
-      margin-bottom: 6px;
-      color: var(--text);
+      margin-bottom: 8px;
     }
 
-    .project-role {
-      font-size: 15px;
+    .project-meta {
+      font-size: 14px;
       color: var(--text-secondary);
     }
 
-    .project-bottom {
-      padding: 28px 40px 36px;
+    .project-body {
+      padding: 28px 36px 36px;
     }
 
     .project-desc {
@@ -520,6 +282,28 @@
       color: var(--text-secondary);
       line-height: 1.7;
       margin-bottom: 24px;
+    }
+
+    .project-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .highlight {
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .highlight::before {
+      content: '→';
+      color: var(--accent);
+      font-weight: 600;
+      flex-shrink: 0;
     }
 
     .project-tech {
@@ -530,33 +314,13 @@
     }
 
     .tech-tag {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      font-weight: 500;
-      padding: 5px 12px;
-      background: var(--bg-alt);
-      border-radius: 100px;
+      padding: 6px 12px;
+      background: var(--code-bg);
+      border-radius: 6px;
       color: var(--text-secondary);
-    }
-
-    .project-highlights {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .highlight-item {
-      display: flex;
-      gap: 10px;
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
-
-    .highlight-dot {
-      color: var(--link);
-      font-weight: 700;
-      flex-shrink: 0;
+      border: 1px solid var(--border);
     }
 
     .project-awards {
@@ -565,71 +329,102 @@
       gap: 8px;
     }
 
-    .award-badge {
+    .project-award {
       font-size: 12px;
       font-weight: 600;
-      padding: 7px 14px;
-      background: linear-gradient(135deg, rgba(255,149,0,0.1), rgba(255,204,0,0.06));
+      padding: 6px 14px;
+      background: linear-gradient(135deg, rgba(255,149,0,0.12), rgba(255,204,0,0.08));
       border-radius: 100px;
       color: #c93400;
     }
 
-    .project-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 16px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--link);
-      text-decoration: none;
-      transition: opacity 0.3s;
+    @media (prefers-color-scheme: dark) {
+      .project-award {
+        color: #ffb800;
+      }
     }
 
-    .project-link:hover { opacity: 0.7; }
+    /* ===== SKILLS - TAG CLOUD ===== */
+    .skills-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-    /* ===== AWARDS ===== */
+    .skill-tag-cloud {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 10px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text);
+      font-weight: 500;
+      transition: all 0.3s var(--ease-spring);
+      cursor: default;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .skill-tag-cloud.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .skill-tag-cloud:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    /* Tag sizes based on importance */
+    .skill-tag-cloud.xl { font-size: 22px; padding: 14px 28px; }
+    .skill-tag-cloud.lg { font-size: 18px; padding: 12px 24px; }
+    .skill-tag-cloud.md { font-size: 15px; padding: 10px 20px; }
+    .skill-tag-cloud.sm { font-size: 13px; padding: 8px 16px; }
+
+    /* ===== AWARDS - TROPHY LIST ===== */
     .awards-hero {
       text-align: center;
-      margin-bottom: 64px;
+      margin-bottom: 48px;
     }
 
-    .awards-big-number {
-      font-size: clamp(80px, 15vw, 120px);
+    .awards-count {
+      font-size: clamp(80px, 15vw, 140px);
       font-weight: 800;
       letter-spacing: -0.05em;
-      background: linear-gradient(135deg, #ff6723, #ff9500, #ffcc00);
+      background: linear-gradient(135deg, #ff9500, #ffcc00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
       line-height: 1;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
-    .awards-big-label {
-      font-size: 21px;
+    .awards-label {
+      font-size: 18px;
       color: var(--text-secondary);
-      font-weight: 400;
     }
 
-    .awards-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+    .awards-list {
+      display: flex;
+      flex-direction: column;
       gap: 12px;
     }
 
     .award-item {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 20px 24px;
       display: flex;
       align-items: center;
-      gap: 14px;
-      border: 0.5px solid var(--border);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+      gap: 16px;
+      padding: 20px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
       transition: all 0.4s var(--ease-spring);
       opacity: 0;
-      transform: translateX(-20px);
+      transform: translateX(-30px);
     }
 
     .award-item.visible {
@@ -638,33 +433,41 @@
     }
 
     .award-item:hover {
-      transform: translateX(4px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      transform: translateX(8px);
+      border-color: var(--accent);
     }
 
-    .award-icon { font-size: 22px; flex-shrink: 0; }
-
-    .award-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.5;
+    .award-trophy {
+      font-size: 28px;
+      flex-shrink: 0;
     }
 
-    .award-text strong {
-      color: var(--text);
+    .award-content {
+      flex: 1;
+    }
+
+    .award-title {
+      font-size: 15px;
       font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .award-detail {
+      font-size: 13px;
+      color: var(--text-secondary);
     }
 
     /* ===== VOLUNTEER ===== */
     .volunteer-card {
-      background: var(--card-bg);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 48px;
-      border: 0.5px solid var(--border);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+      padding: 40px;
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
+      max-width: 700px;
+      margin: 0 auto;
       transition: all 0.5s var(--ease-spring);
       opacity: 0;
       transform: translateY(30px);
@@ -676,58 +479,58 @@
     }
 
     .volunteer-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px -12px var(--shadow-hover);
     }
 
     .volunteer-icon {
-      width: 72px;
-      height: 72px;
-      background: linear-gradient(135deg, #34c759, #30d158);
-      border-radius: 20px;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--success), #30d158);
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      font-size: 28px;
       flex-shrink: 0;
-      box-shadow: 0 8px 24px rgba(52,199,89,0.2);
     }
 
-    .volunteer-content h3 {
-      font-size: 22px;
+    .volunteer-title {
+      font-size: 20px;
       font-weight: 600;
-      margin-bottom: 8px;
-      letter-spacing: -0.01em;
+      margin-bottom: 6px;
     }
 
-    .volunteer-link {
+    .volunteer-title a {
       color: var(--text);
       text-decoration: none;
       transition: color 0.3s;
     }
 
-    .volunteer-link:hover { color: var(--link); }
+    .volunteer-title a:hover {
+      color: var(--accent);
+    }
 
-    .volunteer-content p {
-      font-size: 15px;
+    .volunteer-desc {
+      font-size: 14px;
       color: var(--text-secondary);
-      line-height: 1.6;
     }
 
     /* ===== CONTACT ===== */
     .contact-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .contact-card {
-      background: var(--card-bg);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 36px 28px;
+      padding: 32px 24px;
       text-align: center;
-      border: 0.5px solid var(--border);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
       transition: all 0.4s var(--ease-spring);
       opacity: 0;
       transform: translateY(30px);
@@ -740,7 +543,12 @@
 
     .contact-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+      border-color: var(--accent);
+    }
+
+    .contact-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
     }
 
     .contact-label {
@@ -749,368 +557,274 @@
       color: var(--text-tertiary);
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .contact-value {
       font-size: 15px;
       color: var(--text);
-      line-height: 1.6;
+      font-weight: 500;
     }
 
     .contact-value a {
-      color: var(--link);
+      color: var(--accent);
       text-decoration: none;
       transition: opacity 0.3s;
     }
 
-    .contact-value a:hover { opacity: 0.7; }
+    .contact-value a:hover {
+      opacity: 0.7;
+    }
+
+    /* ===== STATS ===== */
+    .stats-bar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .stats-bar::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ===== SHARE ===== */
+    .share-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: var(--accent);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,113,227,0.3);
+      transition: all 0.3s var(--ease-spring);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .share-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 32px rgba(0,113,227,0.4);
+    }
 
     /* ===== FOOTER ===== */
     footer {
-      padding: 48px 24px;
+      padding: 40px 24px;
       text-align: center;
-      border-top: 0.5px solid var(--border);
-      background: var(--bg-alt);
+      border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
     }
 
     footer p {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-tertiary);
+    }
+
+    /* ===== PARALLAX ===== */
+    .parallax-layer {
+      will-change: transform;
     }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .nav-links { display: none; }
-
-      .about-stats { grid-template-columns: repeat(2, 1fr); }
-
-      .edu-card {
-        grid-template-columns: 1fr;
-        text-align: center;
-        padding: 32px;
-      }
-
-      .edu-icon { margin: 0 auto; }
-
-      .skills-grid { grid-template-columns: 1fr; }
-
-      .awards-grid { grid-template-columns: 1fr; }
-
+      .section { padding: 80px 20px; min-height: auto; }
+      .project-header { padding: 24px; }
+      .project-body { padding: 20px 24px 28px; }
+      .project-title { font-size: 20px; }
       .contact-grid { grid-template-columns: 1fr; }
-
-      .volunteer-card {
-        flex-direction: column;
-        text-align: center;
-        padding: 32px;
-      }
-
-      .project-top { padding: 28px 24px 20px; }
-      .project-bottom { padding: 20px 24px 28px; }
-      .project-title { font-size: 22px; }
-
-      .fullscreen-section { padding: 80px 20px; min-height: auto; }
+      .volunteer-card { flex-direction: column; text-align: center; padding: 28px; }
+      .stats-bar { display: none; }
+      .skill-tag-cloud.xl { font-size: 18px; padding: 12px 20px; }
+      .skill-tag-cloud.lg { font-size: 15px; padding: 10px 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="#" class="nav-logo">岳金豪</a>
-      <div class="nav-links">
-        <a href="#about">关于</a>
-        <a href="#skills">技能</a>
-        <a href="#projects">项目</a>
-        <a href="#awards">获奖</a>
-        <a href="#contact">联系</a>
-      </div>
-    </div>
-  </nav>
+  <!-- Stats -->
+  <div class="stats-bar" id="visitorCount">加载中...</div>
 
   <!-- Hero -->
   <section class="hero">
+    <div class="hero-bg"></div>
     <div class="hero-content">
-      <img src="assets/resume-photo.png" alt="岳金豪" class="hero-avatar">
-      <h1>岳金豪</h1>
-      <p class="hero-subtitle">2006年 · 河南许昌 · GPA 3.36 / 4.0<br>北京石油化工学院 · 电气工程及其自动化</p>
-      <div class="hero-actions">
-        <a href="#projects" class="btn btn-primary">查看项目</a>
-        <a href="#contact" class="btn btn-secondary">联系方式</a>
-      </div>
+      <h1 class="hero-name">岳金豪</h1>
+      <p class="hero-slogan">Developer</p>
     </div>
-    <div class="scroll-hint">
+    <div class="scroll-indicator">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 5v14M5 12l7 7 7-7"/>
       </svg>
     </div>
   </section>
 
-  <!-- About -->
-  <section class="fullscreen-section" id="about">
-    <div class="section-inner">
-      <div class="section-header">
-        <p class="section-eyebrow">About</p>
-        <h2 class="section-headline">个人概览</h2>
-        <p class="section-desc">专注嵌入式与机器人算法开发，具备从视觉算法到硬件调试的全栈实践能力</p>
-      </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <p class="stat-label">所在地</p>
-          <p class="stat-value">河南许昌</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">出生年份</p>
-          <p class="stat-value">2006年</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">GPA</p>
-          <p class="stat-value">3.36 / 4.0</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">志愿时长</p>
-          <p class="stat-value">70+ 小时</p>
-        </div>
-      </div>
-      <div class="edu-card">
-        <div class="edu-icon">🎓</div>
-        <div class="edu-info">
-          <h3>北京石油化工学院</h3>
-          <p class="major">电气工程及其自动化（本科）</p>
-          <p class="period">2023.09 - 至今 · 2023级</p>
-          <div class="course-tags">
-            <span class="course-tag">电路原理</span>
-            <span class="course-tag">模拟电子技术</span>
-            <span class="course-tag">数字电子技术</span>
-            <span class="course-tag">自动控制原理</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Skills -->
-  <section class="fullscreen-section" id="skills">
-    <div class="section-inner">
-      <div class="section-header">
-        <p class="section-eyebrow">Skills</p>
-        <h2 class="section-headline">专业技能</h2>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <p class="skill-card-title">编程语言</p>
-          <div class="skill-tags">
-            <span class="skill-tag">C/C++</span>
-            <span class="skill-tag">Python</span>
-          </div>
-        </div>
-        <div class="skill-card">
-          <p class="skill-card-title">计算机视觉</p>
-          <div class="skill-tags">
-            <span class="skill-tag">OpenCV</span>
-            <span class="skill-tag">YOLOv5</span>
-          </div>
-        </div>
-        <div class="skill-card">
-          <p class="skill-card-title">嵌入式开发</p>
-          <div class="skill-tags">
-            <span class="skill-tag">STM32</span>
-            <span class="skill-tag">51单片机</span>
-            <span class="skill-tag">树莓派</span>
-          </div>
-        </div>
-        <div class="skill-card">
-          <p class="skill-card-title">设计工具</p>
-          <div class="skill-tags">
-            <span class="skill-tag">SolidWorks</span>
-            <span class="skill-tag">MATLAB</span>
-          </div>
-        </div>
-        <div class="skill-card">
-          <p class="skill-card-title">开发环境</p>
-          <div class="skill-tags">
-            <span class="skill-tag">Git</span>
-            <span class="skill-tag">Linux</span>
-            <span class="skill-tag">Docker</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Projects -->
-  <section class="fullscreen-section" id="projects">
+  <section class="section" id="projects">
     <div class="section-inner">
       <div class="section-header">
-        <p class="section-eyebrow">Projects</p>
-        <h2 class="section-headline">项目经历</h2>
+        <p class="section-label">Projects</p>
+        <h2 class="section-title">项目经历</h2>
       </div>
       <div class="projects-list">
 
-        <!-- Project 1 -->
-        <div class="project-card">
-          <div class="project-top">
-            <div class="project-meta-row">
-              <span class="project-badge">中国机器人及人工智能大赛</span>
-              <span class="project-date">2024.12 - 2025.08</span>
-            </div>
+        <!-- Project 1: Most Important -->
+        <div class="project-card" data-importance="1">
+          <div class="project-header">
+            <div class="project-rank">核心项目</div>
             <h3 class="project-title">仿人机器人视觉控制系统</h3>
-            <p class="project-role">项目负责人 · 算法开发</p>
+            <p class="project-meta">中国机器人及人工智能大赛 · 项目负责人 · 2024.12 - 2025.08</p>
           </div>
-          <div class="project-bottom">
+          <div class="project-body">
             <p class="project-desc">
               基于幻尔科技树莓派仿人机器人平台进行二次开发，开发多模态视觉感知系统，实现人脸识别、物体抓取、场地导航、手势交互等功能。
             </p>
+            <div class="project-highlights">
+              <div class="highlight">技术方案设计：作为项目负责人，制定整体技术架构，协调3-4人团队分工</div>
+              <div class="highlight">视觉算法开发：基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署</div>
+              <div class="highlight">算法优化：针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性</div>
+            </div>
             <div class="project-tech">
-              <span class="tech-tag">树莓派</span>
-              <span class="tech-tag">OpenCV</span>
-              <span class="tech-tag">YOLOv5</span>
               <span class="tech-tag">Python</span>
               <span class="tech-tag">C++</span>
-            </div>
-            <div class="project-highlights">
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>技术方案设计：作为项目负责人，制定整体技术架构，协调3-4人团队分工</span>
-              </div>
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>视觉算法开发：基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署</span>
-              </div>
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>算法优化：针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性</span>
-              </div>
+              <span class="tech-tag">OpenCV</span>
+              <span class="tech-tag">YOLOv5</span>
+              <span class="tech-tag">树莓派</span>
             </div>
             <div class="project-awards">
-              <span class="award-badge">国家级二等奖 ×1</span>
-              <span class="award-badge">国家级三等奖 ×1</span>
-              <span class="award-badge">省级一等奖 ×2</span>
-              <span class="award-badge">省级二等奖 ×2</span>
-              <span class="award-badge">省级三等奖 ×2</span>
+              <span class="project-award">🏆 国家级二等奖</span>
+              <span class="project-award">🏆 国家级三等奖</span>
+              <span class="project-award">🥇 省级一等奖 ×2</span>
+              <span class="project-award">🥈 省级二等奖 ×2</span>
+              <span class="project-award">🥉 省级三等奖 ×2</span>
             </div>
-            <a href="https://github.com/le700" target="_blank" class="project-link">
-              github.com/le700
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-            </a>
           </div>
         </div>
 
         <!-- Project 2 -->
-        <div class="project-card">
-          <div class="project-top">
-            <div class="project-meta-row">
-              <span class="project-badge">市级科研项目</span>
-              <span class="project-date">2025.11</span>
-            </div>
-            <h3 class="project-title">危化品仓储智慧监控与安全预警系统</h3>
-            <p class="project-role">项目成员 · 算法工程师</p>
+        <div class="project-card" data-importance="2">
+          <div class="project-header">
+            <div class="project-rank">开源贡献</div>
+            <h3 class="project-title">开源技术研究与贡献</h3>
+            <p class="project-meta">github.com/le700 · 个人开发者 · 持续进行</p>
           </div>
-          <div class="project-bottom">
+          <div class="project-body">
             <p class="project-desc">
-              市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。
+              持续在 GitHub 跟踪研究 OpenClaw、Codex、Claude Code 等前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。
             </p>
-            <div class="project-tech">
-              <span class="tech-tag">YOLOv5</span>
-              <span class="tech-tag">STM32</span>
-              <span class="tech-tag">计算机视觉</span>
-            </div>
             <div class="project-highlights">
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署</span>
-              </div>
+              <div class="highlight">研究 OpenClaw、Codex、Claude Code 等前沿 AI 与开源工具，深入理解其实现原理与应用场景</div>
+              <div class="highlight">自主开发 Skill 工具并开源至 github.com/le700，持续为开源社区贡献实用工具</div>
+              <div class="highlight">广泛研究机器人、嵌入式、AI 等领域有趣的开源项目，持续拓展技术视野</div>
+              <div class="highlight">采用 Vibe Coding 方式开发「基于科大讯飞星火大模型的多维度新闻真实性评测系统」</div>
+            </div>
+            <div class="project-tech">
+              <span class="tech-tag">Git</span>
+              <span class="tech-tag">AI Tools</span>
+              <span class="tech-tag">Open Source</span>
+              <span class="tech-tag">Skill Development</span>
+            </div>
+            <div class="project-awards">
+              <span class="project-award">🥉 挑战杯省级三等奖</span>
+              <span class="project-award">🥈 数字媒体竞赛校赛二等奖</span>
             </div>
           </div>
         </div>
 
         <!-- Project 3 -->
-        <div class="project-card">
-          <div class="project-top">
-            <div class="project-meta-row">
-              <span class="project-badge">京南地区人工智能与机器人创新创业大赛</span>
-            </div>
-            <h3 class="project-title">TI-RSLK 循迹小车竞赛</h3>
-            <p class="project-role">参赛成员 · 传感器开发与嵌入式编程</p>
+        <div class="project-card" data-importance="3">
+          <div class="project-header">
+            <div class="project-rank">科研项目</div>
+            <h3 class="project-title">危化品仓储智慧监控与安全预警系统</h3>
+            <p class="project-meta">市级科研项目 · 算法工程师 · 2025.11</p>
           </div>
-          <div class="project-bottom">
+          <div class="project-body">
             <p class="project-desc">
-              基于 TI-RSLK 机器人学习套件参加循迹赛项，负责传感器数据读取与 C++ 代码编写，最终获省级一等奖。
+              市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。
             </p>
             <div class="project-highlights">
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>负责红外/光电传感器阵列数据采集与处理，实现实时循迹判断逻辑</span>
-              </div>
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>编写 C++ 控制代码，调试 PID 参数，优化小车循迹速度与稳定性</span>
-              </div>
+              <div class="highlight">负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署</div>
             </div>
-            <div class="project-awards">
-              <span class="award-badge">省级一等奖</span>
+            <div class="project-tech">
+              <span class="tech-tag">YOLOv5</span>
+              <span class="tech-tag">STM32</span>
+              <span class="tech-tag">计算机视觉</span>
             </div>
           </div>
         </div>
 
         <!-- Project 4 -->
-        <div class="project-card">
-          <div class="project-top">
-            <div class="project-meta-row">
-              <span class="project-badge">中国机器人及人工智能大赛 & 其他竞赛</span>
-            </div>
-            <h3 class="project-title">小型人形机器人舞蹈赛项</h3>
-            <p class="project-role">参赛成员 · 动作调试与硬件维护</p>
+        <div class="project-card" data-importance="4">
+          <div class="project-header">
+            <div class="project-rank">竞赛项目</div>
+            <h3 class="project-title">TI-RSLK 循迹小车竞赛</h3>
+            <p class="project-meta">京南地区人工智能与机器人创新创业大赛 · 传感器开发与嵌入式编程</p>
           </div>
-          <div class="project-bottom">
+          <div class="project-body">
             <p class="project-desc">
-              参与中国机器人及人工智能大赛等多项竞赛的机器人舞蹈赛项，负责小型人形机器人动作调试与优化及舵机维修维护工作。
+              基于 TI-RSLK 机器人学习套件参加循迹赛项，负责传感器数据读取与 C++ 代码编写，最终获省级一等奖。
             </p>
             <div class="project-highlights">
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>负责小型人形机器人动作序列设计、舞蹈动作调试与精细化优化，确保动作流畅性与比赛表现效果</span>
-              </div>
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>负责机器人舵机的日常检测、维修与更换，保障比赛期间硬件稳定运行</span>
-              </div>
+              <div class="highlight">负责红外/光电传感器阵列数据采集与处理，实现实时循迹判断逻辑</div>
+              <div class="highlight">编写 C++ 控制代码，调试 PID 参数，优化小车循迹速度与稳定性</div>
+            </div>
+            <div class="project-tech">
+              <span class="tech-tag">C++</span>
+              <span class="tech-tag">PID控制</span>
+              <span class="tech-tag">传感器</span>
+            </div>
+            <div class="project-awards">
+              <span class="project-award">🥇 省级一等奖</span>
             </div>
           </div>
         </div>
 
         <!-- Project 5 -->
-        <div class="project-card">
-          <div class="project-top">
-            <div class="project-meta-row">
-              <span class="project-badge">github.com/le700</span>
-              <span class="project-date">持续进行</span>
-            </div>
-            <h3 class="project-title">开源技术研究与贡献</h3>
-            <p class="project-role">个人开发者 · 开源贡献与前沿工具研究</p>
+        <div class="project-card" data-importance="5">
+          <div class="project-header">
+            <div class="project-rank">竞赛项目</div>
+            <h3 class="project-title">小型人形机器人舞蹈赛项</h3>
+            <p class="project-meta">中国机器人及人工智能大赛 · 动作调试与硬件维护</p>
           </div>
-          <div class="project-bottom">
+          <div class="project-body">
             <p class="project-desc">
-              持续在 GitHub 跟踪研究 OpenClaw、Codex、Claude Code 等前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。
+              参与中国机器人及人工智能大赛等多项竞赛的机器人舞蹈赛项，负责小型人形机器人动作调试与优化及舵机维修维护工作。
             </p>
             <div class="project-highlights">
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>研究 OpenClaw、Codex、Claude Code 等前沿 AI 与开源工具，深入理解其实现原理与应用场景</span>
-              </div>
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>自主开发 Skill 工具并开源至 github.com/le700，持续为开源社区贡献实用工具</span>
-              </div>
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>广泛研究机器人、嵌入式、AI 等领域有趣的开源项目，持续拓展技术视野</span>
-              </div>
-              <div class="highlight-item">
-                <span class="highlight-dot">▪</span>
-                <span>采用 Vibe Coding 方式开发「基于科大讯飞星火大模型的多维度新闻真实性评测系统」，获挑战杯首都大学生课外学术科技作品竞赛省级三等奖、全国大学生数字媒体科技作品及创意竞赛校赛二等奖</span>
-              </div>
+              <div class="highlight">负责小型人形机器人动作序列设计、舞蹈动作调试与精细化优化，确保动作流畅性与比赛表现效果</div>
+              <div class="highlight">负责机器人舵机的日常检测、维修与更换，保障比赛期间硬件稳定运行</div>
+            </div>
+            <div class="project-tech">
+              <span class="tech-tag">动作调试</span>
+              <span class="tech-tag">硬件维护</span>
+              <span class="tech-tag">舵机控制</span>
             </div>
           </div>
         </div>
@@ -1119,102 +833,161 @@
     </div>
   </section>
 
-  <!-- Awards -->
-  <section class="fullscreen-section" id="awards">
+  <!-- Skills -->
+  <section class="section" id="skills">
     <div class="section-inner">
       <div class="section-header">
-        <p class="section-eyebrow">Awards</p>
-        <h2 class="section-headline">竞赛获奖</h2>
+        <p class="section-label">Skills</p>
+        <h2 class="section-title">技术栈</h2>
+      </div>
+      <div class="skills-cloud">
+        <span class="skill-tag-cloud xl">Python</span>
+        <span class="skill-tag-cloud xl">C/C++</span>
+        <span class="skill-tag-cloud lg">OpenCV</span>
+        <span class="skill-tag-cloud lg">YOLOv5</span>
+        <span class="skill-tag-cloud lg">STM32</span>
+        <span class="skill-tag-cloud md">树莓派</span>
+        <span class="skill-tag-cloud md">Git</span>
+        <span class="skill-tag-cloud md">Linux</span>
+        <span class="skill-tag-cloud md">51单片机</span>
+        <span class="skill-tag-cloud sm">SolidWorks</span>
+        <span class="skill-tag-cloud sm">MATLAB</span>
+        <span class="skill-tag-cloud sm">Docker</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Awards -->
+  <section class="section" id="awards">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="section-label">Awards</p>
+        <h2 class="section-title">竞赛获奖</h2>
       </div>
       <div class="awards-hero">
-        <p class="awards-big-number">20+</p>
-        <p class="awards-big-label">累计获得省级以上奖项</p>
+        <div class="awards-count">20+</div>
+        <p class="awards-label">省级以上奖项</p>
       </div>
-      <div class="awards-grid">
+      <div class="awards-list">
         <div class="award-item">
-          <span class="award-icon">🏆</span>
-          <p class="award-text">参加 <strong>2025 世界人形机器人运动会</strong> 1500m 项目，使用松延动力小顽童系列机器人</p>
+          <span class="award-trophy">🏆</span>
+          <div class="award-content">
+            <div class="award-title">2025 世界人形机器人运动会</div>
+            <div class="award-detail">1500m 项目 · 松延动力小顽童系列机器人</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥈</span>
-          <p class="award-text"><strong>中国机器人及人工智能大赛</strong> | 国家级二等奖、三等奖</p>
+          <span class="award-trophy">🥈</span>
+          <div class="award-content">
+            <div class="award-title">中国机器人及人工智能大赛</div>
+            <div class="award-detail">国家级二等奖、三等奖</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥉</span>
-          <p class="award-text"><strong>全国大学生信息安全与对抗技术竞赛</strong> | 国家级三等奖</p>
+          <span class="award-trophy">🥉</span>
+          <div class="award-content">
+            <div class="award-title">全国大学生信息安全与对抗技术竞赛</div>
+            <div class="award-detail">国家级三等奖</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥇</span>
-          <p class="award-text"><strong>京南地区人工智能与机器人创新创业大赛</strong> | 省级一等奖（项目负责人）</p>
+          <span class="award-trophy">🥇</span>
+          <div class="award-content">
+            <div class="award-title">京南地区人工智能与机器人创新创业大赛</div>
+            <div class="award-detail">省级一等奖 · 项目负责人</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥇</span>
-          <p class="award-text"><strong>北京市大学生机器人大赛</strong> | 省级一等奖</p>
+          <span class="award-trophy">🥇</span>
+          <div class="award-content">
+            <div class="award-title">北京市大学生机器人大赛</div>
+            <div class="award-detail">省级一等奖</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥇</span>
-          <p class="award-text"><strong>全国大学生信息安全与对抗技术竞赛（区域赛）</strong> | 省级一等奖</p>
+          <span class="award-trophy">🥇</span>
+          <div class="award-content">
+            <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）</div>
+            <div class="award-detail">省级一等奖</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🏅</span>
-          <p class="award-text"><strong>中国机器人及人工智能大赛</strong> | 省级一等奖2项、二等奖2项、三等奖2项</p>
+          <span class="award-trophy">🏅</span>
+          <div class="award-content">
+            <div class="award-title">中国机器人及人工智能大赛</div>
+            <div class="award-detail">省级一等奖2项、二等奖2项、三等奖2项</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥉</span>
-          <p class="award-text"><strong>全国大学生电子设计竞赛（北京赛区）</strong> | 省级三等奖</p>
+          <span class="award-trophy">🥉</span>
+          <div class="award-content">
+            <div class="award-title">全国大学生电子设计竞赛（北京赛区）</div>
+            <div class="award-detail">省级三等奖</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥉</span>
-          <p class="award-text"><strong>挑战杯首都大学生课外学术科技作品竞赛</strong> | 省级三等奖</p>
+          <span class="award-trophy">🥉</span>
+          <div class="award-content">
+            <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛</div>
+            <div class="award-detail">省级三等奖</div>
+          </div>
         </div>
         <div class="award-item">
-          <span class="award-icon">🥈</span>
-          <p class="award-text"><strong>全国大学生数字媒体科技作品及创意竞赛</strong> | 校赛二等奖</p>
+          <span class="award-trophy">🥈</span>
+          <div class="award-content">
+            <div class="award-title">全国大学生数字媒体科技作品及创意竞赛</div>
+            <div class="award-detail">校赛二等奖</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Volunteer -->
-  <section class="fullscreen-section" id="volunteer">
+  <section class="section" id="volunteer">
     <div class="section-inner">
       <div class="section-header">
-        <p class="section-eyebrow">Volunteer</p>
-        <h2 class="section-headline">志愿服务</h2>
+        <p class="section-label">Volunteer</p>
+        <h2 class="section-title">志愿服务</h2>
       </div>
       <div class="volunteer-card">
         <div class="volunteer-icon">❤️</div>
         <div class="volunteer-content">
-          <h3><a href="http://www.oneheartsphere.com/" target="_blank" class="volunteer-link">同心圆慈善基金会</a></h3>
-          <p>参与同心圆慈善基金会的线上支教与线下教学 10+ 课时，累积志愿服务 70+ 小时</p>
+          <h3 class="volunteer-title">
+            <a href="http://www.oneheartsphere.com/" target="_blank">同心圆慈善基金会</a>
+          </h3>
+          <p class="volunteer-desc">参与同心圆慈善基金会的线上支教与线下教学 10+ 课时，累积志愿服务 70+ 小时</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Contact -->
-  <section class="fullscreen-section" id="contact">
+  <section class="section" id="contact">
     <div class="section-inner">
       <div class="section-header">
-        <p class="section-eyebrow">Contact</p>
-        <h2 class="section-headline">联系方式</h2>
+        <p class="section-label">Contact</p>
+        <h2 class="section-title">联系方式</h2>
       </div>
       <div class="contact-grid">
         <div class="contact-card">
-          <p class="contact-label">电话 / 微信</p>
-          <p class="contact-value">18637473189</p>
+          <div class="contact-icon">📱</div>
+          <div class="contact-label">电话 / 微信</div>
+          <div class="contact-value">18637473189</div>
         </div>
         <div class="contact-card">
-          <p class="contact-label">邮箱</p>
-          <p class="contact-value">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-label">邮箱</div>
+          <div class="contact-value">
             <a href="mailto:3189311520@qq.com">3189311520@qq.com</a>
-          </p>
+          </div>
         </div>
         <div class="contact-card">
-          <p class="contact-label">GitHub</p>
-          <p class="contact-value">
+          <div class="contact-icon">💻</div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value">
             <a href="https://github.com/le700" target="_blank">github.com/le700</a>
-          </p>
+          </div>
         </div>
       </div>
     </div>
@@ -1222,41 +995,139 @@
 
   <!-- Footer -->
   <footer>
-    <p>岳金豪-简历</p>
+    <p>岳金豪</p>
   </footer>
 
+  <!-- Share Button -->
+  <button class="share-btn" onclick="sharePage()" title="分享">↗</button>
+
   <script>
-    // Scroll-triggered animations
+    // ===== ENTRANCE ANIMATION =====
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelector('.hero-name').classList.add('revealed');
+      }, 200);
+      
+      setTimeout(() => {
+        document.querySelector('.hero-slogan').classList.add('revealed');
+      }, 800);
+      
+      setTimeout(() => {
+        document.querySelector('.scroll-indicator').classList.add('revealed');
+      }, 1400);
+    });
+
+    // ===== SCROLL ANIMATIONS =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    }, observerOptions);
 
-    document.querySelectorAll('.stat-card, .edu-card, .skill-card, .project-card, .award-item, .volunteer-card, .contact-card').forEach((el, i) => {
-      // Stagger delay based on sibling index
-      const parent = el.parentElement;
-      const siblings = Array.from(parent.children).filter(c => c.classList.contains(el.classList[0]));
-      const index = siblings.indexOf(el);
-      el.style.transitionDelay = `${index * 0.08}s`;
+    // Observe all animated elements
+    document.querySelectorAll('.project-card, .skill-tag-cloud, .award-item, .volunteer-card, .contact-card').forEach(el => {
       observer.observe(el);
     });
 
-    // Nav scroll effect
-    const nav = document.querySelector('.nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 50);
+    // Stagger skill tags
+    document.querySelectorAll('.skill-tag-cloud').forEach((tag, i) => {
+      tag.style.transitionDelay = `${i * 0.05}s`;
     });
 
-    // Smooth scroll for nav links
-    document.querySelectorAll('.nav-links a, .hero-actions a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href.startsWith('#')) {
-          e.preventDefault();
-          document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    // Stagger awards
+    document.querySelectorAll('.award-item').forEach((item, i) => {
+      item.style.transitionDelay = `${i * 0.04}s`;
+    });
+
+    // Stagger projects
+    document.querySelectorAll('.project-card').forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.1}s`;
+    });
+
+    // ===== PARALLAX EFFECT =====
+    let ticking = false;
+    
+    function updateParallax() {
+      const scrolled = window.pageYOffset;
+      const parallaxElements = document.querySelectorAll('.parallax-layer');
+      
+      parallaxElements.forEach(el => {
+        const speed = el.dataset.speed || 0.5;
+        el.style.transform = `translateY(${scrolled * speed}px)`;
+      });
+      
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // ===== VISITOR COUNT =====
+    async function updateVisitorCount() {
+      const countEl = document.getElementById('visitorCount');
+      
+      try {
+        // Use a simple counter with localStorage
+        let count = parseInt(localStorage.getItem('visitorCount') || '0');
+        
+        // Check if this is a new session
+        if (!sessionStorage.getItem('visited')) {
+          count++;
+          localStorage.setItem('visitorCount', count.toString());
+          sessionStorage.setItem('visited', 'true');
+        }
+        
+        countEl.textContent = `${count.toLocaleString()} 次访问`;
+      } catch (e) {
+        countEl.style.display = 'none';
+      }
+    }
+
+    updateVisitorCount();
+
+    // ===== SHARE FUNCTION =====
+    async function sharePage() {
+      const shareData = {
+        title: '岳金豪 - Developer',
+        text: '嵌入式开发与机器人算法工程师',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          console.log('Share cancelled');
+        }
+      } else {
+        // Fallback: copy to clipboard
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          alert('链接已复制到剪贴板');
+        } catch (err) {
+          console.log('Copy failed');
+        }
+      }
+    }
+
+    // ===== SMOOTH SCROLL =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
     });
