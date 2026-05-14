@@ -6,17 +6,19 @@
   <title>岳金豪 — 嵌入式开发工程师</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #000000;
-      --bg-secondary: #0a0a0a;
-      --bg-card: #111111;
-      --text-primary: #ffffff;
+      --bg: #000;
+      --bg-secondary: #141414;
+      --text: #f5f5f7;
       --text-secondary: #86868b;
       --text-tertiary: #6e6e73;
-      --border: rgba(255,255,255,0.1);
-      --accent: #0a84ff;
+      --link: #2997ff;
+      --border: rgba(255,255,255,0.08);
+      --card-bg: rgba(255,255,255,0.03);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     * {
@@ -31,363 +33,210 @@
 
     body {
       font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-weight: 400;
+      letter-spacing: -0.02em;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
     }
 
-    /* Navigation */
-    nav {
+    /* Navigation - Apple Glassmorphism */
+    .nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      z-index: 100;
-      padding: 0 48px;
-      height: 48px;
+      height: 52px;
+      z-index: 9999;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      transition: all 0.4s var(--ease-out);
+    }
+
+    .nav-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 1px solid var(--border);
     }
 
-    .nav-name {
-      font-size: 14px;
+    .nav-logo {
+      font-size: 13px;
       font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      opacity: 0.9;
+      transition: opacity 0.3s;
       letter-spacing: -0.01em;
+    }
+
+    .nav-logo:hover {
+      opacity: 1;
     }
 
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 36px;
     }
 
     .nav-links a {
       font-size: 12px;
       color: var(--text-secondary);
       text-decoration: none;
-      transition: color 0.3s;
+      transition: all 0.3s var(--ease-out);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--text);
+      transition: width 0.3s var(--ease-out);
     }
 
     .nav-links a:hover {
-      color: var(--text-primary);
+      color: var(--text);
     }
 
-    /* Main Container */
-    main {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 0 48px;
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
-    /* Hero */
+    /* Hero - Apple Style */
     .hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
-      padding-top: 48px;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(41,151,255,0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(120,60,200,0.08), transparent);
+      pointer-events: none;
     }
 
     .hero-content {
-      opacity: 0;
-      animation: fadeIn 1s ease forwards;
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    .hero-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      opacity: 0;
+      transform: scale(0.9) translateY(30px);
+      animation: heroIn 1.2s var(--ease-out) 0.1s forwards;
+    }
+
+    @keyframes heroIn {
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .hero h1 {
-      font-size: 56px;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 16px;
-    }
-
-    .hero .title {
-      font-size: 28px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-    }
-
-    .hero .intro {
-      font-size: 17px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      max-width: 540px;
-      margin-bottom: 48px;
-    }
-
-    .avatar-wrapper {
-      width: 120px;
-      height: 120px;
-      border-radius: 24px;
-      overflow: hidden;
-      margin-bottom: 32px;
-      background: var(--bg-card);
-    }
-
-    .avatar-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .cta-group {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .cta-link {
-      font-size: 14px;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border-radius: 980px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      transition: all 0.3s;
-    }
-
-    .cta-link:hover {
-      background: #1c1c1e;
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    .cta-link svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    /* Section */
-    section {
-      padding: 80px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .section-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 48px;
-    }
-
-    /* About Grid */
-    .about-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-    }
-
-    .info-card {
-      padding: 24px;
-      background: var(--bg-card);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-    }
-
-    .info-card .label {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      margin-bottom: 8px;
-    }
-
-    .info-card .value {
-      font-size: 15px;
-      font-weight: 500;
-    }
-
-    /* Skills */
-    .skills-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .skill-row {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 24px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .skill-row:last-child {
-      border-bottom: none;
-    }
-
-    .skill-category {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-
-    .skill-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .skill-tag {
-      font-size: 14px;
-      padding: 6px 14px;
-      background: var(--bg-card);
-      border-radius: 980px;
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      transition: all 0.3s;
-    }
-
-    .skill-tag:hover {
-      background: #1c1c1e;
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    /* Projects */
-    .projects-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      background: var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    .project-item {
-      background: var(--bg-card);
-      padding: 32px;
-      transition: background 0.3s;
-    }
-
-    .project-item:hover {
-      background: #161616;
-    }
-
-    .project-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-
-    .project-title {
-      font-size: 17px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-
-    .project-meta {
-      font-size: 13px;
-      color: var(--text-tertiary);
-    }
-
-    .project-link {
-      font-size: 14px;
-      color: var(--text-tertiary);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .project-link:hover {
-      color: var(--text-primary);
-    }
-
-    .project-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.7;
+      font-size: clamp(56px, 12vw, 96px);
+      font-weight: 700;
+      line-height: 1.05;
       margin-bottom: 20px;
+      letter-spacing: -0.04em;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: heroIn 1.2s var(--ease-out) 0.2s forwards;
     }
 
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .project-tag {
-      font-size: 12px;
-      padding: 4px 10px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 4px;
-      color: var(--text-tertiary);
-    }
-
-    /* Contact */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .contact-card {
-      padding: 28px;
-      background: var(--bg-card);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      transition: all 0.3s;
-    }
-
-    .contact-card:hover {
-      background: #1c1c1e;
-    }
-
-    .contact-icon {
-      font-size: 24px;
-      margin-bottom: 16px;
-    }
-
-    .contact-label {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      margin-bottom: 8px;
-    }
-
-    .contact-value {
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .contact-value a {
-      color: var(--text-primary);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .contact-value a:hover {
+    .hero-subtitle {
+      font-size: clamp(21px, 4vw, 28px);
       color: var(--text-secondary);
+      margin-bottom: 16px;
+      font-weight: 400;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroIn 1.2s var(--ease-out) 0.35s forwards;
     }
 
-    /* Footer */
-    footer {
-      padding: 48px 0;
-      border-top: 1px solid var(--border);
-      text-align: center;
-    }
-
-    footer p {
-      font-size: 12px;
+    .hero-meta {
+      font-size: 17px;
       color: var(--text-tertiary);
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroIn 1.2s var(--ease-out) 0.5s forwards;
     }
 
-    /* Scroll indicator */
-    .scroll-hint {
+    .hero-contacts {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroIn 1.2s var(--ease-out) 0.65s forwards;
+    }
+
+    .hero-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.4s var(--ease-spring);
+    }
+
+    .hero-contact:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .hero-contact.primary {
+      background: var(--link);
+      border-color: var(--link);
+    }
+
+    .hero-contact.primary:hover {
+      background: #0077ed;
+      border-color: #0077ed;
+    }
+
+    .scroll-indicator {
       position: absolute;
-      bottom: 48px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -395,264 +244,1097 @@
       align-items: center;
       gap: 8px;
       opacity: 0;
-      animation: fadeIn 1s ease 0.5s forwards;
+      animation: fadeIn 1s ease 1.5s forwards;
     }
 
-    .scroll-hint span {
-      font-size: 11px;
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .scroll-indicator span {
+      font-size: 10px;
       color: var(--text-tertiary);
-      text-transform: uppercase;
       letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
     .scroll-line {
       width: 1px;
-      height: 48px;
+      height: 40px;
       background: linear-gradient(to bottom, var(--text-tertiary), transparent);
-      animation: scrollPulse 2s ease infinite;
+      animation: scrollPulse 2s ease-in-out infinite;
     }
 
     @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+      0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
       50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* Section Base */
+    .section {
+      padding: 140px 24px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 80px;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 12px;
+      color: var(--link);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+      display: block;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: clamp(40px, 7vw, 56px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    /* About Grid */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .about-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: all 0.5s var(--ease-spring);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .about-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-item:hover {
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .about-item-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .about-item-value {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Education Card */
+    .education-card {
+      background: linear-gradient(135deg, rgba(41,151,255,0.08), rgba(125,60,200,0.05));
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: start;
+      transition: all 0.5s var(--ease-spring);
+    }
+
+    .education-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-4px);
+    }
+
+    .education-icon {
+      width: 72px;
+      height: 72px;
+      background: rgba(41,151,255,0.15);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .education-content h3 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .education-content .major {
+      font-size: 17px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .education-content .period {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      margin-bottom: 20px;
+    }
+
+    .courses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .course-tag {
+      font-size: 12px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      transition: all 0.3s;
+    }
+
+    .course-tag:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .skill-category {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.5s var(--ease-spring);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .skill-category.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .skill-category:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .skill-category-title {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tag {
+      font-size: 15px;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 100px;
+      color: var(--text);
+      transition: all 0.3s var(--ease-spring);
+    }
+
+    .skill-tag:hover {
+      background: rgba(255,255,255,0.12);
+      transform: scale(1.05);
+    }
+
+    /* Projects */
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      overflow: hidden;
+      transition: all 0.6s var(--ease-spring);
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .project-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-8px);
+      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+    }
+
+    .project-header {
+      padding: 36px 36px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .project-badge {
+      font-size: 11px;
+      padding: 6px 12px;
+      background: rgba(41,151,255,0.15);
+      color: var(--link);
+      border-radius: 100px;
+      font-weight: 500;
+    }
+
+    .project-date {
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+
+    .project-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .project-role {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .project-body {
+      padding: 28px 36px 36px;
+    }
+
+    .project-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tech-tag {
+      font-size: 12px;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 100px;
+      color: var(--text-secondary);
+    }
+
+    .project-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .highlight-item {
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .highlight-dot {
+      color: var(--link);
+      font-weight: 600;
+    }
+
+    .project-awards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .award-badge {
+      font-size: 12px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,150,0,0.08));
+      border-radius: 100px;
+      color: #ffb800;
+      font-weight: 600;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--link);
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    .project-link:hover {
+      opacity: 0.8;
+    }
+
+    /* Awards Section */
+    .awards-section {
+      background: linear-gradient(180deg, rgba(41,151,255,0.03) 0%, transparent 60%);
+    }
+
+    .awards-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .awards-count {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-bottom: 60px;
+    }
+
+    .count-item {
+      text-align: center;
+    }
+
+    .count-number {
+      font-size: 72px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .count-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .awards-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .award-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.4s var(--ease-spring);
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .award-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .award-item:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .award-icon {
+      font-size: 20px;
+    }
+
+    .award-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .award-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Volunteer Section */
+    .volunteer-card {
+      background: linear-gradient(135deg, rgba(52,199,89,0.08), rgba(48,209,88,0.03));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      transition: all 0.5s var(--ease-spring);
+    }
+
+    .volunteer-card:hover {
+      border-color: rgba(48,209,88,0.2);
+      transform: translateY(-4px);
+    }
+
+    .volunteer-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(48,209,88,0.15);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .volunteer-content h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .volunteer-content p {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    /* Contact */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .contact-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.5s var(--ease-spring);
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .contact-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-card:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-4px);
+    }
+
+    .contact-card.full-width {
+      grid-column: span 2;
+    }
+
+    .contact-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .contact-value {
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .contact-value a {
+      color: var(--link);
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    .contact-value a:hover {
+      opacity: 0.8;
+    }
+
+    /* Footer */
+    footer {
+      padding: 60px 24px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      font-size: 12px;
+      color: var(--text-tertiary);
     }
 
     /* Responsive */
     @media (max-width: 768px) {
-      nav {
-        padding: 0 24px;
-      }
-
       .nav-links {
         display: none;
       }
 
-      main {
-        padding: 0 24px;
-      }
-
-      .hero h1 {
-        font-size: 36px;
-      }
-
-      .hero .title {
-        font-size: 22px;
-      }
-
       .about-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .education-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 32px;
+      }
+
+      .education-icon {
+        margin: 0 auto;
+      }
+
+      .skills-grid {
         grid-template-columns: 1fr;
       }
 
-      .skill-row {
+      .awards-count {
+        gap: 32px;
+      }
+
+      .count-number {
+        font-size: 48px;
+      }
+
+      .awards-list {
         grid-template-columns: 1fr;
-        gap: 12px;
       }
 
       .contact-grid {
         grid-template-columns: 1fr;
+      }
+
+      .contact-card.full-width {
+        grid-column: span 1;
+      }
+
+      .volunteer-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section {
+        padding: 100px 20px;
       }
     }
   </style>
 </head>
 <body>
   <!-- Navigation -->
-  <nav>
-    <div class="nav-name">岳金豪</div>
-    <div class="nav-links">
-      <a href="#about">关于</a>
-      <a href="#skills">技能</a>
-      <a href="#projects">项目</a>
-      <a href="#contact">联系</a>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">岳金豪</a>
+      <div class="nav-links">
+        <a href="#about">关于</a>
+        <a href="#skills">技能</a>
+        <a href="#projects">项目</a>
+        <a href="#awards">获奖</a>
+        <a href="#contact">联系</a>
+      </div>
     </div>
   </nav>
 
-  <main>
-    <!-- Hero -->
-    <section class="hero" id="hero">
-      <div class="hero-content">
-        <div class="avatar-wrapper">
-          <img src="assets/resume-photo.png" alt="岳金豪">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <img src="assets/resume-photo.png" alt="岳金豪" class="hero-avatar">
+      <h1>岳金豪</h1>
+      <p class="hero-subtitle">嵌入式开发工程师 · 机器人算法工程师</p>
+      <p class="hero-meta">2006年 · 河南许昌 · GPA 3.36 / 4.0</p>
+      <div class="hero-contacts">
+        <a href="tel:18637473189" class="hero-contact primary">18637473189</a>
+        <a href="mailto:3189311520@qq.com" class="hero-contact">3189311520@qq.com</a>
+        <a href="https://github.com/le700" target="_blank" class="hero-contact">github.com/le700</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section" id="about">
+    <div class="section-header">
+      <span class="section-label">About</span>
+      <h2 class="section-title">个人概览</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-item">
+        <p class="about-item-label">所在地</p>
+        <p class="about-item-value">河南许昌</p>
+      </div>
+      <div class="about-item">
+        <p class="about-item-label">出生年份</p>
+        <p class="about-item-value">2006年</p>
+      </div>
+      <div class="about-item">
+        <p class="about-item-label">GPA</p>
+        <p class="about-item-value">3.36 / 4.0</p>
+      </div>
+      <div class="about-item">
+        <p class="about-item-label">志愿时长</p>
+        <p class="about-item-value">70+ 小时</p>
+      </div>
+    </div>
+
+    <div class="education-card">
+      <div class="education-icon">🎓</div>
+      <div class="education-content">
+        <h3>北京石油化工学院</h3>
+        <p class="major">电气工程及其自动化（本科）</p>
+        <p class="period">2023.09 - 至今 · 2023级</p>
+        <div class="courses">
+          <span class="course-tag">电路原理</span>
+          <span class="course-tag">模拟电子技术</span>
+          <span class="course-tag">数字电子技术</span>
+          <span class="course-tag">自动控制原理</span>
+          <span class="course-tag">嵌入式系统设计</span>
+          <span class="course-tag">计算机视觉</span>
+          <span class="course-tag">机器学习</span>
         </div>
-        <h1>岳金豪</h1>
-        <p class="title">嵌入式开发工程师 · 机器人算法工程师</p>
-        <p class="intro">
-          北京石油化工学院 · 电气工程及其自动化专业<br>
-          热爱技术，专注于嵌入式开发与机器人算法，喜欢用代码创造价值
-        </p>
-        <div class="cta-group">
-          <a href="#contact" class="cta-link">
-            获取联系
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="section" id="skills">
+    <div class="section-header">
+      <span class="section-label">Skills</span>
+      <h2 class="section-title">专业技能</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <p class="skill-category-title">编程语言</p>
+        <div class="skill-tags">
+          <span class="skill-tag">C/C++</span>
+          <span class="skill-tag">Python</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <p class="skill-category-title">计算机视觉</p>
+        <div class="skill-tags">
+          <span class="skill-tag">OpenCV</span>
+          <span class="skill-tag">YOLOv5</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <p class="skill-category-title">嵌入式开发</p>
+        <div class="skill-tags">
+          <span class="skill-tag">STM32</span>
+          <span class="skill-tag">51单片机</span>
+          <span class="skill-tag">树莓派</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <p class="skill-category-title">设计工具</p>
+        <div class="skill-tags">
+          <span class="skill-tag">SolidWorks</span>
+          <span class="skill-tag">MATLAB</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <p class="skill-category-title">开发环境</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">Linux</span>
+          <span class="skill-tag">Docker</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="section" id="projects">
+    <div class="section-header">
+      <span class="section-label">Projects</span>
+      <h2 class="section-title">项目经历</h2>
+    </div>
+    <div class="projects-list">
+      <!-- Project 1 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-meta-row">
+            <span class="project-badge">中国机器人及人工智能大赛</span>
+            <span class="project-date">2024.12 - 2025.08</span>
+          </div>
+          <h3 class="project-title">仿人机器人视觉控制系统</h3>
+          <p class="project-role">项目负责人 · 算法开发</p>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">
+            基于幻尔科技树莓派仿人机器人平台进行二次开发，开发多模态视觉感知系统，实现人脸识别、物体抓取、场地导航、手势交互等功能。
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">树莓派</span>
+            <span class="tech-tag">OpenCV</span>
+            <span class="tech-tag">YOLOv5</span>
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">C++</span>
+          </div>
+          <div class="project-highlights">
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>技术方案设计：作为项目负责人，制定整体技术架构，协调3-4人团队分工</span>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>视觉算法开发：基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署</span>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>算法优化：针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性</span>
+            </div>
+          </div>
+          <div class="project-awards">
+            <span class="award-badge">国家级二等奖 ×1</span>
+            <span class="award-badge">国家级三等奖 ×1</span>
+            <span class="award-badge">省级一等奖 ×2</span>
+            <span class="award-badge">省级二等奖 ×2</span>
+            <span class="award-badge">省级三等奖 ×2</span>
+          </div>
+          <a href="https://github.com/le700" target="_blank" class="project-link">
+            github.com/le700
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
             </svg>
           </a>
-          <a href="#projects" class="cta-link">
-            查看项目
-          </a>
         </div>
       </div>
-    </section>
 
-    <!-- About -->
-    <section id="about">
-      <p class="section-label">关于</p>
-      <div class="about-grid">
-        <div class="info-card">
-          <p class="label">所在地</p>
-          <p class="value">河南许昌</p>
-        </div>
-        <div class="info-card">
-          <p class="label">教育背景</p>
-          <p class="value">北京石油化工学院 · 电气工程及其自动化</p>
-        </div>
-        <div class="info-card">
-          <p class="label">GPA</p>
-          <p class="value">3.36 / 4.0</p>
-        </div>
-        <div class="info-card">
-          <p class="label">荣誉</p>
-          <p class="value">同心圆慈善基金会志愿服务 100+ 课时</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills -->
-    <section id="skills">
-      <p class="section-label">技能</p>
-      <div class="skills-container">
-        <div class="skill-row">
-          <span class="skill-category">编程语言</span>
-          <div class="skill-items">
-            <span class="skill-tag">C/C++</span>
-            <span class="skill-tag">Python</span>
+      <!-- Project 2 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-meta-row">
+            <span class="project-badge">市级科研项目</span>
+            <span class="project-date">2025.11</span>
           </div>
+          <h3 class="project-title">危化品仓储智慧监控与安全预警系统</h3>
+          <p class="project-role">项目成员 · 算法工程师</p>
         </div>
-        <div class="skill-row">
-          <span class="skill-category">计算机视觉</span>
-          <div class="skill-items">
-            <span class="skill-tag">OpenCV</span>
-            <span class="skill-tag">YOLOv5</span>
-          </div>
-        </div>
-        <div class="skill-row">
-          <span class="skill-category">嵌入式开发</span>
-          <div class="skill-items">
-            <span class="skill-tag">树莓派</span>
-            <span class="skill-tag">STM32</span>
-            <span class="skill-tag">51单片机</span>
-          </div>
-        </div>
-        <div class="skill-row">
-          <span class="skill-category">设计工具</span>
-          <div class="skill-items">
-            <span class="skill-tag">SolidWorks</span>
-            <span class="skill-tag">MATLAB</span>
-          </div>
-        </div>
-        <div class="skill-row">
-          <span class="skill-category">开发环境</span>
-          <div class="skill-items">
-            <span class="skill-tag">Git</span>
-            <span class="skill-tag">Linux</span>
-            <span class="skill-tag">Docker</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects">
-      <p class="section-label">项目</p>
-      <div class="projects-list">
-        <div class="project-item">
-          <div class="project-header">
-            <div>
-              <h3 class="project-title">ROS2 机器人导航系统</h3>
-              <p class="project-meta">项目负责人 · 省级一等奖</p>
-            </div>
-            <a href="#" class="project-link">→</a>
-          </div>
+        <div class="project-body">
           <p class="project-desc">
-            作为项目负责人，制定整体技术架构，协调团队完成基于 ROS2 的移动机器人自主导航系统开发。实现 SLAM 建图、路径规划与动态避障等功能，系统运行稳定，导航精度达到厘米级。
+            市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。
           </p>
-          <div class="project-tags">
-            <span class="project-tag">省级一等奖</span>
-            <span class="project-tag">ROS2</span>
-            <span class="project-tag">SLAM</span>
-            <span class="project-tag">路径规划</span>
+          <div class="project-tech">
+            <span class="tech-tag">YOLOv5</span>
+            <span class="tech-tag">STM32</span>
+            <span class="tech-tag">计算机视觉</span>
           </div>
-        </div>
-
-        <div class="project-item">
-          <div class="project-header">
-            <div>
-              <h3 class="project-title">危化品仓储监控系统</h3>
-              <p class="project-meta">项目成员 · 市级科研项目</p>
+          <div class="project-highlights">
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署</span>
             </div>
-            <a href="#" class="project-link">→</a>
-          </div>
-          <p class="project-desc">
-            市级科研项目，开发基于计算机视觉的危化品仓储监控系统。实现危化品识别与安全预警功能，采用 YOLOv5 算法进行目标检测，配合 STM32 实现硬件联动报警系统。
-          </p>
-          <div class="project-tags">
-            <span class="project-tag">市级科研</span>
-            <span class="project-tag">YOLOv5</span>
-            <span class="project-tag">STM32</span>
-            <span class="project-tag">计算机视觉</span>
-          </div>
-        </div>
-
-        <div class="project-item">
-          <div class="project-header">
-            <div>
-              <h3 class="project-title">仿生机器人控制</h3>
-              <p class="project-meta">项目成员</p>
-            </div>
-            <a href="#" class="project-link">→</a>
-          </div>
-          <p class="project-desc">
-            参与仿生机器人控制系统开发，使用松延动力小顽童系列机器人。负责运动学建模与步态算法优化，实现复杂的动作序列与稳定的动态平衡控制。
-          </p>
-          <div class="project-tags">
-            <span class="project-tag">机器人控制</span>
-            <span class="project-tag">运动学</span>
-            <span class="project-tag">步态算法</span>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Contact -->
-    <section id="contact">
-      <p class="section-label">联系</p>
-      <div class="contact-grid">
-        <div class="contact-card">
-          <div class="contact-icon">📱</div>
-          <p class="contact-label">电话</p>
-          <p class="contact-value">18637473189</p>
+      <!-- Project 3 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-meta-row">
+            <span class="project-badge">京南地区人工智能与机器人创新创业大赛</span>
+            <span class="project-date">参赛期间</span>
+          </div>
+          <h3 class="project-title">TI-RSLK 循迹小车竞赛</h3>
+          <p class="project-role">参赛成员 · 传感器开发与嵌入式编程</p>
         </div>
-        <div class="contact-card">
-          <div class="contact-icon">✉️</div>
-          <p class="contact-label">邮箱</p>
-          <p class="contact-value">
-            <a href="mailto:3189311520@qq.com">3189311520@qq.com</a><br>
-            <a href="mailto:manbujingxindele@gmail.com">manbujingxindele@gmail.com</a>
+        <div class="project-body">
+          <p class="project-desc">
+            基于 TI-RSLK 机器人学习套件参加循迹赛项，负责传感器数据读取与 C++ 代码编写，最终获省级一等奖。
           </p>
-        </div>
-        <div class="contact-card">
-          <div class="contact-icon">💻</div>
-          <p class="contact-label">GitHub</p>
-          <p class="contact-value">
-            <a href="https://github.com/le700" target="_blank">github.com/le700</a>
-          </p>
+          <div class="project-highlights">
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>负责红外/光电传感器阵列数据采集与处理，实现实时循迹判断逻辑</span>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>编写 C++ 控制代码，调试 PID 参数，优化小车循迹速度与稳定性</span>
+            </div>
+          </div>
+          <div class="project-awards">
+            <span class="award-badge">省级一等奖</span>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-      <p>岳金豪 · 2024</p>
-    </footer>
-  </main>
+      <!-- Project 4 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-meta-row">
+            <span class="project-badge">中国机器人及人工智能大赛 & 其他竞赛</span>
+            <span class="project-date">参赛期间</span>
+          </div>
+          <h3 class="project-title">小型人形机器人舞蹈赛项</h3>
+          <p class="project-role">参赛成员 · 动作调试与硬件维护</p>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">
+            参与中国机器人及人工智能大赛等多项竞赛的机器人舞蹈赛项，负责小型人形机器人动作调试与优化及舵机维修维护工作。
+          </p>
+          <div class="project-highlights">
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>负责小型人形机器人动作序列设计、舞蹈动作调试与精细化优化，确保动作流畅性与比赛表现效果</span>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>负责机器人舵机的日常检测、维修与更换，保障比赛期间硬件稳定运行</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 5 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-meta-row">
+            <span class="project-badge">github.com/le700</span>
+            <span class="project-date">持续进行</span>
+          </div>
+          <h3 class="project-title">开源技术研究与贡献</h3>
+          <p class="project-role">个人开发者 · 开源贡献与前沿工具研究</p>
+        </div>
+        <div class="project-body">
+          <p class="project-desc">
+            持续在 GitHub 跟踪研究 OpenClaw、Codex、Claude Code 等前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。
+          </p>
+          <div class="project-highlights">
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>研究 OpenClaw、Codex、Claude Code 等前沿 AI 与开源工具，深入理解其实现原理与应用场景</span>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>自主开发 Skill 工具并开源至 github.com/le700，持续为开源社区贡献实用工具</span>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>广泛研究机器人、嵌入式、AI 等领域有趣的开源项目，持续拓展技术视野</span>
+            </div>
+            <div class="highlight-item">
+              <span class="highlight-dot">▪</span>
+              <span>采用 Vibe Coding 方式开发「基于科大讯飞星火大模型的多维度新闻真实性评测系统」，获挑战杯首都大学生课外学术科技作品竞赛省级三等奖、全国大学生数字媒体科技作品及创意竞赛校赛二等奖</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Awards -->
+  <section class="section awards-section" id="awards">
+    <div class="section-header">
+      <span class="section-label">Awards</span>
+      <h2 class="section-title">竞赛获奖</h2>
+    </div>
+    
+    <div class="awards-count">
+      <div class="count-item">
+        <p class="count-number">20+</p>
+        <p class="count-label">省级以上奖项</p>
+      </div>
+    </div>
+
+    <div class="awards-list">
+      <div class="award-item">
+        <span class="award-icon">🏆</span>
+        <p class="award-text">参加 <strong>2025 世界人形机器人运动会</strong> 1500m 项目，使用松延动力小顽童系列机器人</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥈</span>
+        <p class="award-text"><strong>中国机器人及人工智能大赛</strong> | 国家级二等奖、三等奖</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <p class="award-text"><strong>全国大学生信息安全与对抗技术竞赛</strong> | 国家级三等奖</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥇</span>
+        <p class="award-text"><strong>京南地区人工智能与机器人创新创业大赛</strong> | 省级一等奖（项目负责人）</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥇</span>
+        <p class="award-text"><strong>北京市大学生机器人大赛</strong> | 省级一等奖</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥇</span>
+        <p class="award-text"><strong>全国大学生信息安全与对抗技术竞赛（区域赛）</strong> | 省级一等奖</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🏅</span>
+        <p class="award-text"><strong>中国机器人及人工智能大赛</strong> | 省级一等奖2项、二等奖2项、三等奖2项</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <p class="award-text"><strong>全国大学生电子设计竞赛（北京赛区）</strong> | 省级三等奖</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <p class="award-text"><strong>挑战杯首都大学生课外学术科技作品竞赛</strong> | 省级三等奖</p>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥈</span>
+        <p class="award-text"><strong>全国大学生数字媒体科技作品及创意竞赛</strong> | 校赛二等奖</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Volunteer -->
+  <section class="section" id="volunteer">
+    <div class="section-header">
+      <span class="section-label">Volunteer</span>
+      <h2 class="section-title">志愿服务</h2>
+    </div>
+    <div class="volunteer-card">
+      <div class="volunteer-icon">❤️</div>
+      <div class="volunteer-content">
+        <h3>同心圆慈善基金会</h3>
+        <p>线上支教与线下教学 10+ 课时 · 志愿服务 70+ 小时</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="section-header">
+      <span class="section-label">Contact</span>
+      <h2 class="section-title">联系方式</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <p class="contact-label">电话 / 微信</p>
+        <p class="contact-value">18637473189</p>
+      </div>
+      <div class="contact-card">
+        <p class="contact-label">邮箱</p>
+        <p class="contact-value">
+          <a href="mailto:3189311520@qq.com">3189311520@qq.com</a>
+        </p>
+      </div>
+      <div class="contact-card full-width">
+        <p class="contact-label">备用邮箱 & GitHub</p>
+        <p class="contact-value">
+          <a href="mailto:manbujingxindele@gmail.com">manbujingxindele@gmail.com</a> · 
+          <a href="https://github.com/le700" target="_blank">github.com/le700</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>岳金豪 · 嵌入式开发工程师 · 2024</p>
+  </footer>
+
+  <script>
+    // Scroll Animation Observer
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('.about-item, .skill-category, .project-card, .award-item, .contact-card').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Stagger animation for about items
+    document.querySelectorAll('.about-item').forEach((item, index) => {
+      item.style.transitionDelay = `${index * 0.1}s`;
+    });
+
+    // Stagger animation for skill categories
+    document.querySelectorAll('.skill-category').forEach((item, index) => {
+      item.style.transitionDelay = `${index * 0.08}s`;
+    });
+
+    // Stagger animation for project cards
+    document.querySelectorAll('.project-card').forEach((item, index) => {
+      item.style.transitionDelay = `${index * 0.15}s`;
+    });
+
+    // Stagger animation for award items
+    document.querySelectorAll('.award-item').forEach((item, index) => {
+      item.style.transitionDelay = `${index * 0.05}s`;
+    });
+
+    // Stagger animation for contact cards
+    document.querySelectorAll('.contact-card').forEach((item, index) => {
+      item.style.transitionDelay = `${index * 0.1}s`;
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Nav background on scroll
+    const nav = document.querySelector('.nav');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 100) {
+        nav.style.background = 'rgba(0,0,0,0.85)';
+      } else {
+        nav.style.background = 'rgba(0,0,0,0.65)';
+      }
+      
+      lastScroll = currentScroll;
+    });
+  </script>
 </body>
 </html>
