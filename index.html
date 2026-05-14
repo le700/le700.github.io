@@ -70,7 +70,7 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* ===== HERO - EXTREME MINIMAL ===== */
+    /* ===== HERO ===== */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -208,7 +208,7 @@
       line-height: 1.1;
     }
 
-    /* ===== PROJECTS - IMPORTANCE ORDERED ===== */
+    /* ===== PROJECTS ===== */
     .projects-list {
       display: flex;
       flex-direction: column;
@@ -222,6 +222,7 @@
       overflow: hidden;
       transition: box-shadow 0.3s, border-color 0.3s;
       opacity: 0;
+      transform: translateY(30px);
       transform-style: preserve-3d;
       perspective: 1000px;
       will-change: transform;
@@ -229,6 +230,8 @@
 
     .project-card.visible {
       opacity: 1;
+      transform: translateY(0);
+      transition: all 0.8s var(--ease-out);
     }
 
     .project-card:hover {
@@ -240,11 +243,11 @@
     }
 
     @keyframes bounceClick {
-      0% { transform: var(--tilt) scale(1); }
-      30% { transform: var(--tilt) scale(0.95); }
-      50% { transform: var(--tilt) scale(1.05); }
-      70% { transform: var(--tilt) scale(0.98); }
-      100% { transform: var(--tilt) scale(1); }
+      0% { transform: scale(1); }
+      30% { transform: scale(0.95); }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.98); }
+      100% { transform: scale(1); }
     }
 
     .project-header {
@@ -356,80 +359,72 @@
       }
     }
 
-    /* ===== SKILLS - TAG CLOUD ===== */
-    .skills-cloud {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
+    /* ===== SKILLS - PHYSICS BUBBLES ===== */
+    .skills-container {
+      position: relative;
+      width: 100%;
       max-width: 800px;
+      height: 400px;
       margin: 0 auto;
-    }
-
-    .skill-tag-cloud {
-      font-family: 'JetBrains Mono', monospace;
-      padding: 10px 20px;
+      overflow: hidden;
+      border-radius: 24px;
       background: var(--card);
       border: 1px solid var(--border);
+    }
+
+    .skill-bubble {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 12px 24px;
+      background: var(--card);
+      border: 2px solid var(--border);
       border-radius: 100px;
       color: var(--text);
-      font-weight: 500;
-      transition: all 0.3s var(--ease-spring);
+      font-weight: 600;
       cursor: grab;
-      opacity: 0;
-      transform: scale(0.8);
       user-select: none;
       -webkit-user-select: none;
+      touch-action: none;
+      box-shadow: 0 4px 12px var(--shadow);
+      transition: box-shadow 0.3s, border-color 0.3s;
+      will-change: transform;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
     }
 
-    .skill-tag-cloud:active {
+    .skill-bubble:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px var(--shadow-hover);
+      z-index: 10;
+    }
+
+    .skill-bubble.dragging {
       cursor: grabbing;
-    }
-
-    .skill-tag-cloud.visible {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .skill-tag-cloud:hover {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-      transform: scale(1.1);
-    }
-
-    .skill-tag-cloud.dragging {
-      opacity: 0.5;
-      transform: scale(1.15) rotate(2deg);
-      box-shadow: 0 16px 32px var(--shadow-hover);
       z-index: 100;
+      box-shadow: 0 16px 48px var(--shadow-hover);
     }
 
-    .skill-tag-cloud.drag-over {
-      transform: scale(1.15);
-      border-color: var(--accent);
-      border-style: dashed;
+    .skill-bubble.bounce {
+      animation: bubbleBounce 0.5s var(--ease-spring);
     }
 
-    .skill-tag-cloud.bounce-click {
-      animation: tagBounce 0.5s var(--ease-spring);
+    @keyframes bubbleBounce {
+      0% { transform: scale(var(--scale)) translate(var(--tx), var(--ty)); }
+      30% { transform: scale(calc(var(--scale) * 0.9)) translate(var(--tx), var(--ty)); }
+      50% { transform: scale(calc(var(--scale) * 1.15)) translate(var(--tx), var(--ty)); }
+      70% { transform: scale(calc(var(--scale) * 0.95)) translate(var(--tx), var(--ty)); }
+      100% { transform: scale(var(--scale)) translate(var(--tx), var(--ty)); }
     }
 
-    @keyframes tagBounce {
-      0% { transform: scale(1); }
-      25% { transform: scale(0.85); }
-      50% { transform: scale(1.15); }
-      75% { transform: scale(0.95); }
-      100% { transform: scale(1); }
-    }
+    /* Bubble sizes */
+    .skill-bubble.xl { font-size: 20px; --scale: 1; }
+    .skill-bubble.lg { font-size: 17px; --scale: 0.92; }
+    .skill-bubble.md { font-size: 14px; --scale: 0.85; }
+    .skill-bubble.sm { font-size: 12px; --scale: 0.78; }
 
-    /* Tag sizes based on importance */
-    .skill-tag-cloud.xl { font-size: 22px; padding: 14px 28px; }
-    .skill-tag-cloud.lg { font-size: 18px; padding: 12px 24px; }
-    .skill-tag-cloud.md { font-size: 15px; padding: 10px 20px; }
-    .skill-tag-cloud.sm { font-size: 13px; padding: 8px 16px; }
-
-    /* ===== AWARDS - TROPHY LIST ===== */
+    /* ===== AWARDS ===== */
     .awards-hero {
       text-align: center;
       margin-bottom: 48px;
@@ -467,12 +462,13 @@
       border-radius: 16px;
       transition: all 0.4s var(--ease-spring);
       opacity: 0;
-      will-change: transform;
+      transform: translateY(20px);
     }
 
     .award-item.visible {
       opacity: 1;
-      transform: translate(0, 0) rotate(0deg) scale(1);
+      transform: translateY(0);
+      transition: all 0.6s var(--ease-out);
     }
 
     .award-item:hover {
@@ -531,6 +527,7 @@
     .volunteer-card.visible {
       opacity: 1;
       transform: translateY(0);
+      transition: all 0.8s var(--ease-out);
     }
 
     .volunteer-card:hover {
@@ -594,6 +591,7 @@
     .contact-card.visible {
       opacity: 1;
       transform: translateY(0);
+      transition: all 0.8s var(--ease-out);
     }
 
     .contact-card:hover {
@@ -677,11 +675,6 @@
       color: var(--text-tertiary);
     }
 
-    /* ===== PARALLAX ===== */
-    .parallax-layer {
-      will-change: transform;
-    }
-
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .section { padding: 80px 20px; min-height: auto; }
@@ -690,15 +683,14 @@
       .project-title { font-size: 20px; }
       .contact-grid { grid-template-columns: 1fr; }
       .volunteer-card { flex-direction: column; text-align: center; padding: 28px; }
+      .skills-container { height: 350px; }
       .stats-bar { display: none; }
-      .skill-tag-cloud.xl { font-size: 18px; padding: 12px 20px; }
-      .skill-tag-cloud.lg { font-size: 15px; padding: 10px 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Stats - 不蒜子 -->
+  <!-- Stats -->
   <div class="stats-bar">
     <span id="busuanzi_container_site_pv">总访问 <span id="busuanzi_value_site_pv">-</span></span>
     <span style="color:var(--border)">|</span>
@@ -730,7 +722,7 @@
       </div>
       <div class="projects-list">
 
-        <!-- Project 1: Most Important -->
+        <!-- Project 1 -->
         <div class="project-card" data-importance="1">
           <div class="project-header">
             <div class="project-rank">核心项目</div>
@@ -868,26 +860,26 @@
     </div>
   </section>
 
-  <!-- Skills -->
+  <!-- Skills - Physics Bubbles -->
   <section class="section" id="skills">
     <div class="section-inner">
       <div class="section-header">
         <p class="section-label">Skills</p>
         <h2 class="section-title">技术栈</h2>
       </div>
-      <div class="skills-cloud">
-        <span class="skill-tag-cloud xl">Python</span>
-        <span class="skill-tag-cloud xl">C/C++</span>
-        <span class="skill-tag-cloud lg">OpenCV</span>
-        <span class="skill-tag-cloud lg">YOLOv5</span>
-        <span class="skill-tag-cloud lg">STM32</span>
-        <span class="skill-tag-cloud md">树莓派</span>
-        <span class="skill-tag-cloud md">Git</span>
-        <span class="skill-tag-cloud md">Linux</span>
-        <span class="skill-tag-cloud md">51单片机</span>
-        <span class="skill-tag-cloud sm">SolidWorks</span>
-        <span class="skill-tag-cloud sm">MATLAB</span>
-        <span class="skill-tag-cloud sm">Docker</span>
+      <div class="skills-container" id="skillsContainer">
+        <div class="skill-bubble xl" data-skill="Python">Python</div>
+        <div class="skill-bubble xl" data-skill="C/C++">C/C++</div>
+        <div class="skill-bubble lg" data-skill="OpenCV">OpenCV</div>
+        <div class="skill-bubble lg" data-skill="YOLOv5">YOLOv5</div>
+        <div class="skill-bubble lg" data-skill="STM32">STM32</div>
+        <div class="skill-bubble md" data-skill="树莓派">树莓派</div>
+        <div class="skill-bubble md" data-skill="Git">Git</div>
+        <div class="skill-bubble md" data-skill="Linux">Linux</div>
+        <div class="skill-bubble md" data-skill="51单片机">51单片机</div>
+        <div class="skill-bubble sm" data-skill="SolidWorks">SolidWorks</div>
+        <div class="skill-bubble sm" data-skill="MATLAB">MATLAB</div>
+        <div class="skill-bubble sm" data-skill="Docker">Docker</div>
       </div>
     </div>
   </section>
@@ -901,7 +893,7 @@
       </div>
       <div class="awards-hero">
         <div class="awards-count">20+</div>
-        <p class="awards-label">省级以上奖项</p>
+        <p class="awards-label">累计获得省级以上奖项</p>
       </div>
       <div class="awards-list">
         <div class="award-item">
@@ -1050,87 +1042,16 @@
     });
 
     // ===== SCROLL ANIMATIONS =====
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, observerOptions);
-
-    // ===== MULTI-DIRECTION FLY-IN =====
-    const flyDirections = [
-      { x: -60, y: 0, r: -5 },   // from left
-      { x: 60, y: 0, r: 5 },    // from right
-      { x: 0, y: -60, r: -3 },   // from top
-      { x: 0, y: 60, r: 3 },    // from bottom
-      { x: -40, y: -40, r: -4 }, // from top-left
-      { x: 40, y: 40, r: 4 },   // from bottom-right
-      { x: -50, y: 30, r: -6 },  // from bottom-left
-      { x: 50, y: -30, r: 6 },  // from top-right
-    ];
-
-    // Set initial transforms for fly-in
-    document.querySelectorAll('.project-card').forEach((card, i) => {
-      const dir = flyDirections[i % flyDirections.length];
-      card.style.transform = `translate(${dir.x}px, ${dir.y}px) rotate(${dir.r}deg) scale(0.95)`;
-      card.style.transition = 'none';
-      card.dataset.dirIndex = i % flyDirections.length;
-    });
-
-    document.querySelectorAll('.award-item').forEach((item, i) => {
-      const dir = flyDirections[(i + 3) % flyDirections.length];
-      item.style.transform = `translate(${dir.x}px, ${dir.y}px) rotate(${dir.r}deg) scale(0.95)`;
-      item.style.transition = 'none';
-    });
-
-    document.querySelectorAll('.skill-tag-cloud').forEach((tag, i) => {
-      const dir = flyDirections[(i + 5) % flyDirections.length];
-      tag.style.transform = `translate(${dir.x * 0.5}px, ${dir.y * 0.5}px) rotate(${dir.r}deg) scale(0.7)`;
-      tag.style.transition = 'none';
-    });
-
-    document.querySelectorAll('.volunteer-card, .contact-card').forEach((el, i) => {
-      const dir = flyDirections[(i + 2) % flyDirections.length];
-      el.style.transform = `translate(${dir.x}px, ${dir.y}px) rotate(${dir.r}deg) scale(0.95)`;
-      el.style.transition = 'none';
-    });
-
-    // Override observer to handle fly-in
-    const flyObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const delay = parseFloat(el.style.transitionDelay) || 0;
-          
-          setTimeout(() => {
-            el.style.transition = 'all 0.8s var(--ease-out)';
-            el.classList.add('visible');
-            
-            // Clean up inline transform after animation
-            setTimeout(() => {
-              el.style.transform = '';
-              el.style.transition = '';
-            }, 900);
-          }, delay * 1000);
-          
-          flyObserver.unobserve(el);
-        }
-      });
     }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-    document.querySelectorAll('.project-card, .skill-tag-cloud, .award-item, .volunteer-card, .contact-card').forEach(el => {
-      flyObserver.observe(el);
-    });
-
-    // Stagger skill tags
-    document.querySelectorAll('.skill-tag-cloud').forEach((tag, i) => {
-      tag.style.transitionDelay = `${i * 0.05}s`;
+    document.querySelectorAll('.project-card, .award-item, .volunteer-card, .contact-card').forEach(el => {
+      observer.observe(el);
     });
 
     // Stagger awards
@@ -1157,13 +1078,11 @@
         const rotateY = ((x - centerX) / centerX) * 20;
         
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        card.style.setProperty('--tilt', `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
         card.style.transition = 'transform 0.1s ease-out';
       });
 
       card.addEventListener('mouseleave', () => {
         card.style.transform = '';
-        card.style.setProperty('--tilt', '');
         card.style.transition = 'transform 0.5s var(--ease-out)';
       });
     });
@@ -1172,130 +1091,273 @@
     function addBounce(el, className) {
       el.addEventListener('click', () => {
         el.classList.remove(className);
-        void el.offsetWidth; // force reflow
+        void el.offsetWidth;
         el.classList.add(className);
         setTimeout(() => el.classList.remove(className), 600);
       });
     }
 
     document.querySelectorAll('.project-card').forEach(card => addBounce(card, 'bounce-click'));
-    document.querySelectorAll('.skill-tag-cloud').forEach(tag => addBounce(tag, 'bounce-click'));
     document.querySelectorAll('.award-item').forEach(item => addBounce(item, 'bounce-click'));
     document.querySelectorAll('.contact-card').forEach(card => addBounce(card, 'bounce-click'));
     document.querySelectorAll('.volunteer-card').forEach(card => addBounce(card, 'bounce-click'));
 
-    // ===== DRAGGABLE SKILL TAGS =====
-    const skillsCloud = document.querySelector('.skills-cloud');
-    let draggedTag = null;
-
-    document.querySelectorAll('.skill-tag-cloud').forEach(tag => {
-      tag.setAttribute('draggable', 'true');
-
-      tag.addEventListener('dragstart', (e) => {
-        draggedTag = tag;
-        tag.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-      });
-
-      tag.addEventListener('dragend', () => {
-        tag.classList.remove('dragging');
-        document.querySelectorAll('.skill-tag-cloud').forEach(t => t.classList.remove('drag-over'));
-        draggedTag = null;
-      });
-
-      tag.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        if (tag !== draggedTag) {
-          tag.classList.add('drag-over');
-        }
-      });
-
-      tag.addEventListener('dragleave', () => {
-        tag.classList.remove('drag-over');
-      });
-
-      tag.addEventListener('drop', (e) => {
-        e.preventDefault();
-        tag.classList.remove('drag-over');
+    // ===== PHYSICS BUBBLES =====
+    class PhysicsBubbles {
+      constructor(container) {
+        this.container = container;
+        this.bubbles = [];
+        this.draggedBubble = null;
+        this.dragOffset = { x: 0, y: 0 };
+        this.containerRect = null;
+        this.animationId = null;
         
-        if (draggedTag && draggedTag !== tag) {
-          const allTags = Array.from(skillsCloud.children);
-          const fromIndex = allTags.indexOf(draggedTag);
-          const toIndex = allTags.indexOf(tag);
+        this.init();
+      }
+
+      init() {
+        const bubbleElements = this.container.querySelectorAll('.skill-bubble');
+        this.containerRect = this.container.getBoundingClientRect();
+        
+        // Initialize bubbles with random positions and velocities
+        bubbleElements.forEach((el, i) => {
+          const rect = el.getBoundingClientRect();
+          const bubble = {
+            el: el,
+            x: Math.random() * (this.containerRect.width - rect.width - 40) + 20,
+            y: Math.random() * (this.containerRect.height - rect.height - 40) + 20,
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: (Math.random() - 0.5) * 1.5,
+            radius: rect.width / 2,
+            mass: parseFloat(getComputedStyle(el).getPropertyValue('--scale')) || 1,
+            isDragging: false
+          };
           
-          if (fromIndex < toIndex) {
-            skillsCloud.insertBefore(draggedTag, tag.nextSibling);
-          } else {
-            skillsCloud.insertBefore(draggedTag, tag);
+          this.bubbles.push(bubble);
+          this.setupDrag(bubble);
+        });
+
+        this.animate();
+        
+        // Update container rect on resize
+        window.addEventListener('resize', () => {
+          this.containerRect = this.container.getBoundingClientRect();
+        });
+      }
+
+      setupDrag(bubble) {
+        const el = bubble.el;
+        
+        // Mouse events
+        el.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          this.startDrag(bubble, e.clientX, e.clientY);
+        });
+
+        // Touch events
+        el.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          this.startDrag(bubble, touch.clientX, touch.clientY);
+        }, { passive: false });
+
+        // Click bounce
+        el.addEventListener('click', () => {
+          if (!bubble.isDragging) {
+            el.classList.remove('bounce');
+            void el.offsetWidth;
+            el.classList.add('bounce');
+            setTimeout(() => el.classList.remove('bounce'), 500);
+            
+            // Add random velocity on click
+            bubble.vx += (Math.random() - 0.5) * 8;
+            bubble.vy += (Math.random() - 0.5) * 8;
+          }
+        });
+      }
+
+      startDrag(bubble, clientX, clientY) {
+        this.draggedBubble = bubble;
+        bubble.isDragging = true;
+        bubble.vx = 0;
+        bubble.vy = 0;
+        
+        const rect = bubble.el.getBoundingClientRect();
+        this.dragOffset.x = clientX - rect.left;
+        this.dragOffset.y = clientY - rect.top;
+        
+        bubble.el.classList.add('dragging');
+      }
+
+      animate() {
+        this.bubbles.forEach(bubble => {
+          if (bubble.isDragging) return;
+          
+          // Update position
+          bubble.x += bubble.vx;
+          bubble.y += bubble.vy;
+          
+          // Wall collision
+          const rect = bubble.el.getBoundingClientRect();
+          const width = rect.width;
+          const height = rect.height;
+          
+          if (bubble.x <= 0) {
+            bubble.x = 0;
+            bubble.vx *= -0.8;
+          } else if (bubble.x >= this.containerRect.width - width) {
+            bubble.x = this.containerRect.width - width;
+            bubble.vx *= -0.8;
+          }
+          
+          if (bubble.y <= 0) {
+            bubble.y = 0;
+            bubble.vy *= -0.8;
+          } else if (bubble.y >= this.containerRect.height - height) {
+            bubble.y = this.containerRect.height - height;
+            bubble.vy *= -0.8;
+          }
+          
+          // Friction
+          bubble.vx *= 0.995;
+          bubble.vy *= 0.995;
+          
+          // Minimum velocity to keep them moving slightly
+          if (Math.abs(bubble.vx) < 0.1) bubble.vx += (Math.random() - 0.5) * 0.2;
+          if (Math.abs(bubble.vy) < 0.1) bubble.vy += (Math.random() - 0.5) * 0.2;
+          
+          // Apply transform
+          bubble.el.style.setProperty('--tx', `${bubble.x}px`);
+          bubble.el.style.setProperty('--ty', `${bubble.y}px`);
+          bubble.el.style.transform = `translate(${bubble.x}px, ${bubble.y}px) scale(var(--scale))`;
+        });
+
+        // Bubble collision
+        for (let i = 0; i < this.bubbles.length; i++) {
+          for (let j = i + 1; j < this.bubbles.length; j++) {
+            this.resolveCollision(this.bubbles[i], this.bubbles[j]);
           }
         }
-      });
 
-      // Touch support for mobile
-      let touchStartY = 0;
-      let touchClone = null;
+        this.animationId = requestAnimationFrame(() => this.animate());
+      }
 
-      tag.addEventListener('touchstart', (e) => {
-        draggedTag = tag;
-        touchStartY = e.touches[0].clientY;
-        tag.classList.add('dragging');
-      }, { passive: true });
-
-      tag.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      resolveCollision(b1, b2) {
+        if (b1.isDragging || b2.isDragging) return;
         
-        document.querySelectorAll('.skill-tag-cloud').forEach(t => t.classList.remove('drag-over'));
-        if (target && target.classList.contains('skill-tag-cloud') && target !== draggedTag) {
-          target.classList.add('drag-over');
-        }
-      }, { passive: false });
-
-      tag.addEventListener('touchend', (e) => {
-        tag.classList.remove('dragging');
-        const touch = e.changedTouches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const dx = (b2.x + b2.el.offsetWidth/2) - (b1.x + b1.el.offsetWidth/2);
+        const dy = (b2.y + b2.el.offsetHeight/2) - (b1.y + b1.el.offsetHeight/2);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDistance = (b1.el.offsetWidth + b2.el.offsetWidth) / 2.5;
         
-        if (target && target.classList.contains('skill-tag-cloud') && target !== draggedTag) {
-          const allTags = Array.from(skillsCloud.children);
-          const fromIndex = allTags.indexOf(draggedTag);
-          const toIndex = allTags.indexOf(target);
+        if (distance < minDistance) {
+          // Collision detected - elastic collision
+          const angle = Math.atan2(dy, dx);
+          const sin = Math.sin(angle);
+          const cos = Math.cos(angle);
           
-          if (fromIndex < toIndex) {
-            skillsCloud.insertBefore(draggedTag, target.nextSibling);
-          } else {
-            skillsCloud.insertBefore(draggedTag, target);
-          }
+          // Rotate velocities
+          const vx1 = b1.vx * cos + b1.vy * sin;
+          const vy1 = b1.vy * cos - b1.vx * sin;
+          const vx2 = b2.vx * cos + b2.vy * sin;
+          const vy2 = b2.vy * cos - b2.vx * sin;
+          
+          // Elastic collision
+          const finalVx1 = ((b1.mass - b2.mass) * vx1 + 2 * b2.mass * vx2) / (b1.mass + b2.mass);
+          const finalVx2 = ((b2.mass - b1.mass) * vx2 + 2 * b1.mass * vx1) / (b1.mass + b2.mass);
+          
+          // Rotate back
+          b1.vx = finalVx1 * cos - vy1 * sin;
+          b1.vy = vy1 * cos + finalVx1 * sin;
+          b2.vx = finalVx2 * cos - vy2 * sin;
+          b2.vy = vy2 * cos + finalVx2 * sin;
+          
+          // Separate bubbles
+          const overlap = minDistance - distance;
+          const separationX = (overlap * cos) / 2;
+          const separationY = (overlap * sin) / 2;
+          
+          b1.x -= separationX;
+          b1.y -= separationY;
+          b2.x += separationX;
+          b2.y += separationY;
         }
-        
-        document.querySelectorAll('.skill-tag-cloud').forEach(t => t.classList.remove('drag-over'));
-        draggedTag = null;
-      });
-    });
-
-    // ===== PARALLAX EFFECT =====
-    let ticking = false;
-    
-    function updateParallax() {
-      const scrolled = window.pageYOffset;
-      const parallaxElements = document.querySelectorAll('.parallax-layer');
-      
-      parallaxElements.forEach(el => {
-        const speed = el.dataset.speed || 0.5;
-        el.style.transform = `translateY(${scrolled * speed}px)`;
-      });
-      
-      ticking = false;
+      }
     }
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(updateParallax);
-        ticking = true;
+    // Global drag handlers
+    document.addEventListener('mousemove', (e) => {
+      const bubbles = window.skillsPhysics?.bubbles;
+      if (!bubbles) return;
+      
+      const dragged = bubbles.find(b => b.isDragging);
+      if (dragged) {
+        dragged.x = e.clientX - window.skillsPhysics.containerRect.left - dragged.el.offsetWidth/2;
+        dragged.y = e.clientY - window.skillsPhysics.containerRect.top - dragged.el.offsetHeight/2;
+        
+        // Constrain to container
+        dragged.x = Math.max(0, Math.min(dragged.x, window.skillsPhysics.containerRect.width - dragged.el.offsetWidth));
+        dragged.y = Math.max(0, Math.min(dragged.y, window.skillsPhysics.containerRect.height - dragged.el.offsetHeight));
+        
+        dragged.el.style.transform = `translate(${dragged.x}px, ${dragged.y}px) scale(var(--scale))`;
       }
-    }, { passive: true });
+    });
+
+    document.addEventListener('mouseup', () => {
+      const bubbles = window.skillsPhysics?.bubbles;
+      if (!bubbles) return;
+      
+      const dragged = bubbles.find(b => b.isDragging);
+      if (dragged) {
+        dragged.isDragging = false;
+        dragged.el.classList.remove('dragging');
+        // Give it a little throw velocity
+        dragged.vx = (Math.random() - 0.5) * 3;
+        dragged.vy = (Math.random() - 0.5) * 3;
+      }
+    });
+
+    // Touch handlers
+    document.addEventListener('touchmove', (e) => {
+      const bubbles = window.skillsPhysics?.bubbles;
+      if (!bubbles) return;
+      
+      const dragged = bubbles.find(b => b.isDragging);
+      if (dragged) {
+        const touch = e.touches[0];
+        dragged.x = touch.clientX - window.skillsPhysics.containerRect.left - dragged.el.offsetWidth/2;
+        dragged.y = touch.clientY - window.skillsPhysics.containerRect.top - dragged.el.offsetHeight/2;
+        
+        dragged.x = Math.max(0, Math.min(dragged.x, window.skillsPhysics.containerRect.width - dragged.el.offsetWidth));
+        dragged.y = Math.max(0, Math.min(dragged.y, window.skillsPhysics.containerRect.height - dragged.el.offsetHeight));
+        
+        dragged.el.style.transform = `translate(${dragged.x}px, ${dragged.y}px) scale(var(--scale))`;
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchend', () => {
+      const bubbles = window.skillsPhysics?.bubbles;
+      if (!bubbles) return;
+      
+      const dragged = bubbles.find(b => b.isDragging);
+      if (dragged) {
+        dragged.isDragging = false;
+        dragged.el.classList.remove('dragging');
+        dragged.vx = (Math.random() - 0.5) * 3;
+        dragged.vy = (Math.random() - 0.5) * 3;
+      }
+    });
+
+    // Initialize physics bubbles when skills section is visible
+    const skillsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !window.skillsPhysics) {
+          window.skillsPhysics = new PhysicsBubbles(document.getElementById('skillsContainer'));
+        }
+      });
+    }, { threshold: 0.1 });
+
+    skillsObserver.observe(document.getElementById('skills'));
 
     // ===== SMOOTH SCROLL =====
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
