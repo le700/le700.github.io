@@ -3,52 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>岳金豪</title>
+  <title>岳金豪 | Developer</title>
   <meta name="description" content="岳金豪 - 嵌入式开发与机器人算法">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     :root {
-      /* Light Theme */
-      --bg: #ffffff;
-      --bg-secondary: #f5f5f7;
-      --bg-tertiary: #fafafa;
-      --text: #1d1d1f;
-      --text-secondary: #6e6e73;
-      --text-tertiary: #86868b;
-      --accent: #0071e3;
-      --accent-hover: #0077ed;
-      --border: rgba(0,0,0,0.08);
-      --card: #ffffff;
-      --shadow: rgba(0,0,0,0.04);
-      --shadow-hover: rgba(0,0,0,0.08);
-      --code-bg: #f4f4f5;
-      --success: #34c759;
-      --warning: #ff9500;
-      
-      /* Easing */
-      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #000000;
-        --bg-secondary: #141414;
-        --bg-tertiary: #0d0d0d;
-        --text: #f5f5f7;
-        --text-secondary: #86868b;
-        --text-tertiary: #6e6e73;
-        --accent: #2997ff;
-        --accent-hover: #0077ed;
-        --border: rgba(255,255,255,0.08);
-        --card: rgba(255,255,255,0.05);
-        --shadow: rgba(0,0,0,0.3);
-        --shadow-hover: rgba(0,0,0,0.5);
-        --code-bg: rgba(255,255,255,0.08);
-      }
+      --bg: #0a0a0b;
+      --bg-secondary: #111113;
+      --bg-tertiary: #161618;
+      --text: #f5f5f7;
+      --text-secondary: #a0a0a5;
+      --text-tertiary: #6e6e73;
+      --accent: #7c9a6a;
+      --accent-glow: rgba(124, 154, 106, 0.3);
+      --moss: #4a5d3f;
+      --moss-light: #7c9a6a;
+      --wood: #3d3229;
+      --border: rgba(255,255,255,0.06);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -59,18 +33,68 @@
     }
 
     body {
-      font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.6;
       font-weight: 400;
-      letter-spacing: -0.01em;
-      -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-      transition: background 0.3s, color 0.3s;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ===== HERO ===== */
+    /* WebGL Canvas */
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(10,10,11,0.9), transparent);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav-logo {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+    }
+
+    /* Hero Section */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -78,225 +102,169 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 40px 24px;
       position: relative;
-      background: var(--bg);
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,113,227,0.08), transparent),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,113,227,0.04), transparent);
-      pointer-events: none;
+      z-index: 1;
+      padding: 120px 24px;
     }
 
     .hero-content {
+      max-width: 900px;
+    }
+
+    .hero-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s ease forwards 0.3s;
+    }
+
+    .hero-title {
+      font-size: clamp(48px, 10vw, 120px);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1.2s ease forwards 0.5s;
+    }
+
+    .hero-title span {
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      font-weight: 300;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s ease forwards 0.8s;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text);
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1s;
+    }
+
+    .hero-cta:hover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Section Base */
+    .section {
       position: relative;
       z-index: 1;
-    }
-
-    .hero-name {
-      font-size: clamp(64px, 15vw, 120px);
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      line-height: 0.9;
-      margin-bottom: 24px;
-      opacity: 0;
-      transform: translateY(40px);
-    }
-
-    .hero-name.revealed {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 1.2s var(--ease-out);
-    }
-
-    .hero-slogan {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: clamp(14px, 2.5vw, 18px);
-      font-weight: 400;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0;
-    }
-
-    .hero-slogan.revealed {
-      opacity: 1;
-      transition: opacity 1s var(--ease-out) 0.6s;
-    }
-
-    .hero-slogan::before {
-      content: '<';
-      margin-right: 8px;
-      color: var(--text-tertiary);
-    }
-
-    .hero-slogan::after {
-      content: '/>';
-      margin-left: 8px;
-      color: var(--text-tertiary);
-    }
-
-    .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-    }
-
-    .scroll-indicator.revealed {
-      opacity: 1;
-      transition: opacity 1s var(--ease-out) 1.2s;
-    }
-
-    .scroll-indicator svg {
-      width: 24px;
-      height: 24px;
-      color: var(--text-tertiary);
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(8px); }
-    }
-
-    /* ===== SECTIONS ===== */
-    .section {
-      min-height: 100vh;
-      padding: 100px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .section:nth-child(odd) {
-      background: var(--bg-secondary);
-    }
-
-    .section-inner {
-      max-width: 1000px;
-      width: 100%;
+      padding: 160px 48px;
     }
 
     .section-header {
-      margin-bottom: 60px;
-      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto 80px;
     }
 
     .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
-      color: var(--accent);
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
+      color: var(--accent);
       margin-bottom: 16px;
     }
 
     .section-title {
-      font-size: clamp(36px, 6vw, 56px);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
     }
 
-    /* ===== PROJECTS ===== */
-    .projects-list {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
+    /* Projects Grid */
+    .projects-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
     }
 
     .project-card {
-      background: var(--card);
-      border-radius: 24px;
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
-      overflow: hidden;
-      transition: box-shadow 0.3s, border-color 0.3s;
+      border-radius: 24px;
+      padding: 48px;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       opacity: 0;
-      transform: translateY(30px);
-      transform-style: preserve-3d;
-      perspective: 1000px;
-      will-change: transform;
+      transform: translateY(40px);
     }
 
     .project-card.visible {
       opacity: 1;
       transform: translateY(0);
-      transition: all 0.8s var(--ease-out);
     }
 
     .project-card:hover {
-      box-shadow: 0 32px 64px -12px var(--shadow-hover);
-    }
-
-    .project-card .bounce-click {
-      animation: bounceClick 0.6s var(--ease-spring);
-    }
-
-    @keyframes bounceClick {
-      0% { transform: scale(1); }
-      30% { transform: scale(0.95); }
-      50% { transform: scale(1.05); }
-      70% { transform: scale(0.98); }
-      100% { transform: scale(1); }
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
     }
 
     .project-header {
-      padding: 32px 36px 24px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(135deg, transparent, rgba(0,113,227,0.03));
-    }
-
-    .project-rank {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .project-rank::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      background: var(--success);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--success);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
     .project-title {
-      font-size: 26px;
-      font-weight: 700;
+      font-size: 28px;
+      font-weight: 500;
       letter-spacing: -0.02em;
-      margin-bottom: 8px;
     }
 
     .project-meta {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-
-    .project-body {
-      padding: 28px 36px 36px;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.05em;
     }
 
     .project-desc {
       font-size: 15px;
       color: var(--text-secondary);
-      line-height: 1.7;
+      line-height: 1.8;
       margin-bottom: 24px;
+      max-width: 700px;
     }
 
     .project-highlights {
@@ -308,6 +276,7 @@
 
     .highlight {
       display: flex;
+      align-items: flex-start;
       gap: 12px;
       font-size: 14px;
       color: var(--text-secondary);
@@ -315,9 +284,12 @@
     }
 
     .highlight::before {
-      content: '→';
-      color: var(--accent);
-      font-weight: 600;
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-top: 8px;
       flex-shrink: 0;
     }
 
@@ -329,13 +301,18 @@
     }
 
     .tech-tag {
-      font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      padding: 6px 12px;
-      background: var(--code-bg);
-      border-radius: 6px;
-      color: var(--text-secondary);
+      padding: 6px 14px;
+      background: var(--bg-tertiary);
       border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      transition: all 0.3s;
+    }
+
+    .tech-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
     .project-awards {
@@ -346,184 +323,31 @@
 
     .project-award {
       font-size: 12px;
-      font-weight: 600;
       padding: 6px 14px;
-      background: linear-gradient(135deg, rgba(255,149,0,0.12), rgba(255,204,0,0.08));
+      background: linear-gradient(135deg, rgba(124,154,106,0.15), rgba(124,154,106,0.05));
+      border: 1px solid rgba(124,154,106,0.3);
       border-radius: 100px;
-      color: #c93400;
+      color: var(--accent);
     }
 
-    @media (prefers-color-scheme: dark) {
-      .project-award {
-        color: #ffb800;
-      }
-    }
-
-    /* ===== SKILLS - PHYSICS BUBBLES ===== */
-    .skills-container {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      height: 400px;
+    /* Awards Section */
+    .awards-grid {
+      max-width: 1200px;
       margin: 0 auto;
-      overflow: hidden;
-      border-radius: 24px;
-      background: var(--card);
-      border: 1px solid var(--border);
-    }
-
-    .skill-bubble {
-      position: absolute;
-      font-family: 'JetBrains Mono', monospace;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.1) 20%, transparent 40%),
-                  radial-gradient(circle at 50% 50%, var(--card) 0%, var(--bg-secondary) 100%);
-      border: 2px solid var(--border);
-      border-radius: 50%;
-      color: var(--text);
-      font-weight: 600;
-      cursor: grab;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: none;
-      box-shadow: 
-        0 8px 32px rgba(0,113,227,0.15),
-        0 2px 8px rgba(0,0,0,0.1),
-        inset 0 -2px 6px rgba(0,0,0,0.1),
-        inset 0 2px 6px rgba(255,255,255,0.8);
-      will-change: transform;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      line-height: 1.2;
-      aspect-ratio: 1;
-      transition: box-shadow 0.3s, border-color 0.3s;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .skill-bubble {
-        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.05) 20%, transparent 40%),
-                    radial-gradient(circle at 50% 50%, var(--card) 0%, rgba(255,255,255,0.05) 100%);
-        box-shadow: 
-          0 8px 32px rgba(0,150,255,0.2),
-          0 2px 8px rgba(0,0,0,0.3),
-          inset 0 -2px 6px rgba(0,0,0,0.3),
-          inset 0 2px 6px rgba(255,255,255,0.1);
-      }
-    }
-
-    .skill-bubble::before {
-      content: '';
-      position: absolute;
-      top: 15%;
-      left: 20%;
-      width: 25%;
-      height: 15%;
-      background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
-      border-radius: 50%;
-      transform: rotate(-30deg);
-      pointer-events: none;
-    }
-
-    .skill-bubble:hover {
-      border-color: var(--accent);
-      box-shadow: 
-        0 12px 40px rgba(0,113,227,0.25),
-        0 4px 12px rgba(0,0,0,0.15),
-        inset 0 -2px 6px rgba(0,0,0,0.1),
-        inset 0 2px 6px rgba(255,255,255,0.8);
-      z-index: 10;
-    }
-
-    .skill-bubble.dragging {
-      cursor: grabbing;
-      z-index: 100;
-      box-shadow: 
-        0 20px 60px rgba(0,113,227,0.35),
-        0 8px 20px rgba(0,0,0,0.2),
-        inset 0 -2px 6px rgba(0,0,0,0.15),
-        inset 0 2px 6px rgba(255,255,255,0.7);
-    }
-
-    .skill-bubble.squeezing {
-      transition: transform 0.08s ease-out;
-    }
-
-    .skill-bubble.bounce {
-      animation: bubbleBounce 0.5s var(--ease-spring);
-    }
-
-    @keyframes bubbleBounce {
-      0% { transform: translate(var(--tx), var(--ty)) scale(var(--scale)); }
-      30% { transform: translate(var(--tx), var(--ty)) scale(calc(var(--scale) * 0.85)); }
-      50% { transform: translate(var(--tx), var(--ty)) scale(calc(var(--scale) * 1.2)); }
-      70% { transform: translate(var(--tx), var(--ty)) scale(calc(var(--scale) * 0.9)); }
-      100% { transform: translate(var(--tx), var(--ty)) scale(var(--scale)); }
-    }
-
-    /* Bubble sizes - perfect circles */
-    .skill-bubble.xl { 
-      font-size: 18px; 
-      --scale: 1;
-      width: 120px;
-      height: 120px;
-    }
-    .skill-bubble.lg { 
-      font-size: 15px; 
-      --scale: 0.92;
-      width: 100px;
-      height: 100px;
-    }
-    .skill-bubble.md { 
-      font-size: 13px; 
-      --scale: 0.85;
-      width: 85px;
-      height: 85px;
-    }
-    .skill-bubble.sm { 
-      font-size: 11px; 
-      --scale: 0.78;
-      width: 75px;
-      height: 75px;
-    }
-
-    /* ===== AWARDS ===== */
-    .awards-hero {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-
-    .awards-count {
-      font-size: clamp(80px, 15vw, 140px);
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      background: linear-gradient(135deg, #ff9500, #ffcc00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-
-    .awards-label {
-      font-size: 18px;
-      color: var(--text-secondary);
-    }
-
-    .awards-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 16px;
     }
 
     .award-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 20px 24px;
-      background: var(--card);
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 16px;
-      transition: all 0.4s var(--ease-spring);
+      padding: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.4s ease;
       opacity: 0;
       transform: translateY(20px);
     }
@@ -531,122 +355,80 @@
     .award-item.visible {
       opacity: 1;
       transform: translateY(0);
-      transition: all 0.6s var(--ease-out);
     }
 
     .award-item:hover {
-      transform: translateX(8px);
       border-color: var(--accent);
+      transform: translateX(8px);
     }
 
-    .award-item.bounce-click {
-      animation: awardBounce 0.5s var(--ease-spring);
-    }
-
-    @keyframes awardBounce {
-      0% { transform: translateX(8px) scale(1); }
-      30% { transform: translateX(8px) scale(0.95); }
-      50% { transform: translateX(8px) scale(1.06); }
-      70% { transform: translateX(8px) scale(0.98); }
-      100% { transform: translateX(8px) scale(1); }
-    }
-
-    .award-trophy {
-      font-size: 28px;
+    .award-icon {
+      font-size: 24px;
       flex-shrink: 0;
-    }
-
-    .award-content {
-      flex: 1;
     }
 
     .award-title {
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 500;
       margin-bottom: 4px;
     }
 
     .award-detail {
       font-size: 13px;
-      color: var(--text-secondary);
+      color: var(--text-tertiary);
     }
 
-    /* ===== VOLUNTEER ===== */
-    .volunteer-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px;
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      max-width: 700px;
-      margin: 0 auto;
-      transition: all 0.5s var(--ease-spring);
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .volunteer-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 0.8s var(--ease-out);
-    }
-
-    .volunteer-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 24px 48px -12px var(--shadow-hover);
-    }
-
-    .volunteer-icon {
-      width: 64px;
-      height: 64px;
-      background: linear-gradient(135deg, var(--success), #30d158);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      flex-shrink: 0;
-    }
-
-    .volunteer-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .volunteer-title a {
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .volunteer-title a:hover {
-      color: var(--accent);
-    }
-
-    .volunteer-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-
-    /* ===== CONTACT ===== */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+    /* Skills Section */
+    .skills-container {
       max-width: 800px;
       margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .skill-bubble {
+      font-size: 14px;
+      padding: 16px 28px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .skill-bubble.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .skill-bubble:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: scale(1.1);
+      box-shadow: 0 0 40px var(--accent-glow);
+    }
+
+    /* Contact Section */
+    .contact-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
 
     .contact-card {
-      background: var(--card);
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 32px 24px;
+      padding: 40px 24px;
       text-align: center;
-      transition: all 0.4s var(--ease-spring);
+      transition: all 0.4s ease;
       opacity: 0;
       transform: translateY(30px);
     }
@@ -654,12 +436,11 @@
     .contact-card.visible {
       opacity: 1;
       transform: translateY(0);
-      transition: all 0.8s var(--ease-out);
     }
 
     .contact-card:hover {
-      transform: translateY(-6px);
       border-color: var(--accent);
+      transform: translateY(-6px);
     }
 
     .contact-icon {
@@ -672,65 +453,32 @@
       font-weight: 600;
       color: var(--text-tertiary);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       margin-bottom: 8px;
     }
 
     .contact-value {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text);
-      font-weight: 500;
     }
 
     .contact-value a {
-      color: var(--accent);
+      color: var(--text);
       text-decoration: none;
-      transition: opacity 0.3s;
+      transition: color 0.3s;
     }
 
     .contact-value a:hover {
-      opacity: 0.7;
+      color: var(--accent);
     }
 
-    /* ===== STATS ===== */
-    .stats-bar {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 8px 16px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .stats-bar::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--success);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    /* ===== FOOTER ===== */
+    /* Footer */
     footer {
-      padding: 40px 24px;
+      padding: 60px 48px;
       text-align: center;
       border-top: 1px solid var(--border);
-      background: var(--bg-secondary);
+      position: relative;
+      z-index: 1;
     }
 
     footer p {
@@ -738,391 +486,299 @@
       color: var(--text-tertiary);
     }
 
-    /* ===== RESPONSIVE ===== */
+    /* Responsive */
     @media (max-width: 768px) {
-      .section { padding: 80px 20px; min-height: auto; }
-      .project-header { padding: 24px; }
-      .project-body { padding: 20px 24px 28px; }
-      .project-title { font-size: 20px; }
+      .nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .section { padding: 100px 24px; }
+      .project-card { padding: 32px 24px; }
+      .awards-grid { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
-      .volunteer-card { flex-direction: column; text-align: center; padding: 28px; }
-      .skills-container { height: 350px; }
-      .stats-bar { display: none; }
     }
   </style>
 </head>
 <body>
+  <!-- WebGL Background -->
+  <canvas id="webgl-canvas"></canvas>
 
-  <!-- Stats -->
-  <div class="stats-bar">
-    <span id="busuanzi_container_site_pv">总访问 <span id="busuanzi_value_site_pv">-</span></span>
-    <span style="color:var(--border)">|</span>
-    <span id="busuanzi_container_page_pv">本页 <span id="busuanzi_value_page_pv">-</span></span>
-  </div>
-
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">岳金豪</div>
+    <div class="nav-links">
+      <a href="#projects" class="nav-link">项目</a>
+      <a href="#awards" class="nav-link">获奖</a>
+      <a href="#skills" class="nav-link">技能</a>
+      <a href="#contact" class="nav-link">联系</a>
+    </div>
+  </nav>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-bg"></div>
     <div class="hero-content">
-      <h1 class="hero-name">岳金豪</h1>
-      <p class="hero-slogan">Developer</p>
-    </div>
-    <div class="scroll-indicator">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 5v14M5 12l7 7 7-7"/>
-      </svg>
+      <p class="hero-label">Developer & Robotics Engineer</p>
+      <h1 class="hero-title">Time to <span>style</span><br>the future</h1>
+      <p class="hero-desc">嵌入式开发与机器人算法工程师，专注于计算机视觉、AI 算法与硬件调试的全栈实践能力</p>
+      <a href="#projects" class="hero-cta">
+        <span>探索作品</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
     </div>
   </section>
 
   <!-- Projects -->
   <section class="section" id="projects">
-    <div class="section-inner">
-      <div class="section-header">
-        <p class="section-label">Projects</p>
-        <h2 class="section-title">项目经历</h2>
-      </div>
-      <div class="projects-list">
-
-        <!-- Project 1 -->
-        <div class="project-card" data-importance="1">
-          <div class="project-header">
-            <div class="project-rank">核心项目</div>
+    <div class="section-header">
+      <p class="section-label">Selected Works</p>
+      <h2 class="section-title">项目经历</h2>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-header">
+          <div>
             <h3 class="project-title">仿人机器人视觉控制系统</h3>
             <p class="project-meta">中国机器人及人工智能大赛 · 项目负责人 · 2024.12 - 2025.08</p>
           </div>
-          <div class="project-body">
-            <p class="project-desc">
-              基于幻尔科技树莓派仿人机器人平台进行二次开发，开发多模态视觉感知系统，实现人脸识别、物体抓取、场地导航、手势交互等功能。
-            </p>
-            <div class="project-highlights">
-              <div class="highlight">技术方案设计：作为项目负责人，制定整体技术架构，协调3-4人团队分工</div>
-              <div class="highlight">视觉算法开发：基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署</div>
-              <div class="highlight">算法优化：针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性</div>
-            </div>
-            <div class="project-tech">
-              <span class="tech-tag">Python</span>
-              <span class="tech-tag">C++</span>
-              <span class="tech-tag">OpenCV</span>
-              <span class="tech-tag">YOLOv5</span>
-              <span class="tech-tag">树莓派</span>
-            </div>
-            <div class="project-awards">
-              <span class="project-award">🏆 国家级二等奖</span>
-              <span class="project-award">🏆 国家级三等奖</span>
-              <span class="project-award">🥇 省级一等奖 ×2</span>
-              <span class="project-award">🥈 省级二等奖 ×2</span>
-              <span class="project-award">🥉 省级三等奖 ×2</span>
-            </div>
-          </div>
         </div>
+        <p class="project-desc">基于幻尔科技树莓派仿人机器人平台进行二次开发，开发多模态视觉感知系统，实现人脸识别、物体抓取、场地导航、手势交互等功能。</p>
+        <div class="project-highlights">
+          <div class="highlight">技术方案设计：作为项目负责人，制定整体技术架构，协调3-4人团队分工</div>
+          <div class="highlight">视觉算法开发：基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署</div>
+          <div class="highlight">算法优化：针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性</div>
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">C++</span>
+          <span class="tech-tag">OpenCV</span>
+          <span class="tech-tag">YOLOv5</span>
+          <span class="tech-tag">树莓派</span>
+        </div>
+        <div class="project-awards">
+          <span class="project-award">国家级二等奖</span>
+          <span class="project-award">国家级三等奖</span>
+          <span class="project-award">省级一等奖 ×2</span>
+          <span class="project-award">省级二等奖 ×2</span>
+          <span class="project-award">省级三等奖 ×2</span>
+        </div>
+      </div>
 
-        <!-- Project 2 -->
-        <div class="project-card" data-importance="2">
-          <div class="project-header">
-            <div class="project-rank">开源贡献</div>
+      <div class="project-card">
+        <div class="project-header">
+          <div>
             <h3 class="project-title">开源技术研究与贡献</h3>
             <p class="project-meta">github.com/le700 · 个人开发者 · 持续进行</p>
           </div>
-          <div class="project-body">
-            <p class="project-desc">
-              持续在 GitHub 跟踪研究 OpenClaw、Codex、Claude Code 等前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。
-            </p>
-            <div class="project-highlights">
-              <div class="highlight">研究 OpenClaw、Codex、Claude Code 等前沿 AI 与开源工具，深入理解其实现原理与应用场景</div>
-              <div class="highlight">自主开发 Skill 工具并开源至 github.com/le700，持续为开源社区贡献实用工具</div>
-              <div class="highlight">广泛研究机器人、嵌入式、AI 等领域有趣的开源项目，持续拓展技术视野</div>
-              <div class="highlight">采用 Vibe Coding 方式开发「基于科大讯飞星火大模型的多维度新闻真实性评测系统」</div>
-            </div>
-            <div class="project-tech">
-              <span class="tech-tag">Git</span>
-              <span class="tech-tag">AI Tools</span>
-              <span class="tech-tag">Open Source</span>
-              <span class="tech-tag">Skill Development</span>
-            </div>
-            <div class="project-awards">
-              <span class="project-award">🥉 挑战杯省级三等奖</span>
-              <span class="project-award">🥈 数字媒体竞赛校赛二等奖</span>
-            </div>
-          </div>
         </div>
+        <p class="project-desc">持续在 GitHub 跟踪研究 OpenClaw、Codex、Claude Code 等前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。</p>
+        <div class="project-highlights">
+          <div class="highlight">研究 OpenClaw、Codex、Claude Code 等前沿 AI 与开源工具，深入理解其实现原理与应用场景</div>
+          <div class="highlight">自主开发 Skill 工具并开源至 github.com/le700，持续为开源社区贡献实用工具</div>
+          <div class="highlight">采用 Vibe Coding 方式开发「基于科大讯飞星火大模型的多维度新闻真实性评测系统」</div>
+        </div>
+        <div class="project-tech">
+          <span class="tech-tag">Git</span>
+          <span class="tech-tag">AI Tools</span>
+          <span class="tech-tag">Open Source</span>
+          <span class="tech-tag">Skill Development</span>
+        </div>
+        <div class="project-awards">
+          <span class="project-award">挑战杯省级三等奖</span>
+          <span class="project-award">数字媒体竞赛校赛二等奖</span>
+        </div>
+      </div>
 
-        <!-- Project 3 -->
-        <div class="project-card" data-importance="3">
-          <div class="project-header">
-            <div class="project-rank">科研项目</div>
+      <div class="project-card">
+        <div class="project-header">
+          <div>
             <h3 class="project-title">危化品仓储智慧监控与安全预警系统</h3>
             <p class="project-meta">市级科研项目 · 算法工程师 · 2025.11</p>
           </div>
-          <div class="project-body">
-            <p class="project-desc">
-              市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。
-            </p>
-            <div class="project-highlights">
-              <div class="highlight">负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署</div>
-            </div>
-            <div class="project-tech">
-              <span class="tech-tag">YOLOv5</span>
-              <span class="tech-tag">STM32</span>
-              <span class="tech-tag">计算机视觉</span>
-            </div>
-          </div>
         </div>
-
-        <!-- Project 4 -->
-        <div class="project-card" data-importance="4">
-          <div class="project-header">
-            <div class="project-rank">竞赛项目</div>
-            <h3 class="project-title">TI-RSLK 循迹小车竞赛</h3>
-            <p class="project-meta">京南地区人工智能与机器人创新创业大赛 · 传感器开发与嵌入式编程</p>
-          </div>
-          <div class="project-body">
-            <p class="project-desc">
-              基于 TI-RSLK 机器人学习套件参加循迹赛项，负责传感器数据读取与 C++ 代码编写，最终获省级一等奖。
-            </p>
-            <div class="project-highlights">
-              <div class="highlight">负责红外/光电传感器阵列数据采集与处理，实现实时循迹判断逻辑</div>
-              <div class="highlight">编写 C++ 控制代码，调试 PID 参数，优化小车循迹速度与稳定性</div>
-            </div>
-            <div class="project-tech">
-              <span class="tech-tag">C++</span>
-              <span class="tech-tag">PID控制</span>
-              <span class="tech-tag">传感器</span>
-            </div>
-            <div class="project-awards">
-              <span class="project-award">🥇 省级一等奖</span>
-            </div>
-          </div>
+        <p class="project-desc">市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。</p>
+        <div class="project-highlights">
+          <div class="highlight">负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署</div>
         </div>
-
-        <!-- Project 5 -->
-        <div class="project-card" data-importance="5">
-          <div class="project-header">
-            <div class="project-rank">竞赛项目</div>
-            <h3 class="project-title">小型人形机器人舞蹈赛项</h3>
-            <p class="project-meta">中国机器人及人工智能大赛 · 动作调试与硬件维护</p>
-          </div>
-          <div class="project-body">
-            <p class="project-desc">
-              参与中国机器人及人工智能大赛等多项竞赛的机器人舞蹈赛项，负责小型人形机器人动作调试与优化及舵机维修维护工作。
-            </p>
-            <div class="project-highlights">
-              <div class="highlight">负责小型人形机器人动作序列设计、舞蹈动作调试与精细化优化，确保动作流畅性与比赛表现效果</div>
-              <div class="highlight">负责机器人舵机的日常检测、维修与更换，保障比赛期间硬件稳定运行</div>
-            </div>
-            <div class="project-tech">
-              <span class="tech-tag">动作调试</span>
-              <span class="tech-tag">硬件维护</span>
-              <span class="tech-tag">舵机控制</span>
-            </div>
-          </div>
+        <div class="project-tech">
+          <span class="tech-tag">YOLOv5</span>
+          <span class="tech-tag">STM32</span>
+          <span class="tech-tag">计算机视觉</span>
         </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Skills - Physics Bubbles -->
-  <section class="section" id="skills">
-    <div class="section-inner">
-      <div class="section-header">
-        <p class="section-label">Skills</p>
-        <h2 class="section-title">技术栈</h2>
-      </div>
-      <div class="skills-container" id="skillsContainer">
-        <div class="skill-bubble xl" data-skill="Python">Python</div>
-        <div class="skill-bubble xl" data-skill="C/C++">C/C++</div>
-        <div class="skill-bubble lg" data-skill="OpenCV">OpenCV</div>
-        <div class="skill-bubble lg" data-skill="YOLOv5">YOLOv5</div>
-        <div class="skill-bubble lg" data-skill="STM32">STM32</div>
-        <div class="skill-bubble md" data-skill="树莓派">树莓派</div>
-        <div class="skill-bubble md" data-skill="Git">Git</div>
-        <div class="skill-bubble md" data-skill="Linux">Linux</div>
-        <div class="skill-bubble md" data-skill="51单片机">51单片机</div>
-        <div class="skill-bubble sm" data-skill="SolidWorks">SolidWorks</div>
-        <div class="skill-bubble sm" data-skill="MATLAB">MATLAB</div>
-        <div class="skill-bubble sm" data-skill="Docker">Docker</div>
       </div>
     </div>
   </section>
 
   <!-- Awards -->
   <section class="section" id="awards">
-    <div class="section-inner">
-      <div class="section-header">
-        <p class="section-label">Awards</p>
-        <h2 class="section-title">竞赛获奖</h2>
+    <div class="section-header">
+      <p class="section-label">Achievements</p>
+      <h2 class="section-title">竞赛获奖</h2>
+    </div>
+    <div class="awards-grid">
+      <div class="award-item">
+        <span class="award-icon">🏆</span>
+        <div>
+          <div class="award-title">2025 世界人形机器人运动会</div>
+          <div class="award-detail">1500m 项目 · 松延动力小顽童系列机器人</div>
+        </div>
       </div>
-      <div class="awards-hero">
-        <div class="awards-count">20+</div>
-        <p class="awards-label">累计获得省级以上奖项</p>
+      <div class="award-item">
+        <span class="award-icon">🥈</span>
+        <div>
+          <div class="award-title">中国机器人及人工智能大赛</div>
+          <div class="award-detail">国家级二等奖、三等奖</div>
+        </div>
       </div>
-      <div class="awards-list">
-        <div class="award-item">
-          <span class="award-trophy">🏆</span>
-          <div class="award-content">
-            <div class="award-title">2025 世界人形机器人运动会</div>
-            <div class="award-detail">1500m 项目 · 松延动力小顽童系列机器人</div>
-          </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <div>
+          <div class="award-title">全国大学生信息安全与对抗技术竞赛</div>
+          <div class="award-detail">国家级三等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥈</span>
-          <div class="award-content">
-            <div class="award-title">中国机器人及人工智能大赛</div>
-            <div class="award-detail">国家级二等奖、三等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🏆</span>
+        <div>
+          <div class="award-title">全国机器人锦标赛及第四届国际仿人机器人奥林匹克大赛</div>
+          <div class="award-detail">省级二等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥉</span>
-          <div class="award-content">
-            <div class="award-title">全国大学生信息安全与对抗技术竞赛</div>
-            <div class="award-detail">国家级三等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥇</span>
+        <div>
+          <div class="award-title">京南地区人工智能与机器人创新创业大赛</div>
+          <div class="award-detail">省级一等奖 · 项目负责人</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🏆</span>
-          <div class="award-content">
-            <div class="award-title">全国机器人锦标赛及第四届国际仿人机器人奥林匹克大赛</div>
-            <div class="award-detail">省级二等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥇</span>
+        <div>
+          <div class="award-title">北京市大学生机器人大赛</div>
+          <div class="award-detail">省级一等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥇</span>
-          <div class="award-content">
-            <div class="award-title">京南地区人工智能与机器人创新创业大赛</div>
-            <div class="award-detail">省级一等奖 · 项目负责人</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥇</span>
+        <div>
+          <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）</div>
+          <div class="award-detail">省级一等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥇</span>
-          <div class="award-content">
-            <div class="award-title">北京市大学生机器人大赛</div>
-            <div class="award-detail">省级一等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥇</span>
+        <div>
+          <div class="award-title">全国三维数字化创新设计大赛（北京赛区）</div>
+          <div class="award-detail">省级一等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥇</span>
-          <div class="award-content">
-            <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）</div>
-            <div class="award-detail">省级一等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🏅</span>
+        <div>
+          <div class="award-title">中国机器人及人工智能大赛</div>
+          <div class="award-detail">省级一等奖2项、二等奖2项、三等奖2项</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥇</span>
-          <div class="award-content">
-            <div class="award-title">全国三维数字化创新设计大赛（北京赛区）</div>
-            <div class="award-detail">省级一等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥈</span>
+        <div>
+          <div class="award-title">华北五省市、自治区大学生机器人大赛</div>
+          <div class="award-detail">省级二等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🏅</span>
-          <div class="award-content">
-            <div class="award-title">中国机器人及人工智能大赛</div>
-            <div class="award-detail">省级一等奖2项、二等奖2项、三等奖2项</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥈</span>
+        <div>
+          <div class="award-title">中国国际大学生创新大赛北京赛区</div>
+          <div class="award-detail">省级三等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥈</span>
-          <div class="award-content">
-            <div class="award-title">华北五省市、自治区大学生机器人大赛</div>
-            <div class="award-detail">省级二等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <div>
+          <div class="award-title">全国大学生电子设计竞赛（北京赛区）</div>
+          <div class="award-detail">省级三等奖 · 项目负责人</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥈</span>
-          <div class="award-content">
-            <div class="award-title">中国国际大学生创新大赛北京赛区</div>
-            <div class="award-detail">省级三等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <div>
+          <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛</div>
+          <div class="award-detail">省级三等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥉</span>
-          <div class="award-content">
-            <div class="award-title">全国大学生电子设计竞赛（北京赛区）</div>
-            <div class="award-detail">省级三等奖 · 项目负责人</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <div>
+          <div class="award-title">全国大学生智能汽车竞赛华北赛区</div>
+          <div class="award-detail">省级三等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥉</span>
-          <div class="award-content">
-            <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛</div>
-            <div class="award-detail">省级三等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥈</span>
+        <div>
+          <div class="award-title">全国大学生数字媒体科技作品及创意竞赛</div>
+          <div class="award-detail">校赛二等奖</div>
         </div>
-        <div class="award-item">
-          <span class="award-trophy">🥉</span>
-          <div class="award-content">
-            <div class="award-title">全国大学生智能汽车竞赛华北赛区</div>
-            <div class="award-detail">省级三等奖</div>
-          </div>
-        </div>
-        <div class="award-item">
-          <span class="award-trophy">🥈</span>
-          <div class="award-content">
-            <div class="award-title">全国大学生数字媒体科技作品及创意竞赛</div>
-            <div class="award-detail">校赛二等奖</div>
-          </div>
-        </div>
-        <div class="award-item">
-          <span class="award-trophy">🥉</span>
-          <div class="award-content">
-            <div class="award-title">中国国际大学生创新大赛校赛</div>
-            <div class="award-detail">校赛三等奖</div>
-          </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🥉</span>
+        <div>
+          <div class="award-title">中国国际大学生创新大赛校赛</div>
+          <div class="award-detail">校赛三等奖</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Volunteer -->
-  <section class="section" id="volunteer">
-    <div class="section-inner">
-      <div class="section-header">
-        <p class="section-label">Volunteer</p>
-        <h2 class="section-title">志愿服务</h2>
-      </div>
-      <div class="volunteer-card">
-        <div class="volunteer-icon">❤️</div>
-        <div class="volunteer-content">
-          <h3 class="volunteer-title">
-            <a href="http://www.oneheartsphere.com/" target="_blank">同心圆慈善基金会</a>
-          </h3>
-          <p class="volunteer-desc">参与同心圆慈善基金会的线上支教与线下教学 10+ 课时，累积志愿服务 70+ 小时</p>
-        </div>
-      </div>
+  <!-- Skills -->
+  <section class="section" id="skills">
+    <div class="section-header">
+      <p class="section-label">Expertise</p>
+      <h2 class="section-title">技术栈</h2>
+    </div>
+    <div class="skills-container">
+      <div class="skill-bubble">Python</div>
+      <div class="skill-bubble">C/C++</div>
+      <div class="skill-bubble">OpenCV</div>
+      <div class="skill-bubble">YOLOv5</div>
+      <div class="skill-bubble">STM32</div>
+      <div class="skill-bubble">树莓派</div>
+      <div class="skill-bubble">Git</div>
+      <div class="skill-bubble">Linux</div>
+      <div class="skill-bubble">Docker</div>
+      <div class="skill-bubble">嵌入式</div>
+      <div class="skill-bubble">计算机视觉</div>
+      <div class="skill-bubble">机器人算法</div>
     </div>
   </section>
 
   <!-- Contact -->
   <section class="section" id="contact">
-    <div class="section-inner">
-      <div class="section-header">
-        <p class="section-label">Contact</p>
-        <h2 class="section-title">联系方式</h2>
+    <div class="section-header">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">联系方式</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">📱</div>
+        <div class="contact-label">电话 / 微信</div>
+        <div class="contact-value">18637473189</div>
       </div>
-      <div class="contact-grid">
-        <div class="contact-card">
-          <div class="contact-icon">📱</div>
-          <div class="contact-label">电话 / 微信</div>
-          <div class="contact-value">18637473189</div>
+      <div class="contact-card">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-label">邮箱</div>
+        <div class="contact-value">
+          <a href="mailto:3189311520@qq.com">3189311520@qq.com</a>
         </div>
-        <div class="contact-card">
-          <div class="contact-icon">✉️</div>
-          <div class="contact-label">邮箱</div>
-          <div class="contact-value">
-            <a href="mailto:3189311520@qq.com">3189311520@qq.com</a>
-          </div>
-          <div class="contact-value" style="margin-top:6px;">
-            <a href="mailto:manbujingxindele@gmail.com">manbujingxindele@gmail.com</a>
-          </div>
+        <div class="contact-value" style="margin-top:6px;">
+          <a href="mailto:manbujingxindele@gmail.com">manbujingxindele@gmail.com</a>
         </div>
-        <div class="contact-card">
-          <div class="contact-icon">💻</div>
-          <div class="contact-label">GitHub</div>
-          <div class="contact-value">
-            <a href="https://github.com/le700" target="_blank">github.com/le700</a>
-          </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">💻</div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">
+          <a href="https://github.com/le700" target="_blank">github.com/le700</a>
         </div>
       </div>
     </div>
@@ -1130,401 +786,230 @@
 
   <!-- Footer -->
   <footer>
-    <p>岳金豪</p>
+    <p>© 2025 岳金豪. All rights reserved.</p>
   </footer>
 
   <script>
-    // ===== ENTRANCE ANIMATION =====
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        document.querySelector('.hero-name').classList.add('revealed');
-      }, 200);
+    // ===== THREE.JS ORGANIC BACKGROUND =====
+    const canvas = document.getElementById('webgl-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 30;
+
+    // Mouse tracking
+    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+    
+    document.addEventListener('mousemove', (e) => {
+      mouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    // Create organic moss-like particles
+    const particleCount = 150;
+    const particles = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const originalPositions = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    const speeds = new Float32Array(particleCount);
+
+    for (let i = 0; i < particleCount; i++) {
+      const i3 = i * 3;
+      positions[i3] = (Math.random() - 0.5) * 60;
+      positions[i3 + 1] = (Math.random() - 0.5) * 60;
+      positions[i3 + 2] = (Math.random() - 0.5) * 30;
       
-      setTimeout(() => {
-        document.querySelector('.hero-slogan').classList.add('revealed');
-      }, 800);
+      originalPositions[i3] = positions[i3];
+      originalPositions[i3 + 1] = positions[i3 + 1];
+      originalPositions[i3 + 2] = positions[i3 + 2];
       
-      setTimeout(() => {
-        document.querySelector('.scroll-indicator').classList.add('revealed');
-      }, 1400);
+      sizes[i] = Math.random() * 3 + 1;
+      speeds[i] = Math.random() * 0.5 + 0.2;
+    }
+
+    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+    // Custom shader for organic look
+    const particleMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uColor1: { value: new THREE.Color('#4a5d3f') },
+        uColor2: { value: new THREE.Color('#7c9a6a') }
+      },
+      vertexShader: `
+        attribute float size;
+        uniform float uTime;
+        uniform vec2 uMouse;
+        varying float vAlpha;
+        
+        void main() {
+          vec3 pos = position;
+          
+          // Organic movement
+          float noise = sin(pos.x * 0.1 + uTime * 0.5) * cos(pos.y * 0.1 + uTime * 0.3) * 2.0;
+          pos.z += noise;
+          
+          // Mouse interaction - particles move away from mouse
+          float dist = distance(pos.xy, uMouse * 20.0);
+          float influence = smoothstep(15.0, 0.0, dist);
+          pos.xy += normalize(pos.xy - uMouse * 20.0) * influence * 3.0;
+          
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          gl_PointSize = size * (300.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+          
+          vAlpha = 1.0 - smoothstep(0.0, 50.0, length(pos.xy));
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uColor1;
+        uniform vec3 uColor2;
+        varying float vAlpha;
+        
+        void main() {
+          float dist = length(gl_PointCoord - vec2(0.5));
+          if (dist > 0.5) discard;
+          
+          float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
+          vec3 color = mix(uColor1, uColor2, dist * 2.0);
+          
+          gl_FragColor = vec4(color, alpha * vAlpha * 0.6);
+        }
+      `,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const particleSystem = new THREE.Points(particles, particleMaterial);
+    scene.add(particleSystem);
+
+    // Create flowing lines (branch-like)
+    const lineCount = 20;
+    const lines = [];
+
+    for (let i = 0; i < lineCount; i++) {
+      const points = [];
+      const segments = 50;
+      const radius = 10 + Math.random() * 15;
+      const angleOffset = (i / lineCount) * Math.PI * 2;
+      
+      for (let j = 0; j <= segments; j++) {
+        const t = j / segments;
+        const angle = angleOffset + t * Math.PI * 0.5;
+        const x = Math.cos(angle) * radius * (1 + t * 0.5);
+        const y = Math.sin(angle) * radius * (1 + t * 0.5);
+        const z = (Math.random() - 0.5) * 10;
+        points.push(new THREE.Vector3(x, y, z));
+      }
+      
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const material = new THREE.LineBasicMaterial({
+        color: 0x4a5d3f,
+        transparent: true,
+        opacity: 0.15
+      });
+      
+      const line = new THREE.Line(geometry, material);
+      line.userData = { originalPoints: points.map(p => p.clone()), angleOffset, radius };
+      lines.push(line);
+      scene.add(line);
+    }
+
+    // Animation loop
+    let time = 0;
+    
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.01;
+      
+      // Smooth mouse interpolation
+      mouse.x += (mouse.targetX - mouse.x) * 0.05;
+      mouse.y += (mouse.targetY - mouse.y) * 0.05;
+      
+      // Update particle shader
+      particleMaterial.uniforms.uTime.value = time;
+      particleMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
+      
+      // Rotate particle system slowly
+      particleSystem.rotation.y = time * 0.05;
+      particleSystem.rotation.x = Math.sin(time * 0.1) * 0.1;
+      
+      // Animate lines - organic wave motion
+      lines.forEach((line, i) => {
+        const positions = line.geometry.attributes.position.array;
+        const original = line.userData.originalPoints;
+        
+        for (let j = 0; j < original.length; j++) {
+          const j3 = j * 3;
+          const orig = original[j];
+          
+          // Wave motion based on time and position
+          const wave = Math.sin(time * 0.5 + orig.x * 0.1 + i) * 0.5;
+          const wave2 = Math.cos(time * 0.3 + orig.y * 0.1) * 0.3;
+          
+          // Mouse influence on lines
+          const mouseInfluenceX = mouse.x * 5 * (j / original.length);
+          const mouseInfluenceY = mouse.y * 5 * (j / original.length);
+          
+          positions[j3] = orig.x + wave + mouseInfluenceX;
+          positions[j3 + 1] = orig.y + wave2 + mouseInfluenceY;
+          positions[j3 + 2] = orig.z + Math.sin(time + j * 0.1) * 0.5;
+        }
+        
+        line.geometry.attributes.position.needsUpdate = true;
+        line.rotation.z = time * 0.02 * (i % 2 === 0 ? 1 : -1);
+      });
+      
+      // Camera subtle movement based on mouse
+      camera.position.x = mouse.x * 2;
+      camera.position.y = mouse.y * 2;
+      camera.lookAt(0, 0, 0);
+      
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
     // ===== SCROLL ANIMATIONS =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    }, observerOptions);
 
-    document.querySelectorAll('.project-card, .award-item, .volunteer-card, .contact-card').forEach(el => {
+    // Observe elements
+    document.querySelectorAll('.project-card, .award-item, .skill-bubble, .contact-card').forEach(el => {
       observer.observe(el);
     });
 
-    // Stagger awards
+    // Stagger animations
     document.querySelectorAll('.award-item').forEach((item, i) => {
-      item.style.transitionDelay = `${i * 0.04}s`;
+      item.style.transitionDelay = `${i * 0.03}s`;
     });
 
-    // Stagger projects
-    document.querySelectorAll('.project-card').forEach((card, i) => {
-      card.style.transitionDelay = `${i * 0.1}s`;
+    document.querySelectorAll('.skill-bubble').forEach((bubble, i) => {
+      bubble.style.transitionDelay = `${i * 0.05}s`;
     });
-
-    // ===== 3D TILT FOR PROJECT CARDS =====
-    document.querySelectorAll('.project-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        if (!card.classList.contains('visible')) return;
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = ((y - centerY) / centerY) * -20;
-        const rotateY = ((x - centerX) / centerX) * 20;
-        
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        card.style.transition = 'transform 0.1s ease-out';
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-        card.style.transition = 'transform 0.5s var(--ease-out)';
-      });
-    });
-
-    // ===== BOUNCE CLICK FEEDBACK =====
-    function addBounce(el, className) {
-      el.addEventListener('click', () => {
-        el.classList.remove(className);
-        void el.offsetWidth;
-        el.classList.add(className);
-        setTimeout(() => el.classList.remove(className), 600);
-      });
-    }
-
-    document.querySelectorAll('.project-card').forEach(card => addBounce(card, 'bounce-click'));
-    document.querySelectorAll('.award-item').forEach(item => addBounce(item, 'bounce-click'));
-    document.querySelectorAll('.contact-card').forEach(card => addBounce(card, 'bounce-click'));
-    document.querySelectorAll('.volunteer-card').forEach(card => addBounce(card, 'bounce-click'));
-
-    // ===== PHYSICS BUBBLES =====
-    class PhysicsBubbles {
-      constructor(container) {
-        this.container = container;
-        this.bubbles = [];
-        this.draggedBubble = null;
-        this.dragOffset = { x: 0, y: 0 };
-        this.containerRect = null;
-        this.animationId = null;
-        
-        this.init();
-      }
-
-      init() {
-        const bubbleElements = this.container.querySelectorAll('.skill-bubble');
-        this.containerRect = this.container.getBoundingClientRect();
-        
-        // Initialize bubbles with random positions and velocities
-        bubbleElements.forEach((el, i) => {
-          const rect = el.getBoundingClientRect();
-          const bubble = {
-            el: el,
-            x: Math.random() * (this.containerRect.width - rect.width - 40) + 20,
-            y: Math.random() * (this.containerRect.height - rect.height - 40) + 20,
-            vx: (Math.random() - 0.5) * 1.5,
-            vy: (Math.random() - 0.5) * 1.5,
-            radius: rect.width / 2,
-            mass: parseFloat(getComputedStyle(el).getPropertyValue('--scale')) || 1,
-            isDragging: false
-          };
-          
-          this.bubbles.push(bubble);
-          this.setupDrag(bubble);
-        });
-
-        this.animate();
-        
-        // Update container rect on resize
-        window.addEventListener('resize', () => {
-          this.containerRect = this.container.getBoundingClientRect();
-        });
-      }
-
-      setupDrag(bubble) {
-        const el = bubble.el;
-        let dragStartX = 0;
-        let dragStartY = 0;
-        let hasDragged = false;
-        
-        // Mouse events
-        el.addEventListener('mousedown', (e) => {
-          e.preventDefault();
-          dragStartX = e.clientX;
-          dragStartY = e.clientY;
-          hasDragged = false;
-          this.startDrag(bubble, e.clientX, e.clientY);
-        });
-
-        // Touch events
-        el.addEventListener('touchstart', (e) => {
-          e.preventDefault();
-          const touch = e.touches[0];
-          dragStartX = touch.clientX;
-          dragStartY = touch.clientY;
-          hasDragged = false;
-          this.startDrag(bubble, touch.clientX, touch.clientY);
-        }, { passive: false });
-
-        // Track if actually dragged
-        const trackDrag = (e) => {
-          const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-          const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-          if (Math.abs(clientX - dragStartX) > 5 || Math.abs(clientY - dragStartY) > 5) {
-            hasDragged = true;
-          }
-        };
-        
-        el.addEventListener('mousemove', trackDrag);
-        el.addEventListener('touchmove', trackDrag, { passive: true });
-
-        // Click bounce - only if not dragged
-        el.addEventListener('click', (e) => {
-          if (!hasDragged && !bubble.isDragging) {
-            e.preventDefault();
-            el.classList.remove('bounce');
-            void el.offsetWidth;
-            el.classList.add('bounce');
-            setTimeout(() => el.classList.remove('bounce'), 500);
-            
-            // Add random velocity on click
-            bubble.vx += (Math.random() - 0.5) * 8;
-            bubble.vy += (Math.random() - 0.5) * 8;
-          }
-        });
-      }
-
-      startDrag(bubble, clientX, clientY) {
-        this.draggedBubble = bubble;
-        bubble.isDragging = true;
-        bubble.vx = 0;
-        bubble.vy = 0;
-        
-        const rect = bubble.el.getBoundingClientRect();
-        this.dragOffset.x = clientX - rect.left;
-        this.dragOffset.y = clientY - rect.top;
-        
-        bubble.el.classList.add('dragging');
-      }
-
-      animate() {
-        this.bubbles.forEach(bubble => {
-          if (bubble.isDragging) return;
-          
-          // Update position
-          bubble.x += bubble.vx;
-          bubble.y += bubble.vy;
-          
-          // Wall collision
-          const rect = bubble.el.getBoundingClientRect();
-          const width = rect.width;
-          const height = rect.height;
-          
-          if (bubble.x <= 0) {
-            bubble.x = 0;
-            bubble.vx *= -0.8;
-          } else if (bubble.x >= this.containerRect.width - width) {
-            bubble.x = this.containerRect.width - width;
-            bubble.vx *= -0.8;
-          }
-          
-          if (bubble.y <= 0) {
-            bubble.y = 0;
-            bubble.vy *= -0.8;
-          } else if (bubble.y >= this.containerRect.height - height) {
-            bubble.y = this.containerRect.height - height;
-            bubble.vy *= -0.8;
-          }
-          
-          // Friction
-          bubble.vx *= 0.995;
-          bubble.vy *= 0.995;
-          
-          // Minimum velocity to keep them moving slightly
-          if (Math.abs(bubble.vx) < 0.1) bubble.vx += (Math.random() - 0.5) * 0.2;
-          if (Math.abs(bubble.vy) < 0.1) bubble.vy += (Math.random() - 0.5) * 0.2;
-          
-          // Apply transform
-          bubble.el.style.setProperty('--tx', `${bubble.x}px`);
-          bubble.el.style.setProperty('--ty', `${bubble.y}px`);
-          bubble.el.style.transform = `translate(${bubble.x}px, ${bubble.y}px) scale(var(--scale))`;
-        });
-
-        // Bubble collision
-        for (let i = 0; i < this.bubbles.length; i++) {
-          for (let j = i + 1; j < this.bubbles.length; j++) {
-            this.resolveCollision(this.bubbles[i], this.bubbles[j]);
-          }
-        }
-
-        this.animationId = requestAnimationFrame(() => this.animate());
-      }
-
-      resolveCollision(b1, b2) {
-        if (b1.isDragging || b2.isDragging) return;
-        
-        const dx = (b2.x + b2.el.offsetWidth/2) - (b1.x + b1.el.offsetWidth/2);
-        const dy = (b2.y + b2.el.offsetHeight/2) - (b1.y + b1.el.offsetHeight/2);
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const minDistance = (b1.el.offsetWidth + b2.el.offsetWidth) / 2.2;
-        
-        if (distance < minDistance && distance > 0) {
-          // Calculate collision depth (0 to 1)
-          const depth = 1 - (distance / minDistance);
-          const angle = Math.atan2(dy, dx);
-          const sin = Math.sin(angle);
-          const cos = Math.cos(angle);
-          
-          // Apply squeeze effect - squeeze perpendicular to collision
-          const maxSqueeze = 0.25;
-          const squeeze = Math.min(depth * maxSqueeze, 0.2);
-          
-          // Squeeze in collision direction, expand perpendicular
-          const scaleX = 1 - squeeze;
-          const scaleY = 1 + squeeze * 0.5;
-          
-          // Apply squeeze transform directly with computed values
-          const s1 = parseFloat(getComputedStyle(b1.el).getPropertyValue('--scale')) || 1;
-          const s2 = parseFloat(getComputedStyle(b2.el).getPropertyValue('--scale')) || 1;
-          
-          b1.el.style.setProperty('--tx', `${b1.x}px`);
-          b1.el.style.setProperty('--ty', `${b1.y}px`);
-          b2.el.style.setProperty('--tx', `${b2.x}px`);
-          b2.el.style.setProperty('--ty', `${b2.y}px`);
-          
-          b1.el.style.transform = `translate(${b1.x}px, ${b1.y}px) scale(${s1 * scaleX}, ${s1 * scaleY})`;
-          b2.el.style.transform = `translate(${b2.x}px, ${b2.y}px) scale(${s2 * scaleX}, ${s2 * scaleY})`;
-          
-          // Store squeeze timeout to clear it
-          if (b1.squeezeTimeout) clearTimeout(b1.squeezeTimeout);
-          if (b2.squeezeTimeout) clearTimeout(b2.squeezeTimeout);
-          
-          b1.squeezeTimeout = setTimeout(() => {
-            if (!b1.isDragging) {
-              b1.el.style.transform = `translate(${b1.x}px, ${b1.y}px) scale(${s1})`;
-            }
-          }, 100);
-          
-          b2.squeezeTimeout = setTimeout(() => {
-            if (!b2.isDragging) {
-              b2.el.style.transform = `translate(${b2.x}px, ${b2.y}px) scale(${s2})`;
-            }
-          }, 100);
-          
-          // Rotate velocities
-          const vx1 = b1.vx * cos + b1.vy * sin;
-          const vy1 = b1.vy * cos - b1.vx * sin;
-          const vx2 = b2.vx * cos + b2.vy * sin;
-          const vy2 = b2.vy * cos - b2.vx * sin;
-          
-          // Elastic collision
-          const finalVx1 = ((b1.mass - b2.mass) * vx1 + 2 * b2.mass * vx2) / (b1.mass + b2.mass);
-          const finalVx2 = ((b2.mass - b1.mass) * vx2 + 2 * b1.mass * vx1) / (b1.mass + b2.mass);
-          
-          // Rotate back
-          b1.vx = finalVx1 * cos - vy1 * sin;
-          b1.vy = vy1 * cos + finalVx1 * sin;
-          b2.vx = finalVx2 * cos - vy2 * sin;
-          b2.vy = vy2 * cos + finalVx2 * sin;
-          
-          // Separate bubbles more aggressively
-          const overlap = minDistance - distance;
-          const separationX = (overlap * cos) / 1.5;
-          const separationY = (overlap * sin) / 1.5;
-          
-          b1.x -= separationX;
-          b1.y -= separationY;
-          b2.x += separationX;
-          b2.y += separationY;
-        }
-      }
-    }
-
-    // Global drag handlers
-    document.addEventListener('mousemove', (e) => {
-      const bubbles = window.skillsPhysics?.bubbles;
-      if (!bubbles) return;
-      
-      const dragged = bubbles.find(b => b.isDragging);
-      if (dragged) {
-        dragged.x = e.clientX - window.skillsPhysics.containerRect.left - dragged.el.offsetWidth/2;
-        dragged.y = e.clientY - window.skillsPhysics.containerRect.top - dragged.el.offsetHeight/2;
-        
-        // Constrain to container
-        dragged.x = Math.max(0, Math.min(dragged.x, window.skillsPhysics.containerRect.width - dragged.el.offsetWidth));
-        dragged.y = Math.max(0, Math.min(dragged.y, window.skillsPhysics.containerRect.height - dragged.el.offsetHeight));
-        
-        dragged.el.style.transform = `translate(${dragged.x}px, ${dragged.y}px) scale(var(--scale))`;
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      const bubbles = window.skillsPhysics?.bubbles;
-      if (!bubbles) return;
-      
-      const dragged = bubbles.find(b => b.isDragging);
-      if (dragged) {
-        dragged.isDragging = false;
-        dragged.el.classList.remove('dragging');
-        // Give it a little throw velocity
-        dragged.vx = (Math.random() - 0.5) * 3;
-        dragged.vy = (Math.random() - 0.5) * 3;
-      }
-    });
-
-    // Touch handlers
-    document.addEventListener('touchmove', (e) => {
-      const bubbles = window.skillsPhysics?.bubbles;
-      if (!bubbles) return;
-      
-      const dragged = bubbles.find(b => b.isDragging);
-      if (dragged) {
-        const touch = e.touches[0];
-        dragged.x = touch.clientX - window.skillsPhysics.containerRect.left - dragged.el.offsetWidth/2;
-        dragged.y = touch.clientY - window.skillsPhysics.containerRect.top - dragged.el.offsetHeight/2;
-        
-        dragged.x = Math.max(0, Math.min(dragged.x, window.skillsPhysics.containerRect.width - dragged.el.offsetWidth));
-        dragged.y = Math.max(0, Math.min(dragged.y, window.skillsPhysics.containerRect.height - dragged.el.offsetHeight));
-        
-        dragged.el.style.transform = `translate(${dragged.x}px, ${dragged.y}px) scale(var(--scale))`;
-      }
-    }, { passive: false });
-
-    document.addEventListener('touchend', () => {
-      const bubbles = window.skillsPhysics?.bubbles;
-      if (!bubbles) return;
-      
-      const dragged = bubbles.find(b => b.isDragging);
-      if (dragged) {
-        dragged.isDragging = false;
-        dragged.el.classList.remove('dragging');
-        dragged.vx = (Math.random() - 0.5) * 3;
-        dragged.vy = (Math.random() - 0.5) * 3;
-      }
-    });
-
-    // Initialize physics bubbles when skills section is visible
-    const skillsObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !window.skillsPhysics) {
-          window.skillsPhysics = new PhysicsBubbles(document.getElementById('skillsContainer'));
-        }
-      });
-    }, { threshold: 0.1 });
-
-    skillsObserver.observe(document.getElementById('skills'));
 
     // ===== SMOOTH SCROLL =====
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
