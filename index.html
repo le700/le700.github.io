@@ -2421,6 +2421,86 @@
     }
     animate3D();
 
+    // Device Orientation - 手机倾斜视差交互
+    (function() {
+      let tiltX = 0, tiltY = 0; // -1 ~ 1
+      let targetTiltX = 0, targetTiltY = 0;
+      const heroContent = document.querySelector('.hero-content');
+      const heroGlow = document.querySelector('.hero-glow');
+      const scrollHint = document.querySelector('.scroll-hint');
+      const maxTilt = 15; // 最大倾斜角度(度)
+
+      function handleOrientation(e) {
+        // beta: 前后倾斜 (-180~180), gamma: 左右倾斜 (-90~90)
+        const beta = e.beta || 0;  // 前后
+        const gamma = e.gamma || 0; // 左右
+        targetTiltX = Math.max(-1, Math.min(1, gamma / 45)); // 左右
+        targetTiltY = Math.max(-1, Math.min(1, (beta - 45) / 45)); // 前后，45度为中性
+      }
+
+      // iOS 13+ 需要请求权限
+      function requestPermission() {
+        if (typeof DeviceOrientationEvent !== 'undefined' &&
+            typeof DeviceOrientationEvent.requestPermission === 'function') {
+          DeviceOrientationEvent.requestPermission()
+            .then(state => {
+              if (state === 'granted') {
+                window.addEventListener('deviceorientation', handleOrientation, true);
+              }
+            }).catch(console.warn);
+        } else {
+          window.addEventListener('deviceorientation', handleOrientation, true);
+        }
+      }
+
+      // 首次触摸时请求权限（iOS）
+      document.addEventListener('touchstart', function initTilt() {
+        requestPermission();
+        document.removeEventListener('touchstart', initTilt);
+      }, { once: true });
+
+      // 桌面端用鼠标模拟
+      document.addEventListener('mousemove', function(e) {
+        targetTiltX = (e.clientX / window.innerWidth - 0.5) * 2;
+        targetTiltY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      // 平滑插值动画
+      function animateTilt() {
+        tiltX += (targetTiltX - tiltX) * 0.08;
+        tiltY += (targetTiltY - tiltY) * 0.08;
+
+        const rotX = tiltY * maxTilt;
+        const rotY = -tiltX * maxTilt;
+        const translateX = tiltX * 20;
+        const translateY = tiltY * 15;
+
+        // Hero 内容视差
+        if (heroContent) {
+          heroContent.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${rotX * 0.3}deg) rotateY(${rotY * 0.3}deg)`;
+        }
+
+        // 光晕跟随
+        if (heroGlow) {
+          heroGlow.style.transform = `translate(${translateX * 1.5}px, ${translateY * 1.5}px) scale(${1 + Math.abs(tiltX + tiltY) * 0.15})`;
+        }
+
+        // 滚动提示反向微移
+        if (scrollHint) {
+          scrollHint.style.transform = `translateX(-50%) translate(${-translateX * 0.5}px, ${-translateY * 0.5}px)`;
+        }
+
+        // Three.js 粒子系统跟随
+        particleSystem.rotation.x += (tiltY * 0.1 - particleSystem.rotation.x + 0.0001) * 0.05;
+        particleSystem.rotation.y += (tiltX * 0.1 - particleSystem.rotation.y + 0.0002) * 0.05;
+        linesMesh.rotation.x = particleSystem.rotation.x;
+        linesMesh.rotation.y = particleSystem.rotation.y;
+
+        requestAnimationFrame(animateTilt);
+      }
+      animateTilt();
+    })();
+
     // GSAP Animations
     gsap.registerPlugin(ScrollTrigger);
 
