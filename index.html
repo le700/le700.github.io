@@ -813,14 +813,14 @@
       transform: translate(-50%, -50%);
       width: 800px;
       height: 800px;
-      background: radial-gradient(circle, rgba(0, 245, 255, 0.05) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(230, 57, 124, 0.05) 0%, transparent 60%);
       pointer-events: none;
     }
 
     .contact h2 {
       font-size: clamp(42px, 7vw, 72px);
       font-weight: 200;
-      margin-bottom: 32px;
+      margin-bottom: 80px;
       letter-spacing: -0.02em;
       position: relative;
       z-index: 1;
@@ -834,46 +834,44 @@
       background-clip: text;
     }
 
-    .contact-desc {
-      font-size: 18px;
-      color: var(--text-secondary);
-      margin-bottom: 80px;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.9;
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 40px;
+      max-width: 1000px;
+      margin: 0 auto;
       position: relative;
       z-index: 1;
     }
 
-    .contact-links {
+    .contact-item {
       display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
-
-    .contact-link {
-      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 16px;
-      padding: 20px 36px;
+      gap: 20px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .contact-item:hover {
+      transform: translateY(-10px);
+    }
+
+    .contact-icon {
+      width: 80px;
+      height: 80px;
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      border-radius: 100px;
-      color: var(--text-primary);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(10px);
     }
 
-    .contact-link::before {
+    .contact-icon::before {
       content: '';
       position: absolute;
       inset: 0;
@@ -882,34 +880,97 @@
       transition: opacity 0.4s ease;
     }
 
-    .contact-link::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      background: var(--gradient-primary);
-      border-radius: 100px;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.4s ease;
+    .contact-item:hover .contact-icon {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 20px 40px rgba(230, 57, 124, 0.3);
+      transform: scale(1.1);
     }
 
-    .contact-link:hover::before {
+    .contact-item:hover .contact-icon::before {
       opacity: 0.1;
     }
 
-    .contact-link:hover::after {
-      opacity: 0.4;
-    }
-
-    .contact-link:hover {
-      transform: translateY(-6px);
-      border-color: transparent;
-      box-shadow: 0 30px 60px rgba(0, 245, 255, 0.2);
-    }
-
-    .contact-link span {
+    .contact-icon svg {
+      width: 36px;
+      height: 36px;
+      fill: var(--text-primary);
       position: relative;
       z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .contact-item:hover .contact-icon svg {
+      fill: var(--accent-cyan);
+    }
+
+    .contact-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+
+    .contact-item:hover .contact-label {
+      color: var(--accent-cyan);
+    }
+
+    .contact-info-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 29, 0.95);
+      z-index: 10001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(20px);
+    }
+
+    .contact-info-modal.active {
+      display: flex;
+    }
+
+    .contact-info-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 48px 64px;
+      text-align: center;
+      max-width: 90vw;
+    }
+
+    .contact-info-content h3 {
+      font-size: 24px;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+
+    .contact-info-content p {
+      font-size: 32px;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .contact-info-close {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      width: 56px;
+      height: 56px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      color: var(--text-primary);
+      font-size: 28px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-info-close:hover {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
     }
 
     /* Footer */
@@ -1350,24 +1411,48 @@
   <!-- Contact Section -->
   <section class="contact" id="contact">
     <h2>Let's <span class="highlight">Connect</span></h2>
-    <div class="contact-links">
-      <a href="tel:18637473189" class="contact-link">
-        <span>18637473189（微信同号）</span>
-      </a>
-      <a href="mailto:3189311520@qq.com" class="contact-link">
-        <span>3189311520@qq.com</span>
-      </a>
-      <a href="mailto:manbujingxindele@gmail.com" class="contact-link">
-        <span>manbujingxindele@gmail.com</span>
-      </a>
-      <a href="https://github.com/le700" class="contact-link" target="_blank">
-        <span>GitHub</span>
-      </a>
-      <a href="https://le700.github.io" class="contact-link" target="_blank">
-        <span>个人网页：le700.github.io</span>
-      </a>
+    <div class="contact-grid">
+      <div class="contact-item" onclick="showContactInfo('微信', '18637473189')">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.269-.03-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>
+        </div>
+        <span class="contact-label">微信</span>
+      </div>
+      <div class="contact-item" onclick="showContactInfo('QQ邮箱', '3189311520@qq.com')">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+        </div>
+        <span class="contact-label">QQ邮箱</span>
+      </div>
+      <div class="contact-item" onclick="showContactInfo('Gmail', 'manbujingxindele@gmail.com')">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73l-6.545 5.818-6.545-5.818v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 10.91l6.545-6.27 1.528-1.145C21.69 2.32 24 3.475 24 5.457z"/></svg>
+        </div>
+        <span class="contact-label">Gmail</span>
+      </div>
+      <div class="contact-item" onclick="window.open('https://github.com/le700', '_blank')">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </div>
+        <span class="contact-label">GitHub</span>
+      </div>
+      <div class="contact-item" onclick="showContactInfo('手机号', '18637473189')">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
+        <span class="contact-label">电话</span>
+      </div>
     </div>
   </section>
+
+  <!-- Contact Info Modal -->
+  <div class="contact-info-modal" id="contactInfoModal">
+    <button class="contact-info-close" onclick="closeContactInfo()">×</button>
+    <div class="contact-info-content">
+      <h3 id="contactInfoTitle"></h3>
+      <p id="contactInfoValue"></p>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
@@ -1689,12 +1774,12 @@
       ease: 'power2.out'
     });
 
-    gsap.from('.contact-link', {
+    gsap.from('.contact-item', {
       scrollTrigger: { trigger: '.contact', start: 'top 60%', toggleActions: 'play none none reverse' },
       y: 40,
       opacity: 0,
       duration: 0.8,
-      stagger: 0.15,
+      stagger: 0.1,
       ease: 'power2.out'
     });
 
@@ -1721,6 +1806,31 @@
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    });
+
+    // Contact Info Modal
+    const contactInfoModal = document.getElementById('contactInfoModal');
+    const contactInfoTitle = document.getElementById('contactInfoTitle');
+    const contactInfoValue = document.getElementById('contactInfoValue');
+
+    function showContactInfo(title, value) {
+      contactInfoTitle.textContent = title;
+      contactInfoValue.textContent = value;
+      contactInfoModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeContactInfo() {
+      contactInfoModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    contactInfoModal.addEventListener('click', (e) => {
+      if (e.target === contactInfoModal) closeContactInfo();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && contactInfoModal.classList.contains('active')) closeContactInfo();
     });
 
     // Resize handler
