@@ -204,6 +204,34 @@
       left: 0;
     }
 
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 200;
+    }
+    .hamburger span {
+      display: block;
+      width: 18px;
+      height: 1.5px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
     /* Hero Section - 沉浸式 */
     .hero {
       height: 100vh;
@@ -998,7 +1026,7 @@
     .skill-planet:nth-child(8) { --orbit-radius: 130px; animation-duration: 30s; animation-delay: -15s; top: 50%; left: 50%; }
     .skill-planet:nth-child(9) { --orbit-radius: 130px; animation-duration: 30s; animation-delay: -7.5s; top: 50%; left: 50%; }
     .skill-planet:nth-child(10) { --orbit-radius: 190px; animation-duration: 40s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(11) { --orbit-radius: 190px; animation-duration: 40s; animation-delay: -20s; top: 50%; left: left: 50%; }
+    .skill-planet:nth-child(11) { --orbit-radius: 190px; animation-duration: 40s; animation-delay: -20s; top: 50%; left: 50%; }
     .skill-planet:nth-child(12) { --orbit-radius: 190px; animation-duration: 40s; animation-delay: -10s; top: 50%; left: 50%; }
     .skill-planet:nth-child(13) { --orbit-radius: 250px; animation-duration: 50s; top: 50%; left: 50%; }
     .skill-planet:nth-child(14) { --orbit-radius: 250px; animation-duration: 50s; animation-delay: -25s; top: 50%; left: 50%; }
@@ -1357,22 +1385,112 @@
     }
 
     @media (max-width: 768px) {
-      nav { top: 20px; padding: 14px 28px; gap: 32px; }
-      .nav-links { display: none; }
-      .projects-bento { grid-template-columns: 1fr; }
-      .bento-card.large, .bento-card.wide { grid-column: span 1; }
-      .skills-galaxy { height: 350px; }
+      /* Navigation */
+      nav { top: 16px; padding: 12px 20px; gap: 16px; border-radius: 16px; }
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(26, 26, 29, 0.97);
+        backdrop-filter: blur(30px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        z-index: 150;
+        border-radius: 0;
+        border: none;
+        padding: 0;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 24px; font-weight: 500; }
+
+      /* Sections */
+      section { padding: 80px 20px; max-width: 100%; }
+      .section-header { margin-bottom: 48px; }
+      .section-eyebrow { font-size: 10px; letter-spacing: 0.3em; }
+      .section-eyebrow::before, .section-eyebrow::after { width: 40px; }
+
+      /* Hero */
+      .hero-content { padding: 0 20px; }
+      .hero-desc { font-size: 15px; margin-bottom: 40px; }
+      .scroll-hint { bottom: 40px; }
+      .hero-glow { width: 300px; height: 300px; }
+
+      /* Projects Bento */
+      .projects-bento { grid-template-columns: 1fr; grid-auto-rows: minmax(220px, auto); gap: 16px; }
+      .bento-card.large, .bento-card.wide { grid-column: span 1; grid-row: span 1; }
+      .bento-front { padding: 24px; }
+      .bento-back { padding: 24px; }
+      .bento-front h3 { font-size: 18px; }
+      .bento-card.large .bento-front h3 { font-size: 20px; }
+      .bento-number { font-size: 32px; top: 16px; right: 16px; }
+      .bento-icon { width: 40px; height: 40px; border-radius: 10px; margin-bottom: 12px; }
+      .bento-icon svg { width: 20px; height: 20px; }
+      .bento-tag { font-size: 10px; padding: 4px 10px; }
+
+      /* Awards Card Stack */
+      .awards-stack { padding: 80px 0 60px; }
+      .awards-progress { top: 70px; right: 20px; font-size: 14px; }
+      .awards-progress span:first-child { font-size: 24px; }
+      .card-stack-container { padding: 0 16px; min-height: 55vh; }
+      .card-stack { height: 380px; }
+      .award-card { padding: 28px 24px; border-radius: 18px; }
+      .award-card-title { font-size: 22px; margin-bottom: 12px; }
+      .award-card-year { font-size: 32px; }
+      .award-card-level { padding: 8px 16px; font-size: 12px; }
+      .award-card-rank { font-size: 15px; }
+      .award-card-header { margin-bottom: 16px; }
+      .award-card-footer { margin-top: 16px; padding-top: 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .view-cert-btn { padding: 10px 20px; font-size: 13px; }
+      .awards-nav { margin-top: 24px; }
+      .nav-btn { width: 48px; height: 48px; font-size: 20px; }
+      .scroll-hint-awards { bottom: 20px; font-size: 12px; }
+      .cert-modal { padding: 20px; }
+      .cert-modal-close { top: -40px; }
+
+      /* Skills */
+      .skills-galaxy { height: auto; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; padding: 20px 0; }
       .skill-orbit { display: none; }
-      .skill-planet { position: relative; top: auto !important; left: auto !important; display: inline-block; margin: 8px; }
-      .skill-planet.core { position: relative; transform: none; margin-bottom: 20px; }
-      .stat-number { font-size: 48px; }
-      .award-item { grid-template-columns: 1fr; gap: 16px; text-align: center; }
+      .skill-planet {
+        position: relative !important;
+        top: auto !important; left: auto !important;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0; animation: none !important;
+        width: 60px !important; height: 60px !important;
+      }
+      .skill-planet::after {
+        bottom: -22px; font-size: 10px; white-space: nowrap;
+      }
+
+      /* Contact */
+      .contact { padding: 80px 20px; }
+      .contact h2 { margin-bottom: 36px; }
+      .contact-cards { flex-direction: row; flex-wrap: wrap; gap: 12px; justify-content: center; }
+      .contact-card { width: calc(33.33% - 8px); height: 120px; border-radius: 14px; gap: 8px; }
+      .contact-card-icon { width: 36px; height: 36px; border-radius: 10px; }
+      .contact-card-icon svg { width: 20px; height: 20px; }
+      .contact-card-label { font-size: 12px; }
+      .contact-card-hint { font-size: 10px; }
+
+      /* Award list items (old style) */
+      .award-item { grid-template-columns: 1fr; gap: 12px; text-align: center; padding: 20px; }
       .award-year { text-align: center; }
-      .contact { padding: 140px 40px; }
-      .contact-cards { flex-direction: column; align-items: center; }
-      .contact-card { width: 200px; height: 160px; }
+      .stat-number { font-size: 48px; }
+
+      /* Cursor */
       body { cursor: auto; }
       .cursor, .cursor-dot { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 60px 16px; }
+      .section-header { margin-bottom: 36px; }
+      .card-stack { height: 340px; }
+      .award-card { padding: 24px 20px; }
+      .award-card-title { font-size: 20px; }
+      .contact-card { width: calc(50% - 6px); height: 110px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1395,14 +1513,17 @@
   <div class="scanlines"></div>
 
   <!-- Navigation -->
-  <nav>
+  <nav id="mainNav">
     <div class="nav-logo">岳金豪</div>
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
       <a href="#projects">项目</a>
       <a href="#awards">获奖</a>
       <a href="#skills">技能</a>
       <a href="#contact">联系</a>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- Hero Section -->
@@ -2084,6 +2205,22 @@
   </div>
 
   <script>
+    // Hamburger Menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('open');
+      document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+
     // Smooth Scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
