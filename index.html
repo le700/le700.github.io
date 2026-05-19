@@ -30,7 +30,6 @@
       overflow-x: hidden;
     }
 
-    /* Loading */
     .loader {
       position: fixed;
       inset: 0;
@@ -44,7 +43,6 @@
 
     .loader.hidden { opacity: 0; pointer-events: none; }
 
-    /* Navigation */
     nav {
       position: fixed;
       top: 0;
@@ -69,7 +67,6 @@
 
     nav a:hover { opacity: 0.6; }
 
-    /* Hero */
     .hero {
       height: 100vh;
       display: flex;
@@ -122,7 +119,6 @@
       50% { transform: translateX(-50%) translateY(-10px); }
     }
 
-    /* Sections */
     section {
       padding: 150px 60px;
       max-width: 1400px;
@@ -148,7 +144,6 @@
       margin-bottom: 16px;
     }
 
-    /* Projects - Minimal List */
     .projects-list {
       display: flex;
       flex-direction: column;
@@ -214,7 +209,6 @@
       content: none;
     }
 
-    /* Awards - Clean List */
     .awards-list {
       display: flex;
       flex-direction: column;
@@ -257,7 +251,6 @@
       text-align: right;
     }
 
-    /* Skills - Simple Tags */
     .skills {
       display: flex;
       flex-wrap: wrap;
@@ -276,7 +269,6 @@
       color: var(--text);
     }
 
-    /* Contact */
     .contact {
       text-align: center;
       padding: 200px 60px;
@@ -318,7 +310,6 @@
       width: 100%;
     }
 
-    /* Modal */
     .modal {
       position: fixed;
       inset: 0;
@@ -362,7 +353,6 @@
     .modal-prev { left: 20px; }
     .modal-next { right: 20px; }
 
-    /* Footer */
     footer {
       padding: 60px;
       text-align: center;
@@ -374,7 +364,6 @@
       color: var(--text-secondary);
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       nav { padding: 20px 30px; }
       nav a { margin-left: 20px; font-size: 11px; }
@@ -466,75 +455,161 @@
       <h2>竞赛获奖</h2>
     </div>
     <div class="awards-list">
-      <div class="award" data-cert="certificates/8722-2025-王若冰、岳金豪、陈齐兴、苏君硕、黄思睿、魏兴一、方涛、李秋颖.png">
-        <div class="award-level">国家级</div>
-        <div class="award-title">中国机器人及人工智能大赛 · 二等奖</div>
-        <div class="award-detail">2025</div>
+      <!-- 7828: 全国机器人锦标赛 -->
+      <div class="award" data-cert="certificates/7828-2024-陈齐兴、岳金豪、杨佳骏、何保森、杨京涛.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国机器人锦标赛 · 二等奖</div>
+        <div class="award-detail">2024</div>
       </div>
-      <div class="award" data-cert="certificates/8873-2025-王若冰、陈齐兴、魏兴一、苏君硕、黄思睿、方涛、岳金豪.jpg">
-        <div class="award-level">国家级</div>
-        <div class="award-title">中国机器人及人工智能大赛 · 三等奖</div>
-        <div class="award-detail">2025</div>
+      <!-- 7856: 第四届国际仿人机器人奥林匹克大赛 -->
+      <div class="award" data-cert="certificates/7856-2024-陈齐兴、岳金豪、杨佳骏、何保森、杨京涛.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">第四届国际仿人机器人奥林匹克大赛 · 二等奖</div>
+        <div class="award-detail">2024</div>
       </div>
-      <div class="award" data-cert="certificates/9797-2025-魏兴一、毕可欣、岳金豪.png">
-        <div class="award-level">国家级</div>
-        <div class="award-title">全国大学生信息安全与对抗技术竞赛 · 三等奖</div>
-        <div class="award-detail">2025</div>
-      </div>
+      <!-- 8285: 京南地区人工智能与机器人创新创业大赛 -->
       <div class="award" data-cert="certificates/8285-2024-岳金豪.png">
         <div class="award-level">省级</div>
         <div class="award-title">京南地区人工智能与机器人创新创业大赛 · 一等奖</div>
         <div class="award-detail">2024 · 项目负责人</div>
       </div>
+      <!-- 8298: 京南地区人工智能与机器人创新创业大赛 -->
+      <div class="award" data-cert="certificates/8298-2024-陈齐兴、杨佳骏、岳金豪.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">京南地区人工智能与机器人创新创业大赛 · 一等奖</div>
+        <div class="award-detail">2024</div>
+      </div>
+      <!-- 8722: 中国机器人及人工智能大赛 -->
+      <div class="award" data-cert="certificates/8722-2025-王若冰、岳金豪、陈齐兴、苏君硕、黄思睿、魏兴一、方涛、李秋颖.png">
+        <div class="award-level">国家级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 二等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 8845: 北京市大学生机器人大赛 -->
       <div class="award" data-cert="certificates/8845-2025-岳金豪、屠浩然、魏兴一.png">
         <div class="award-level">省级</div>
         <div class="award-title">北京市大学生机器人大赛 · 一等奖</div>
         <div class="award-detail">2025</div>
       </div>
-      <div class="award" data-cert="certificates/9783-2025-陈齐兴、岳金豪、王劭书、毕可欣.png">
-        <div class="award-level">省级</div>
-        <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）· 一等奖</div>
-        <div class="award-detail">2025</div>
-      </div>
-      <div class="award" data-cert="certificates/9148-2025-方涛、张卿郡、岳金豪、陈齐兴、毕可欣.png">
-        <div class="award-level">省级</div>
-        <div class="award-title">全国三维数字化创新设计大赛（北京赛区）· 一等奖</div>
-        <div class="award-detail">2025</div>
-      </div>
+      <!-- 8847: 中国机器人及人工智能大赛 -->
       <div class="award" data-cert="certificates/8847-2025-陈珂、岳金豪、陈齐兴.png">
         <div class="award-level">省级</div>
         <div class="award-title">中国机器人及人工智能大赛 · 一等奖</div>
         <div class="award-detail">2025</div>
       </div>
+      <!-- 8853: 中国机器人及人工智能大赛 -->
+      <div class="award" data-cert="certificates/8853-2025-陈珂、岳金豪、陈齐兴.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 二等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 8873: 中国机器人及人工智能大赛 -->
+      <div class="award" data-cert="certificates/8873-2025-王若冰、陈齐兴、魏兴一、苏君硕、黄思睿、方涛、岳金豪.jpg">
+        <div class="award-level">国家级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 8979: 华北五省市大学生机器人大赛 -->
       <div class="award" data-cert="certificates/8979-2025-方涛、岳金豪、王若冰、李燕飞、苏君硕.jpg">
         <div class="award-level">省级</div>
         <div class="award-title">华北五省市大学生机器人大赛 · 二等奖</div>
         <div class="award-detail">2025</div>
       </div>
+      <!-- 9016: 中国国际大学生创新大赛北京赛区 -->
       <div class="award" data-cert="certificates/9016-2025-李燕飞、王若冰、方涛、岳金豪、苏君硕.jpg">
         <div class="award-level">省级</div>
         <div class="award-title">中国国际大学生创新大赛北京赛区 · 三等奖</div>
         <div class="award-detail">2025</div>
       </div>
-      <div class="award" data-cert="certificates/9025-2025-岳金豪、李莹川、马敏涛.jpg">
-        <div class="award-level">省级</div>
-        <div class="award-title">全国大学生电子设计竞赛（北京赛区）· 三等奖</div>
-        <div class="award-detail">2025 · 项目负责人</div>
-      </div>
-      <div class="award" data-cert="certificates/10120-2026-梁范杰、刘瑞洲、岳金豪.jpg">
-        <div class="award-level">省级</div>
-        <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛 · 三等奖</div>
-        <div class="award-detail">2026</div>
-      </div>
+      <!-- 9017: 全国大学生智能汽车竞赛华北赛区 -->
       <div class="award" data-cert="certificates/9017-2025-王若冰、苏君硕、蔡东呈、方涛、岳金豪.jpg">
         <div class="award-level">省级</div>
         <div class="award-title">全国大学生智能汽车竞赛华北赛区 · 三等奖</div>
         <div class="award-detail">2025</div>
       </div>
+      <!-- 9025: 全国大学生电子设计竞赛 -->
+      <div class="award" data-cert="certificates/9025-2025-岳金豪、李莹川、马敏涛.jpg">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国大学生电子设计竞赛（北京赛区）· 三等奖</div>
+        <div class="award-detail">2025 · 项目负责人</div>
+      </div>
+      <!-- 9147: 中国机器人及人工智能大赛 -->
+      <div class="award" data-cert="certificates/9147-2025-陈珂、岳金豪、陈齐兴.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9148: 全国三维数字化创新设计大赛 -->
+      <div class="award" data-cert="certificates/9148-2025-方涛、张卿郡、岳金豪、陈齐兴、毕可欣.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国三维数字化创新设计大赛（北京赛区）· 一等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9150: 全国大学生数字媒体科技作品及创意竞赛 -->
       <div class="award" data-cert="certificates/9150-2025-岳金豪、屠浩然、魏兴一.png">
         <div class="award-level">校级</div>
         <div class="award-title">全国大学生数字媒体科技作品及创意竞赛 · 二等奖</div>
         <div class="award-detail">2025</div>
+      </div>
+      <!-- 9157: 中国机器人及人工智能大赛 -->
+      <div class="award" data-cert="certificates/9157-2025-陈珂、岳金豪、陈齐兴.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 二等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9167: 北京市大学生机器人大赛 -->
+      <div class="award" data-cert="certificates/9167-2025-岳金豪、屠浩然、魏兴一.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">北京市大学生机器人大赛 · 二等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9169: 北京市大学生机器人大赛 -->
+      <div class="award" data-cert="certificates/9169-2025-岳金豪、屠浩然、魏兴一.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">北京市大学生机器人大赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9455: 中国机器人及人工智能大赛 -->
+      <div class="award" data-cert="certificates/9455-2025-陈珂、岳金豪、陈齐兴.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9783: 全国大学生信息安全与对抗技术竞赛 -->
+      <div class="award" data-cert="certificates/9783-2025-陈齐兴、岳金豪、王劭书、毕可欣.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）· 一等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9786: 中国国际大学生创新大赛 -->
+      <div class="award" data-cert="certificates/9786-2025-魏兴一、毕可欣、岳金豪.png">
+        <div class="award-level">校级</div>
+        <div class="award-title">中国国际大学生创新大赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9788: 全国大学生信息安全与对抗技术竞赛 -->
+      <div class="award" data-cert="certificates/9788-2025-陈齐兴、岳金豪、王劭书、毕可欣.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）· 二等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9792: 全国大学生信息安全与对抗技术竞赛 -->
+      <div class="award" data-cert="certificates/9792-2025-毕可欣、张金莹、陈齐兴、冯亦琪、岳金豪、黄沛淇.jpg">
+        <div class="award-level">国家级</div>
+        <div class="award-title">全国大学生信息安全与对抗技术竞赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 9797: 全国大学生信息安全与对抗技术竞赛 -->
+      <div class="award" data-cert="certificates/9797-2025-魏兴一、毕可欣、岳金豪.png">
+        <div class="award-level">国家级</div>
+        <div class="award-title">全国大学生信息安全与对抗技术竞赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <!-- 10120: 挑战杯首都大学生课外学术科技作品竞赛 -->
+      <div class="award" data-cert="certificates/10120-2026-梁范杰、刘瑞洲、岳金豪.jpg">
+        <div class="award-level">省级</div>
+        <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛 · 三等奖</div>
+        <div class="award-detail">2026</div>
       </div>
     </div>
   </section>
@@ -582,13 +657,11 @@
   </div>
 
   <script>
-    // Loading
     setTimeout(() => {
       document.querySelector('.loader').classList.add('hidden');
       initAnimations();
     }, 800);
 
-    // Three.js Hero
     const canvas = document.getElementById('hero-canvas');
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -634,7 +707,6 @@
     }
     animate();
 
-    // GSAP Animations
     function initAnimations() {
       gsap.registerPlugin(ScrollTrigger);
 
@@ -667,7 +739,6 @@
       });
     }
 
-    // Certificate Modal
     let certs = [], current = 0;
 
     document.querySelectorAll('.award').forEach(award => {
@@ -707,7 +778,6 @@
       }
     });
 
-    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
