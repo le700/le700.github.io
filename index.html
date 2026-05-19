@@ -8,1019 +8,633 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
   <style>
     :root {
       --bg: #0a0a0b;
       --bg-secondary: #111113;
-      --bg-tertiary: #161618;
       --text: #f5f5f7;
       --text-secondary: #a0a0a5;
-      --text-tertiary: #6e6e73;
       --accent: #7c9a6a;
-      --accent-glow: rgba(124, 154, 106, 0.3);
-      --moss: #4a5d3f;
-      --moss-light: #7c9a6a;
-      --wood: #3d3229;
-      --border: rgba(255,255,255,0.06);
+      --accent-glow: rgba(124, 154, 106, 0.4);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
-    body {
-      font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    html, body {
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
-      font-weight: 400;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
     }
 
-    /* WebGL Canvas */
-    #webgl-canvas {
+    /* Physics Container */
+    #physics-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
-      pointer-events: none;
+      z-index: 1;
     }
 
-    /* Navigation */
-    .nav {
+    /* UI Layer */
+    #ui-layer {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 24px 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: linear-gradient(to bottom, rgba(10,10,11,0.9), transparent);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
     }
 
-    .nav-logo {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text);
+    /* Physics Elements */
+    .physics-element {
+      position: absolute;
+      transform-origin: center center;
+      will-change: transform;
+      cursor: grab;
+      user-select: none;
+      pointer-events: auto;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 32px;
+    .physics-element:active {
+      cursor: grabbing;
     }
 
-    .nav-link {
-      font-size: 13px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.3s;
-      letter-spacing: 0.05em;
-    }
-
-    .nav-link:hover {
-      color: var(--accent);
-    }
-
-    /* Hero Section */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    /* Hero Title */
+    .hero-title-container {
+      position: absolute;
+      left: 50%;
+      top: 15%;
+      transform: translateX(-50%);
       text-align: center;
-      position: relative;
-      z-index: 1;
-      padding: 120px 24px;
     }
 
-    .hero-content {
-      max-width: 900px;
-    }
-
-    .hero-label {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 32px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1s ease forwards 0.3s;
-    }
-
-    .hero-title {
-      font-size: clamp(48px, 10vw, 120px);
-      font-weight: 300;
+    .hero-name {
+      font-size: clamp(60px, 12vw, 140px);
+      font-weight: 800;
       letter-spacing: -0.04em;
-      line-height: 1;
-      margin-bottom: 32px;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeUp 1.2s ease forwards 0.5s;
-    }
-
-    .hero-title span {
-      font-weight: 600;
-      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 50%, var(--text) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 80px var(--accent-glow);
+      white-space: nowrap;
     }
 
-    .hero-desc {
-      font-size: clamp(16px, 2vw, 20px);
+    .hero-subtitle {
+      font-size: clamp(14px, 2vw, 18px);
       color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 48px;
-      font-weight: 300;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1s ease forwards 0.8s;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 32px;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text);
-      font-size: 14px;
-      text-decoration: none;
-      transition: all 0.4s ease;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 1s;
-    }
-
-    .hero-cta:hover {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-      transform: translateY(-2px);
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Section Base */
-    .section {
-      position: relative;
-      z-index: 1;
-      padding: 160px 48px;
-    }
-
-    .section-header {
-      max-width: 1200px;
-      margin: 0 auto 80px;
-    }
-
-    .section-label {
-      font-size: 12px;
-      font-weight: 500;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
+      margin-top: 16px;
     }
 
-    .section-title {
-      font-size: clamp(32px, 5vw, 56px);
-      font-weight: 300;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-    }
-
-    /* Projects Grid */
-    .projects-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      gap: 24px;
-    }
-
+    /* Physics Cards */
     .project-card {
       background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 48px;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      opacity: 0;
-      transform: translateY(40px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 24px;
+      width: 320px;
+      backdrop-filter: blur(10px);
     }
 
-    .project-card.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .project-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--accent);
     }
 
-    .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
-    }
-
-    .project-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .project-title {
-      font-size: 28px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-    }
-
-    .project-meta {
+    .project-card p {
       font-size: 13px;
-      color: var(--text-tertiary);
-      letter-spacing: 0.05em;
-    }
-
-    .project-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.8;
-      margin-bottom: 24px;
-      max-width: 700px;
-    }
-
-    .project-highlights {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .highlight {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 14px;
       color: var(--text-secondary);
       line-height: 1.6;
     }
 
-    .highlight::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--accent);
+    .project-card .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .project-card .tech-tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      background: rgba(124,154,106,0.15);
+      border-radius: 100px;
+      color: var(--accent);
+    }
+
+    /* Award Balls */
+    .award-ball {
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      margin-top: 8px;
-      flex-shrink: 0;
-    }
-
-    .project-tech {
+      background: linear-gradient(135deg, rgba(124,154,106,0.2), rgba(124,154,106,0.05));
+      border: 2px solid rgba(124,154,106,0.4);
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      backdrop-filter: blur(10px);
     }
 
-    .tech-tag {
-      font-size: 12px;
-      padding: 6px 14px;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text-secondary);
-      transition: all 0.3s;
-    }
-
-    .tech-tag:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .project-awards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .project-award {
-      font-size: 12px;
-      padding: 6px 14px;
-      background: linear-gradient(135deg, rgba(124,154,106,0.15), rgba(124,154,106,0.05));
-      border: 1px solid rgba(124,154,106,0.3);
-      border-radius: 100px;
-      color: var(--accent);
-    }
-
-    /* Awards Section */
-    .awards-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 16px;
-    }
-
-    .award-item {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      transition: all 0.4s ease;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .award-item.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .award-item:hover {
-      border-color: var(--accent);
-      transform: translateX(8px);
-    }
-
-    .award-icon {
-      font-size: 24px;
-      flex-shrink: 0;
-    }
-
-    .award-title {
-      font-size: 15px;
-      font-weight: 500;
+    .award-ball .icon {
+      font-size: 28px;
       margin-bottom: 4px;
     }
 
-    .award-detail {
-      font-size: 13px;
-      color: var(--text-tertiary);
-    }
-
-    /* Skills Section */
-    .skills-container {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px;
-    }
-
-    .skill-bubble {
-      font-size: 14px;
-      padding: 16px 28px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text-secondary);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: default;
-      opacity: 0;
-      transform: scale(0.8);
-    }
-
-    .skill-bubble.visible {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .skill-bubble:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: scale(1.1);
-      box-shadow: 0 0 40px var(--accent-glow);
-    }
-
-    /* Contact Section */
-    .contact-grid {
-      max-width: 800px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .contact-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 40px 24px;
-      text-align: center;
-      transition: all 0.4s ease;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .contact-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .contact-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-6px);
-    }
-
-    .contact-icon {
-      font-size: 28px;
-      margin-bottom: 16px;
-    }
-
-    .contact-label {
+    .award-ball .title {
       font-size: 11px;
       font-weight: 600;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .award-ball .detail {
+      font-size: 9px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Skill Blocks */
+    .skill-block {
+      padding: 16px 28px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    /* Contact Blocks */
+    .contact-block {
+      padding: 20px 32px;
+      background: rgba(124,154,106,0.1);
+      border: 1px solid rgba(124,154,106,0.3);
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .contact-block .icon {
+      font-size: 24px;
       margin-bottom: 8px;
     }
 
-    .contact-value {
-      font-size: 14px;
+    .contact-block .label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .contact-block .value {
+      font-size: 13px;
       color: var(--text);
     }
 
-    .contact-value a {
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.3s;
+    /* Controls */
+    .controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+      pointer-events: auto;
     }
 
-    .contact-value a:hover {
+    .control-btn {
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .control-btn:hover {
+      background: rgba(124,154,106,0.2);
+      border-color: var(--accent);
+    }
+
+    .control-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+    /* Instructions */
+    .instructions {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      z-index: 100;
+      font-size: 12px;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .instructions span {
       color: var(--accent);
     }
 
-    /* Footer */
-    footer {
-      padding: 60px 48px;
-      text-align: center;
-      border-top: 1px solid var(--border);
-      position: relative;
-      z-index: 1;
+    /* Gravity Indicator */
+    .gravity-indicator {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      z-index: 100;
+      text-align: right;
+      pointer-events: none;
     }
 
-    footer p {
-      font-size: 13px;
-      color: var(--text-tertiary);
+    .gravity-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .nav { padding: 20px 24px; }
-      .nav-links { display: none; }
-      .section { padding: 100px 24px; }
-      .project-card { padding: 32px 24px; }
-      .awards-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
+    .gravity-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
     }
   </style>
 </head>
 <body>
-  <!-- WebGL Background -->
-  <canvas id="webgl-canvas"></canvas>
+  <!-- Physics Canvas -->
+  <div id="physics-container"></div>
 
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-logo">岳金豪</div>
-    <div class="nav-links">
-      <a href="#projects" class="nav-link">项目</a>
-      <a href="#awards" class="nav-link">获奖</a>
-      <a href="#skills" class="nav-link">技能</a>
-      <a href="#contact" class="nav-link">联系</a>
+  <!-- UI Layer -->
+  <div id="ui-layer">
+    <!-- Instructions -->
+    <div class="instructions">
+      <div><span>拖拽</span> 抛掷元素</div>
+      <div><span>点击</span> 施加冲击力</div>
+      <div><span>悬停</span> 产生引力场</div>
     </div>
-  </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-content">
-      <p class="hero-label">Developer & Robotics Engineer</p>
-      <h1 class="hero-title">Time to <span>style</span><br>the future</h1>
-      <p class="hero-desc">嵌入式开发与机器人算法工程师，专注于计算机视觉、AI 算法与硬件调试的全栈实践能力</p>
-      <a href="#projects" class="hero-cta">
-        <span>探索作品</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M7 17L17 7M17 7H7M17 7V17"/>
-        </svg>
-      </a>
+    <!-- Gravity Indicator -->
+    <div class="gravity-indicator">
+      <div class="gravity-value" id="gravity-value">1.0</div>
+      <div class="gravity-label">Gravity</div>
     </div>
-  </section>
 
-  <!-- Projects -->
-  <section class="section" id="projects">
-    <div class="section-header">
-      <p class="section-label">Selected Works</p>
-      <h2 class="section-title">项目经历</h2>
+    <!-- Controls -->
+    <div class="controls">
+      <button class="control-btn" id="btn-zero-g">零重力</button>
+      <button class="control-btn active" id="btn-normal-g">正常重力</button>
+      <button class="control-btn" id="btn-high-g">高重力</button>
+      <button class="control-btn" id="btn-scatter">打散</button>
+      <button class="control-btn" id="btn-reset">重置</button>
     </div>
-    <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-header">
-          <div>
-            <h3 class="project-title">仿人机器人视觉控制系统</h3>
-            <p class="project-meta">中国机器人及人工智能大赛 · 项目负责人 · 2024.12 - 2025.08</p>
-          </div>
-        </div>
-        <p class="project-desc">基于幻尔科技树莓派仿人机器人平台进行二次开发，开发多模态视觉感知系统，实现人脸识别、物体抓取、场地导航、手势交互等功能。</p>
-        <div class="project-highlights">
-          <div class="highlight">技术方案设计：作为项目负责人，制定整体技术架构，协调3-4人团队分工</div>
-          <div class="highlight">视觉算法开发：基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署</div>
-          <div class="highlight">算法优化：针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性</div>
-        </div>
-        <div class="project-tech">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">C++</span>
-          <span class="tech-tag">OpenCV</span>
-          <span class="tech-tag">YOLOv5</span>
-          <span class="tech-tag">树莓派</span>
-        </div>
-        <div class="project-awards">
-          <span class="project-award">国家级二等奖</span>
-          <span class="project-award">国家级三等奖</span>
-          <span class="project-award">省级一等奖 ×2</span>
-          <span class="project-award">省级二等奖 ×2</span>
-          <span class="project-award">省级三等奖 ×2</span>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-header">
-          <div>
-            <h3 class="project-title">开源技术研究与贡献</h3>
-            <p class="project-meta">github.com/le700 · 个人开发者 · 持续进行</p>
-          </div>
-        </div>
-        <p class="project-desc">持续在 GitHub 跟踪研究 OpenClaw、Codex、Claude Code 等前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。</p>
-        <div class="project-highlights">
-          <div class="highlight">研究 OpenClaw、Codex、Claude Code 等前沿 AI 与开源工具，深入理解其实现原理与应用场景</div>
-          <div class="highlight">自主开发 Skill 工具并开源至 github.com/le700，持续为开源社区贡献实用工具</div>
-          <div class="highlight">采用 Vibe Coding 方式开发「基于科大讯飞星火大模型的多维度新闻真实性评测系统」</div>
-        </div>
-        <div class="project-tech">
-          <span class="tech-tag">Git</span>
-          <span class="tech-tag">AI Tools</span>
-          <span class="tech-tag">Open Source</span>
-          <span class="tech-tag">Skill Development</span>
-        </div>
-        <div class="project-awards">
-          <span class="project-award">挑战杯省级三等奖</span>
-          <span class="project-award">数字媒体竞赛校赛二等奖</span>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-header">
-          <div>
-            <h3 class="project-title">危化品仓储智慧监控与安全预警系统</h3>
-            <p class="project-meta">市级科研项目 · 算法工程师 · 2025.11</p>
-          </div>
-        </div>
-        <p class="project-desc">市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。</p>
-        <div class="project-highlights">
-          <div class="highlight">负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署</div>
-        </div>
-        <div class="project-tech">
-          <span class="tech-tag">YOLOv5</span>
-          <span class="tech-tag">STM32</span>
-          <span class="tech-tag">计算机视觉</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Awards -->
-  <section class="section" id="awards">
-    <div class="section-header">
-      <p class="section-label">Achievements</p>
-      <h2 class="section-title">竞赛获奖</h2>
-    </div>
-    <div class="awards-grid">
-      <div class="award-item">
-        <span class="award-icon">🏆</span>
-        <div>
-          <div class="award-title">2025 世界人形机器人运动会</div>
-          <div class="award-detail">1500m 项目 · 松延动力小顽童系列机器人</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥈</span>
-        <div>
-          <div class="award-title">中国机器人及人工智能大赛</div>
-          <div class="award-detail">国家级二等奖、三等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥉</span>
-        <div>
-          <div class="award-title">全国大学生信息安全与对抗技术竞赛</div>
-          <div class="award-detail">国家级三等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🏆</span>
-        <div>
-          <div class="award-title">全国机器人锦标赛及第四届国际仿人机器人奥林匹克大赛</div>
-          <div class="award-detail">省级二等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥇</span>
-        <div>
-          <div class="award-title">京南地区人工智能与机器人创新创业大赛</div>
-          <div class="award-detail">省级一等奖 · 项目负责人</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥇</span>
-        <div>
-          <div class="award-title">北京市大学生机器人大赛</div>
-          <div class="award-detail">省级一等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥇</span>
-        <div>
-          <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）</div>
-          <div class="award-detail">省级一等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥇</span>
-        <div>
-          <div class="award-title">全国三维数字化创新设计大赛（北京赛区）</div>
-          <div class="award-detail">省级一等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🏅</span>
-        <div>
-          <div class="award-title">中国机器人及人工智能大赛</div>
-          <div class="award-detail">省级一等奖2项、二等奖2项、三等奖2项</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥈</span>
-        <div>
-          <div class="award-title">华北五省市、自治区大学生机器人大赛</div>
-          <div class="award-detail">省级二等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥈</span>
-        <div>
-          <div class="award-title">中国国际大学生创新大赛北京赛区</div>
-          <div class="award-detail">省级三等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥉</span>
-        <div>
-          <div class="award-title">全国大学生电子设计竞赛（北京赛区）</div>
-          <div class="award-detail">省级三等奖 · 项目负责人</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥉</span>
-        <div>
-          <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛</div>
-          <div class="award-detail">省级三等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥉</span>
-        <div>
-          <div class="award-title">全国大学生智能汽车竞赛华北赛区</div>
-          <div class="award-detail">省级三等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥈</span>
-        <div>
-          <div class="award-title">全国大学生数字媒体科技作品及创意竞赛</div>
-          <div class="award-detail">校赛二等奖</div>
-        </div>
-      </div>
-      <div class="award-item">
-        <span class="award-icon">🥉</span>
-        <div>
-          <div class="award-title">中国国际大学生创新大赛校赛</div>
-          <div class="award-detail">校赛三等奖</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Skills -->
-  <section class="section" id="skills">
-    <div class="section-header">
-      <p class="section-label">Expertise</p>
-      <h2 class="section-title">技术栈</h2>
-    </div>
-    <div class="skills-container">
-      <div class="skill-bubble">Python</div>
-      <div class="skill-bubble">C/C++</div>
-      <div class="skill-bubble">OpenCV</div>
-      <div class="skill-bubble">YOLOv5</div>
-      <div class="skill-bubble">STM32</div>
-      <div class="skill-bubble">树莓派</div>
-      <div class="skill-bubble">Git</div>
-      <div class="skill-bubble">Linux</div>
-      <div class="skill-bubble">Docker</div>
-      <div class="skill-bubble">嵌入式</div>
-      <div class="skill-bubble">计算机视觉</div>
-      <div class="skill-bubble">机器人算法</div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section class="section" id="contact">
-    <div class="section-header">
-      <p class="section-label">Get in Touch</p>
-      <h2 class="section-title">联系方式</h2>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-card">
-        <div class="contact-icon">📱</div>
-        <div class="contact-label">电话 / 微信</div>
-        <div class="contact-value">18637473189</div>
-      </div>
-      <div class="contact-card">
-        <div class="contact-icon">✉️</div>
-        <div class="contact-label">邮箱</div>
-        <div class="contact-value">
-          <a href="mailto:3189311520@qq.com">3189311520@qq.com</a>
-        </div>
-        <div class="contact-value" style="margin-top:6px;">
-          <a href="mailto:manbujingxindele@gmail.com">manbujingxindele@gmail.com</a>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div class="contact-icon">💻</div>
-        <div class="contact-label">GitHub</div>
-        <div class="contact-value">
-          <a href="https://github.com/le700" target="_blank">github.com/le700</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 岳金豪. All rights reserved.</p>
-  </footer>
+  </div>
 
   <script>
-    // ===== THREE.JS ORGANIC BACKGROUND =====
-    const canvas = document.getElementById('webgl-canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Matter.js aliases
+    const Engine = Matter.Engine,
+          Render = Matter.Render,
+          Runner = Matter.Runner,
+          Bodies = Matter.Bodies,
+          Composite = Matter.Composite,
+          Events = Matter.Events,
+          Mouse = Matter.Mouse,
+          MouseConstraint = Matter.MouseConstraint,
+          Body = Matter.Body,
+          Vector = Matter.Vector;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 30;
+    // Create engine
+    const engine = Engine.create();
+    const world = engine.world;
 
-    // Mouse tracking
-    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
-    
-    document.addEventListener('mousemove', (e) => {
-      mouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
-    });
+    // Canvas dimensions
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
-    // Create organic moss-like particles
-    const particleCount = 150;
-    const particles = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const originalPositions = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
-    const speeds = new Float32Array(particleCount);
-
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
-      positions[i3] = (Math.random() - 0.5) * 60;
-      positions[i3 + 1] = (Math.random() - 0.5) * 60;
-      positions[i3 + 2] = (Math.random() - 0.5) * 30;
-      
-      originalPositions[i3] = positions[i3];
-      originalPositions[i3 + 1] = positions[i3 + 1];
-      originalPositions[i3 + 2] = positions[i3 + 2];
-      
-      sizes[i] = Math.random() * 3 + 1;
-      speeds[i] = Math.random() * 0.5 + 0.2;
-    }
-
-    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-    // Custom shader for organic look
-    const particleMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0, 0) },
-        uColor1: { value: new THREE.Color('#4a5d3f') },
-        uColor2: { value: new THREE.Color('#7c9a6a') }
-      },
-      vertexShader: `
-        attribute float size;
-        uniform float uTime;
-        uniform vec2 uMouse;
-        varying float vAlpha;
-        
-        void main() {
-          vec3 pos = position;
-          
-          // Organic movement
-          float noise = sin(pos.x * 0.1 + uTime * 0.5) * cos(pos.y * 0.1 + uTime * 0.3) * 2.0;
-          pos.z += noise;
-          
-          // Mouse interaction - particles move away from mouse
-          float dist = distance(pos.xy, uMouse * 20.0);
-          float influence = smoothstep(15.0, 0.0, dist);
-          pos.xy += normalize(pos.xy - uMouse * 20.0) * influence * 3.0;
-          
-          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          gl_PointSize = size * (300.0 / -mvPosition.z);
-          gl_Position = projectionMatrix * mvPosition;
-          
-          vAlpha = 1.0 - smoothstep(0.0, 50.0, length(pos.xy));
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 uColor1;
-        uniform vec3 uColor2;
-        varying float vAlpha;
-        
-        void main() {
-          float dist = length(gl_PointCoord - vec2(0.5));
-          if (dist > 0.5) discard;
-          
-          float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
-          vec3 color = mix(uColor1, uColor2, dist * 2.0);
-          
-          gl_FragColor = vec4(color, alpha * vAlpha * 0.6);
-        }
-      `,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
-    });
-
-    const particleSystem = new THREE.Points(particles, particleMaterial);
-    scene.add(particleSystem);
-
-    // Create flowing lines (branch-like)
-    const lineCount = 20;
-    const lines = [];
-
-    for (let i = 0; i < lineCount; i++) {
-      const points = [];
-      const segments = 50;
-      const radius = 10 + Math.random() * 15;
-      const angleOffset = (i / lineCount) * Math.PI * 2;
-      
-      for (let j = 0; j <= segments; j++) {
-        const t = j / segments;
-        const angle = angleOffset + t * Math.PI * 0.5;
-        const x = Math.cos(angle) * radius * (1 + t * 0.5);
-        const y = Math.sin(angle) * radius * (1 + t * 0.5);
-        const z = (Math.random() - 0.5) * 10;
-        points.push(new THREE.Vector3(x, y, z));
+    // Create renderer
+    const render = Render.create({
+      element: document.getElementById('physics-container'),
+      engine: engine,
+      options: {
+        width: width,
+        height: height,
+        wireframes: false,
+        background: 'transparent',
+        pixelRatio: window.devicePixelRatio
       }
-      
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      const material = new THREE.LineBasicMaterial({
-        color: 0x4a5d3f,
-        transparent: true,
-        opacity: 0.15
+    });
+
+    // Create boundaries
+    const wallThickness = 100;
+    const walls = [
+      Bodies.rectangle(width/2, height + wallThickness/2, width + 200, wallThickness, { 
+        isStatic: true, 
+        render: { visible: false },
+        friction: 0.5,
+        restitution: 0.3
+      }),
+      Bodies.rectangle(width/2, -wallThickness*2, width + 200, wallThickness, { 
+        isStatic: true, 
+        render: { visible: false } 
+      }),
+      Bodies.rectangle(-wallThickness/2, height/2, wallThickness, height * 2, { 
+        isStatic: true, 
+        render: { visible: false } 
+      }),
+      Bodies.rectangle(width + wallThickness/2, height/2, wallThickness, height * 2, { 
+        isStatic: true, 
+        render: { visible: false } 
+      })
+    ];
+    Composite.add(world, walls);
+
+    // Store physics bodies with their DOM elements
+    const physicsElements = [];
+
+    // Helper: Create physics body with DOM element
+    function createPhysicsElement(x, y, width, height, options = {}) {
+      const body = Bodies.rectangle(x, y, width, height, {
+        restitution: 0.6,
+        friction: 0.3,
+        frictionAir: 0.01,
+        ...options
       });
       
-      const line = new THREE.Line(geometry, material);
-      line.userData = { originalPoints: points.map(p => p.clone()), angleOffset, radius };
-      lines.push(line);
-      scene.add(line);
+      const domEl = document.createElement('div');
+      domEl.className = 'physics-element';
+      domEl.style.width = width + 'px';
+      domEl.style.height = height + 'px';
+      document.getElementById('ui-layer').appendChild(domEl);
+      
+      physicsElements.push({ body, domEl, width, height });
+      Composite.add(world, body);
+      
+      return { body, domEl };
     }
 
-    // Animation loop
-    let time = 0;
-    
-    function animate() {
-      requestAnimationFrame(animate);
-      time += 0.01;
-      
-      // Smooth mouse interpolation
-      mouse.x += (mouse.targetX - mouse.x) * 0.05;
-      mouse.y += (mouse.targetY - mouse.y) * 0.05;
-      
-      // Update particle shader
-      particleMaterial.uniforms.uTime.value = time;
-      particleMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
-      
-      // Rotate particle system slowly
-      particleSystem.rotation.y = time * 0.05;
-      particleSystem.rotation.x = Math.sin(time * 0.1) * 0.1;
-      
-      // Animate lines - organic wave motion
-      lines.forEach((line, i) => {
-        const positions = line.geometry.attributes.position.array;
-        const original = line.userData.originalPoints;
-        
-        for (let j = 0; j < original.length; j++) {
-          const j3 = j * 3;
-          const orig = original[j];
-          
-          // Wave motion based on time and position
-          const wave = Math.sin(time * 0.5 + orig.x * 0.1 + i) * 0.5;
-          const wave2 = Math.cos(time * 0.3 + orig.y * 0.1) * 0.3;
-          
-          // Mouse influence on lines
-          const mouseInfluenceX = mouse.x * 5 * (j / original.length);
-          const mouseInfluenceY = mouse.y * 5 * (j / original.length);
-          
-          positions[j3] = orig.x + wave + mouseInfluenceX;
-          positions[j3 + 1] = orig.y + wave2 + mouseInfluenceY;
-          positions[j3 + 2] = orig.z + Math.sin(time + j * 0.1) * 0.5;
-        }
-        
-        line.geometry.attributes.position.needsUpdate = true;
-        line.rotation.z = time * 0.02 * (i % 2 === 0 ? 1 : -1);
+    // Helper: Create circle body
+    function createPhysicsCircle(x, y, radius, options = {}) {
+      const body = Bodies.circle(x, y, radius, {
+        restitution: 0.7,
+        friction: 0.2,
+        frictionAir: 0.01,
+        ...options
       });
       
-      // Camera subtle movement based on mouse
-      camera.position.x = mouse.x * 2;
-      camera.position.y = mouse.y * 2;
-      camera.lookAt(0, 0, 0);
+      const domEl = document.createElement('div');
+      domEl.className = 'physics-element';
+      domEl.style.width = radius * 2 + 'px';
+      domEl.style.height = radius * 2 + 'px';
+      document.getElementById('ui-layer').appendChild(domEl);
       
-      renderer.render(scene, camera);
+      physicsElements.push({ body, domEl, width: radius * 2, height: radius * 2 });
+      Composite.add(world, body);
+      
+      return { body, domEl };
     }
+
+    // Create Hero Title (Static at top)
+    const heroContainer = document.createElement('div');
+    heroContainer.className = 'hero-title-container';
+    heroContainer.innerHTML = `
+      <div class="hero-name">岳金豪</div>
+      <div class="hero-subtitle">Developer & Robotics Engineer</div>
+    `;
+    document.getElementById('ui-layer').appendChild(heroContainer);
+
+    // Create Project Cards
+    const projects = [
+      { title: '仿人机器人视觉控制系统', desc: '基于树莓派的视觉感知系统，实现人脸识别、物体抓取', tech: ['Python', 'OpenCV', 'YOLOv5'] },
+      { title: '开源技术研究与贡献', desc: 'GitHub 开源项目，AI工具与Skill开发', tech: ['Git', 'AI Tools'] },
+      { title: '危化品仓储监控系统', desc: '市级科研项目，YOLOv5目标检测', tech: ['YOLOv5', 'STM32'] }
+    ];
+
+    projects.forEach((proj, i) => {
+      const { domEl } = createPhysicsElement(
+        150 + i * 350, 
+        200 + Math.random() * 100, 
+        320, 
+        180,
+        { chamfer: { radius: 20 } }
+      );
+      
+      domEl.className = 'physics-element project-card';
+      domEl.innerHTML = `
+        <h3>${proj.title}</h3>
+        <p>${proj.desc}</p>
+        <div class="tech-tags">
+          ${proj.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+        </div>
+      `;
+    });
+
+    // Create Award Balls
+    const awards = [
+      { icon: '🏆', title: '世界人形机器人运动会', detail: '1500m项目' },
+      { icon: '🥈', title: '中国机器人大赛', detail: '国家级二等奖' },
+      { icon: '🥉', title: '信息安全对抗赛', detail: '国家级三等奖' },
+      { icon: '🥇', title: '京南AI大赛', detail: '省级一等奖' },
+      { icon: '🥇', title: '北京市机器人大赛', detail: '省级一等奖' },
+      { icon: '🏅', title: '机器人及AI大赛', detail: '省级多奖项' },
+      { icon: '🥈', title: '华北五省市大赛', detail: '省级二等奖' },
+      { icon: '🥉', title: '电子设计竞赛', detail: '省级三等奖' }
+    ];
+
+    awards.forEach((award, i) => {
+      const { domEl } = createPhysicsCircle(
+        width - 150 - (i % 4) * 140,
+        350 + Math.floor(i / 4) * 150,
+        60
+      );
+      
+      domEl.className = 'physics-element award-ball';
+      domEl.innerHTML = `
+        <div class="icon">${award.icon}</div>
+        <div class="title">${award.title}</div>
+        <div class="detail">${award.detail}</div>
+      `;
+    });
+
+    // Create Skill Blocks
+    const skills = ['Python', 'C/C++', 'OpenCV', 'YOLOv5', 'STM32', '树莓派', 'Git', 'Linux', 'Docker', '嵌入式'];
     
-    animate();
+    skills.forEach((skill, i) => {
+      const { domEl } = createPhysicsElement(
+        100 + Math.random() * (width - 200),
+        height - 300 + Math.random() * 150,
+        100,
+        50,
+        { chamfer: { radius: 12 } }
+      );
+      
+      domEl.className = 'physics-element skill-block';
+      domEl.innerHTML = skill;
+    });
+
+    // Create Contact Blocks
+    const contacts = [
+      { icon: '📱', label: '电话', value: '18637473189' },
+      { icon: '✉️', label: '邮箱', value: '3189311520@qq.com' },
+      { icon: '💻', label: 'GitHub', value: 'github.com/le700' }
+    ];
+
+    contacts.forEach((contact, i) => {
+      const { domEl } = createPhysicsElement(
+        width/2 - 200 + i * 200,
+        height - 150,
+        140,
+        100,
+        { chamfer: { radius: 16 } }
+      );
+      
+      domEl.className = 'physics-element contact-block';
+      domEl.innerHTML = `
+        <div class="icon">${contact.icon}</div>
+        <div class="label">${contact.label}</div>
+        <div class="value">${contact.value}</div>
+      `;
+    });
+
+    // Mouse constraint for dragging
+    const mouse = Mouse.create(render.canvas);
+    const mouseConstraint = MouseConstraint.create(engine, {
+      mouse: mouse,
+      constraint: {
+        stiffness: 0.2,
+        render: { visible: false }
+      }
+    });
+    Composite.add(world, mouseConstraint);
+
+    // Keep mouse in sync with rendering
+    render.mouse = mouse;
+
+    // Mouse attraction/repulsion force
+    let mouseAttract = true;
+    
+    Events.on(engine, 'beforeUpdate', function() {
+      const mousePosition = mouse.position;
+      
+      physicsElements.forEach(({ body }) => {
+        const bodyPos = body.position;
+        const dist = Vector.magnitude(Vector.sub(mousePosition, bodyPos));
+        
+        if (dist < 300 && dist > 50) {
+          const force = Vector.mult(
+            Vector.normalise(Vector.sub(mousePosition, bodyPos)),
+            mouseAttract ? 0.0005 : -0.0005
+          );
+          Body.applyForce(body, bodyPos, force);
+        }
+      });
+    });
+
+    // Update DOM elements to match physics bodies
+    Events.on(render, 'afterRender', function() {
+      physicsElements.forEach(({ body, domEl, width, height }) => {
+        domEl.style.transform = `translate(${body.position.x - width/2}px, ${body.position.y - height/2}px) rotate(${body.angle}rad)`;
+      });
+    });
+
+    // Run engine and renderer
+    Render.run(render);
+    const runner = Runner.create();
+    Runner.run(runner, engine);
+
+    // Controls
+    document.getElementById('btn-zero-g').addEventListener('click', function() {
+      engine.gravity.y = 0;
+      updateGravityDisplay(0);
+      setActiveBtn(this);
+    });
+
+    document.getElementById('btn-normal-g').addEventListener('click', function() {
+      engine.gravity.y = 1;
+      updateGravityDisplay(1);
+      setActiveBtn(this);
+    });
+
+    document.getElementById('btn-high-g').addEventListener('click', function() {
+      engine.gravity.y = 2.5;
+      updateGravityDisplay(2.5);
+      setActiveBtn(this);
+    });
+
+    document.getElementById('btn-scatter').addEventListener('click', function() {
+      physicsElements.forEach(({ body }) => {
+        Body.applyForce(body, body.position, {
+          x: (Math.random() - 0.5) * 0.15,
+          y: -0.1 - Math.random() * 0.1
+        });
+      });
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', function() {
+      location.reload();
+    });
+
+    function setActiveBtn(btn) {
+      document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function updateGravityDisplay(g) {
+      document.getElementById('gravity-value').textContent = g.toFixed(1);
+    }
+
+    // Click to apply explosive force
+    render.canvas.addEventListener('click', function(e) {
+      const rect = render.canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      
+      physicsElements.forEach(({ body }) => {
+        const dist = Vector.magnitude(Vector.sub({ x: clickX, y: clickY }, body.position));
+        if (dist < 200) {
+          const force = Vector.mult(
+            Vector.normalise(Vector.sub(body.position, { x: clickX, y: clickY })),
+            0.05 * (1 - dist / 200)
+          );
+          Body.applyForce(body, body.position, force);
+        }
+      });
+    });
 
     // Handle resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    window.addEventListener('resize', function() {
+      render.canvas.width = window.innerWidth;
+      render.canvas.height = window.innerHeight;
+      render.options.width = window.innerWidth;
+      render.options.height = window.innerHeight;
     });
 
-    // ===== SCROLL ANIMATIONS =====
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+    // Initial scatter animation
+    setTimeout(() => {
+      physicsElements.forEach(({ body }) => {
+        Body.applyForce(body, body.position, {
+          x: (Math.random() - 0.5) * 0.02,
+          y: -0.02
+        });
       });
-    }, observerOptions);
-
-    // Observe elements
-    document.querySelectorAll('.project-card, .award-item, .skill-bubble, .contact-card').forEach(el => {
-      observer.observe(el);
-    });
-
-    // Stagger animations
-    document.querySelectorAll('.award-item').forEach((item, i) => {
-      item.style.transitionDelay = `${i * 0.03}s`;
-    });
-
-    document.querySelectorAll('.skill-bubble').forEach((bubble, i) => {
-      bubble.style.transitionDelay = `${i * 0.05}s`;
-    });
-
-    // ===== SMOOTH SCROLL =====
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
+    }, 500);
   </script>
 </body>
 </html>
