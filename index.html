@@ -3,37 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>岳金豪 | AI & Robotics Developer</title>
+  <title>岳金豪 | AI & Robotics Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <style>
     :root {
-      /* 新配色方案 - 温暖自然系 */
-      --bg-primary: #F1EBE5;
-      --bg-secondary: #E8E2DC;
-      --bg-tertiary: #DED8D2;
-      --text-primary: #2D2A26;
-      --text-secondary: #6B6560;
-      --text-muted: #9B9590;
-      --accent: #C4A574;
-      --accent-light: #D4B584;
-      --accent-dark: #A08554;
-      --white: #FFFFFF;
-      --cream: #FAF8F5;
+      /* 深空电光主题 - 电影级配色 */
+      --bg-primary: #050508;
+      --bg-secondary: #0a0a0f;
+      --bg-tertiary: #12121a;
+      --bg-card: rgba(255, 255, 255, 0.02);
       
-      /* Glass effect */
-      --glass-bg: rgba(255, 255, 255, 0.4);
-      --glass-border: rgba(255, 255, 255, 0.6);
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b0;
+      --text-muted: #606070;
+      
+      /* 电光蓝紫渐变 */
+      --accent-cyan: #00f5ff;
+      --accent-blue: #0080ff;
+      --accent-purple: #8b5cf6;
+      --accent-pink: #ec4899;
+      
+      --gradient-primary: linear-gradient(135deg, #00f5ff 0%, #0080ff 50%, #8b5cf6 100%);
+      --gradient-glow: linear-gradient(135deg, rgba(0, 245, 255, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+      
+      /* 玻璃效果 */
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.06);
+      --glass-highlight: rgba(255, 255, 255, 0.1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html { scroll-behavior: auto; }
+    html { 
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
     
     body {
       font-family: 'Inter', 'Noto Sans SC', sans-serif;
@@ -44,39 +53,42 @@
       cursor: none;
     }
 
-    /* Custom Cursor - Organic style */
+    /* Custom Cursor - 电影级 */
     .cursor {
       position: fixed;
       width: 24px;
       height: 24px;
-      border: 1.5px solid var(--accent);
+      border: 2px solid var(--accent-cyan);
       border-radius: 50%;
       pointer-events: none;
       z-index: 99999;
-      transition: transform 0.2s ease-out, width 0.4s ease, height 0.4s ease, background 0.3s ease;
+      transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
       transform: translate(-50%, -50%);
       mix-blend-mode: difference;
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
     }
 
     .cursor-dot {
       position: fixed;
       width: 6px;
       height: 6px;
-      background: var(--accent);
+      background: var(--accent-cyan);
       border-radius: 50%;
       pointer-events: none;
       z-index: 99999;
       transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px var(--accent-cyan);
     }
 
     .cursor.hover {
-      width: 80px;
-      height: 80px;
-      background: rgba(196, 165, 116, 0.1);
-      border-color: var(--accent-dark);
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 245, 255, 0.1);
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
     }
 
-    /* Organic Grain Overlay */
+    /* 电影级颗粒叠加 */
     .grain-overlay {
       position: fixed;
       top: 0;
@@ -89,33 +101,76 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* Navigation - Minimal floating */
+    /* 电影级暗角 */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9997;
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(5, 5, 8, 0.8) 100%);
+    }
+
+    /* 扫描线效果 */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9996;
+      opacity: 0.02;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 245, 255, 0.03) 2px,
+        rgba(0, 245, 255, 0.03) 4px
+      );
+    }
+
+    /* 导航 - 悬浮玻璃 */
     nav {
       position: fixed;
-      top: 40px;
+      top: 32px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 16px 32px;
+      padding: 16px 40px;
       display: flex;
-      gap: 48px;
+      gap: 56px;
       z-index: 100;
       background: var(--glass-bg);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px) saturate(180%);
       border: 1px solid var(--glass-border);
       border-radius: 100px;
-      box-shadow: 0 4px 30px rgba(45, 42, 38, 0.08);
+      box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 var(--glass-highlight);
+      transition: all 0.4s ease;
+    }
+
+    nav.scrolled {
+      padding: 12px 32px;
+      background: rgba(10, 10, 15, 0.9);
+      border-color: rgba(0, 245, 255, 0.1);
     }
 
     .nav-logo {
       font-size: 15px;
       font-weight: 600;
       letter-spacing: -0.01em;
-      color: var(--text-primary);
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 40px;
     }
 
     .nav-links a {
@@ -124,7 +179,7 @@
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.02em;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
       position: relative;
     }
 
@@ -135,12 +190,13 @@
       left: 50%;
       width: 0;
       height: 1px;
-      background: var(--accent);
+      background: var(--gradient-primary);
       transition: width 0.3s ease, left 0.3s ease;
     }
 
     .nav-links a:hover {
-      color: var(--text-primary);
+      color: var(--accent-cyan);
+      text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
     }
 
     .nav-links a:hover::after {
@@ -148,7 +204,7 @@
       left: 0;
     }
 
-    /* Hero Section - Organic flow */
+    /* Hero Section - 沉浸式 */
     .hero {
       height: 100vh;
       display: flex;
@@ -166,45 +222,92 @@
       z-index: 0;
     }
 
+    /* 光晕效果 */
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 245, 255, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
     .hero-content {
       position: relative;
-      z-index: 1;
-      max-width: 900px;
+      z-index: 2;
+      max-width: 1000px;
       padding: 0 40px;
     }
 
     .hero-eyebrow {
       font-size: 11px;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.5em;
       text-transform: uppercase;
-      color: var(--accent-dark);
-      margin-bottom: 32px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 40px;
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(30px);
+      font-weight: 500;
     }
 
     .hero h1 {
-      font-size: clamp(48px, 10vw, 120px);
-      font-weight: 300;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 32px;
-      color: var(--text-primary);
+      font-size: clamp(48px, 10vw, 140px);
+      font-weight: 200;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 40px;
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(50px);
     }
 
-    .hero h1 span {
-      font-weight: 600;
-      color: var(--accent-dark);
+    .hero h1 .char {
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .hero h1 .char:hover {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 30px rgba(0, 245, 255, 0.8);
+      transform: translateY(-5px);
+    }
+
+    .hero h1 .highlight {
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+      opacity: 0.5;
     }
 
     .hero-desc {
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-secondary);
-      max-width: 560px;
-      margin: 0 auto 48px;
-      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto 60px;
+      line-height: 1.9;
       font-weight: 400;
       opacity: 0;
       transform: translateY(30px);
@@ -212,7 +315,7 @@
 
     .hero-stats {
       display: flex;
-      gap: 80px;
+      gap: 100px;
       justify-content: center;
       opacity: 0;
       transform: translateY(30px);
@@ -221,178 +324,251 @@
     .stat-item {
       text-align: center;
       position: relative;
+      padding: 20px;
     }
 
-    .stat-item::after {
+    .stat-item::before {
       content: '';
       position: absolute;
-      right: -40px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 1px;
-      height: 40px;
-      background: var(--glass-border);
+      inset: 0;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
-    .stat-item:last-child::after { display: none; }
+    .stat-item:hover::before {
+      opacity: 1;
+    }
 
     .stat-number {
-      font-size: 56px;
-      font-weight: 200;
-      color: var(--accent-dark);
+      font-size: 64px;
+      font-weight: 100;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       line-height: 1;
       font-family: 'Inter', sans-serif;
+      position: relative;
+      z-index: 1;
     }
 
     .stat-label {
       font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-top: 12px;
+      letter-spacing: 0.25em;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
     }
 
     .scroll-hint {
       position: absolute;
-      bottom: 60px;
+      bottom: 80px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
       opacity: 0;
     }
 
     .scroll-hint span {
       font-size: 10px;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--text-muted);
     }
 
     .scroll-line {
       width: 1px;
-      height: 80px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: breathe 3s ease-in-out infinite;
+      height: 100px;
+      background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple), transparent);
+      animation: scanline 2s ease-in-out infinite;
+      position: relative;
     }
 
-    @keyframes breathe {
-      0%, 100% { transform: scaleY(1); opacity: 0.6; }
-      50% { transform: scaleY(0.6); opacity: 0.3; }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -2px;
+      width: 5px;
+      height: 20px;
+      background: var(--accent-cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--accent-cyan);
+      animation: scan 2s ease-in-out infinite;
+    }
+
+    @keyframes scanline {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    @keyframes scan {
+      0% { top: 0; opacity: 1; }
+      100% { top: 80px; opacity: 0; }
     }
 
     /* Sections */
     section {
-      padding: 160px 80px;
+      padding: 180px 80px;
       max-width: 1400px;
       margin: 0 auto;
       position: relative;
     }
 
     .section-header {
-      margin-bottom: 100px;
+      margin-bottom: 120px;
       text-align: center;
     }
 
     .section-eyebrow {
       font-size: 11px;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
-      color: var(--accent-dark);
-      margin-bottom: 20px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
       display: inline-flex;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
+      font-weight: 500;
     }
 
     .section-eyebrow::before,
     .section-eyebrow::after {
       content: '';
-      width: 60px;
+      width: 80px;
       height: 1px;
-      background: var(--accent);
-      opacity: 0.5;
+      background: linear-gradient(to right, transparent, var(--accent-cyan), transparent);
     }
 
     .section-header h2 {
-      font-size: clamp(32px, 4vw, 48px);
-      font-weight: 300;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 200;
       letter-spacing: -0.02em;
       line-height: 1.2;
-      color: var(--text-primary);
     }
 
-    /* Organic Cards - Moss/branch inspired */
+    /* Projects Grid - 3D卡片 */
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 32px;
+      gap: 40px;
+      perspective: 1000px;
     }
 
     .project-card {
-      background: var(--cream);
+      background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 48px;
+      border-radius: 28px;
+      padding: 56px;
       position: relative;
       overflow: hidden;
       transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       transform-style: preserve-3d;
+      backdrop-filter: blur(10px);
     }
 
     .project-card::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(196, 165, 116, 0.15), transparent 60%);
+      background: radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+        rgba(0, 245, 255, 0.1) 0%, 
+        transparent 50%
+      );
       opacity: 0;
       transition: opacity 0.4s ease;
       pointer-events: none;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: var(--gradient-primary);
+      border-radius: 28px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
 
     .project-card:hover::before {
       opacity: 1;
     }
 
+    .project-card:hover::after {
+      opacity: 0.3;
+    }
+
     .project-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 30px 60px rgba(45, 42, 38, 0.12);
-      border-color: rgba(196, 165, 116, 0.3);
+      transform: translateY(-12px) rotateX(5deg);
+      box-shadow: 
+        0 40px 80px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(0, 245, 255, 0.1);
+      border-color: rgba(0, 245, 255, 0.2);
     }
 
     .project-card.large {
       grid-column: span 2;
-      padding: 64px;
+      padding: 72px;
     }
 
     .project-year {
       font-size: 11px;
-      color: var(--accent-dark);
-      letter-spacing: 0.15em;
+      color: var(--accent-cyan);
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project-year::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-cyan);
     }
 
     .project-card h3 {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 500;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       line-height: 1.3;
-      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover h3 {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .project-card.large h3 {
-      font-size: 36px;
+      font-size: 42px;
     }
 
     .project-card p {
       font-size: 15px;
       color: var(--text-secondary);
-      line-height: 1.8;
-      margin-bottom: 32px;
+      line-height: 1.9;
+      margin-bottom: 40px;
     }
 
     .project-tech {
@@ -403,40 +579,73 @@
 
     .tech-tag {
       font-size: 12px;
-      padding: 8px 18px;
-      background: var(--bg-primary);
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--glass-border);
       border-radius: 100px;
       color: var(--text-secondary);
       letter-spacing: 0.02em;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tech-tag::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .tech-tag:hover {
-      background: var(--accent);
-      color: var(--white);
-      border-color: var(--accent);
+      color: var(--text-primary);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
     }
 
-    /* Awards - Organic list */
+    .tech-tag:hover::before {
+      opacity: 0.1;
+    }
+
+    .tech-tag span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Awards - 电影级列表 */
     .awards-container {
       display: flex;
       flex-direction: column;
-      gap: 1px;
+      gap: 2px;
       background: var(--glass-border);
-      border-radius: 24px;
+      border-radius: 32px;
       overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+
+    .award-category {
+      background: rgba(0, 245, 255, 0.05);
+      padding: 24px 40px;
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .award-item {
       display: grid;
-      grid-template-columns: 120px 1fr 80px;
-      gap: 40px;
+      grid-template-columns: 100px 1fr 100px;
+      gap: 48px;
       padding: 32px 40px;
-      background: var(--cream);
+      background: var(--bg-secondary);
       align-items: center;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
     }
@@ -447,127 +656,194 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 3px;
-      background: var(--accent);
+      width: 4px;
+      background: var(--gradient-primary);
       transform: scaleY(0);
       transition: transform 0.4s ease;
+    }
+
+    .award-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0, 245, 255, 0.03) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
 
     .award-item:hover::before {
       transform: scaleY(1);
     }
 
+    .award-item:hover::after {
+      opacity: 1;
+    }
+
     .award-item:hover {
-      background: var(--white);
-      padding-left: 48px;
+      background: var(--bg-tertiary);
+      padding-left: 52px;
     }
 
     .award-level {
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      padding: 10px 18px;
+      padding: 12px 20px;
       border-radius: 100px;
       text-align: center;
       white-space: nowrap;
+      position: relative;
+      z-index: 1;
     }
 
     .award-level.national {
-      background: rgba(196, 165, 116, 0.15);
-      color: var(--accent-dark);
-      border: 1px solid rgba(196, 165, 116, 0.3);
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.1);
     }
 
     .award-level.provincial {
-      background: rgba(107, 101, 96, 0.08);
+      background: rgba(160, 160, 176, 0.08);
       color: var(--text-secondary);
-      border: 1px solid rgba(107, 101, 96, 0.2);
+      border: 1px solid rgba(160, 160, 176, 0.2);
     }
 
     .award-level.school {
-      background: rgba(155, 149, 144, 0.08);
+      background: rgba(96, 96, 112, 0.08);
       color: var(--text-muted);
-      border: 1px solid rgba(155, 149, 144, 0.2);
+      border: 1px solid rgba(96, 96, 112, 0.2);
     }
 
     .award-title {
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 500;
-      line-height: 1.5;
-      color: var(--text-primary);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .award-item:hover .award-title {
+      color: var(--accent-cyan);
     }
 
     .award-rank {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-secondary);
-      margin-top: 6px;
+      margin-top: 8px;
       display: block;
+      transition: all 0.3s ease;
+    }
+
+    .award-item:hover .award-rank {
+      color: var(--accent-purple);
     }
 
     .award-year {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-muted);
       text-align: right;
       font-weight: 500;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Skills - Organic cloud */
+    /* Skills - 浮动气泡 */
     .skills-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 16px;
-      max-width: 1000px;
+      gap: 20px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
     .skill-bubble {
-      font-size: 14px;
-      padding: 16px 28px;
-      background: var(--cream);
+      font-size: 15px;
+      padding: 20px 32px;
+      background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 100px;
       color: var(--text-secondary);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-bubble::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .skill-bubble:hover {
-      background: var(--accent);
-      color: var(--white);
-      border-color: var(--accent);
-      transform: scale(1.05);
+      color: var(--text-primary);
+      border-color: var(--accent-cyan);
+      transform: scale(1.08) translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 245, 255, 0.2);
     }
 
-    /* Contact - Minimal organic */
+    .skill-bubble:hover::before {
+      opacity: 0.1;
+    }
+
+    .skill-bubble span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Contact - 电影级 */
     .contact {
       text-align: center;
-      padding: 200px 80px;
+      padding: 220px 80px;
       position: relative;
     }
 
-    .contact h2 {
-      font-size: clamp(36px, 6vw, 64px);
-      font-weight: 300;
-      margin-bottom: 24px;
-      color: var(--text-primary);
-      letter-spacing: -0.02em;
+    .contact::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(0, 245, 255, 0.05) 0%, transparent 60%);
+      pointer-events: none;
     }
 
-    .contact h2 span {
-      font-weight: 500;
-      color: var(--accent-dark);
+    .contact h2 {
+      font-size: clamp(42px, 7vw, 72px);
+      font-weight: 200;
+      margin-bottom: 32px;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact h2 .highlight {
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .contact-desc {
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-secondary);
-      margin-bottom: 64px;
-      max-width: 480px;
+      margin-bottom: 80px;
+      max-width: 520px;
       margin-left: auto;
       margin-right: auto;
-      line-height: 1.8;
+      line-height: 1.9;
+      position: relative;
+      z-index: 1;
     }
 
     .contact-links {
@@ -575,14 +851,16 @@
       justify-content: center;
       gap: 24px;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }
 
     .contact-link {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 18px 32px;
-      background: var(--cream);
+      gap: 16px;
+      padding: 20px 36px;
+      background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 100px;
       color: var(--text-primary);
@@ -590,91 +868,173 @@
       font-size: 14px;
       font-weight: 500;
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .contact-link::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: var(--gradient-primary);
+      border-radius: 100px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .contact-link:hover::before {
+      opacity: 0.1;
+    }
+
+    .contact-link:hover::after {
+      opacity: 0.4;
     }
 
     .contact-link:hover {
-      background: var(--accent);
-      color: var(--white);
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(196, 165, 116, 0.3);
+      transform: translateY(-6px);
+      border-color: transparent;
+      box-shadow: 0 30px 60px rgba(0, 245, 255, 0.2);
+    }
+
+    .contact-link span {
+      position: relative;
+      z-index: 1;
     }
 
     /* Footer */
     footer {
-      padding: 60px;
+      padding: 80px;
       text-align: center;
       border-top: 1px solid var(--glass-border);
+      position: relative;
     }
 
     footer p {
       font-size: 12px;
       color: var(--text-muted);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1em;
     }
 
-    /* Modal */
+    /* Modal - 电影级 */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(241, 235, 229, 0.98);
+      background: rgba(5, 5, 8, 0.98);
       z-index: 10000;
       display: none;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(30px);
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
 
-    .modal.active { display: flex; }
+    .modal.active {
+      display: flex;
+      opacity: 1;
+    }
 
     .modal img {
-      max-width: 85vw;
-      max-height: 85vh;
-      border-radius: 16px;
-      box-shadow: 0 40px 80px rgba(45, 42, 38, 0.2);
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 20px;
+      box-shadow: 
+        0 60px 120px rgba(0, 0, 0, 0.6),
+        0 0 60px rgba(0, 245, 255, 0.1);
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal.active img {
+      transform: scale(1);
     }
 
     .modal-close {
       position: absolute;
       top: 40px;
       right: 40px;
-      width: 56px;
-      height: 56px;
-      background: var(--cream);
+      width: 64px;
+      height: 64px;
+      background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: 50%;
       color: var(--text-primary);
-      font-size: 24px;
+      font-size: 28px;
       cursor: pointer;
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(10px);
     }
 
     .modal-close:hover {
-      background: var(--accent);
-      color: var(--white);
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
       transform: rotate(90deg);
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+    }
+
+    /* 浮动装饰元素 */
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: rgba(0, 245, 255, 0.1);
+      top: 20%;
+      right: -100px;
+      animation: float-orb 8s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: rgba(139, 92, 246, 0.1);
+      bottom: 30%;
+      left: -50px;
+      animation: float-orb 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes float-orb {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.1); }
     }
 
     /* Responsive */
     @media (max-width: 1024px) {
       .projects-grid { grid-template-columns: 1fr; }
       .project-card.large { grid-column: span 1; padding: 48px; }
-      .award-item { grid-template-columns: 100px 1fr 60px; padding: 24px 32px; gap: 24px; }
-      section { padding: 120px 40px; }
+      .award-item { grid-template-columns: 90px 1fr 70px; padding: 28px 32px; gap: 32px; }
+      section { padding: 140px 40px; }
+      .hero-stats { gap: 60px; }
     }
 
     @media (max-width: 768px) {
-      nav { top: 20px; padding: 12px 24px; gap: 24px; }
+      nav { top: 20px; padding: 14px 28px; gap: 32px; }
       .nav-links { display: none; }
-      .hero-stats { gap: 40px; }
-      .stat-item::after { right: -20px; height: 30px; }
-      .stat-number { font-size: 40px; }
-      .award-item { grid-template-columns: 1fr; gap: 12px; text-align: center; }
+      .hero-stats { gap: 32px; flex-wrap: wrap; }
+      .stat-number { font-size: 48px; }
+      .award-item { grid-template-columns: 1fr; gap: 16px; text-align: center; }
       .award-year { text-align: center; }
-      .contact { padding: 120px 40px; }
+      .contact { padding: 140px 40px; }
       .contact-links { flex-direction: column; align-items: center; }
       body { cursor: auto; }
       .cursor, .cursor-dot { display: none; }
@@ -694,8 +1054,10 @@
   <div class="cursor"></div>
   <div class="cursor-dot"></div>
   
-  <!-- Grain Overlay -->
+  <!-- Cinematic Overlays -->
   <div class="grain-overlay"></div>
+  <div class="vignette"></div>
+  <div class="scanlines"></div>
 
   <!-- Navigation -->
   <nav>
@@ -711,21 +1073,22 @@
   <!-- Hero Section -->
   <section class="hero">
     <canvas id="hero-canvas"></canvas>
+    <div class="hero-glow"></div>
     <div class="hero-content">
-      <div class="hero-eyebrow">AI & Robotics Developer</div>
-      <h1>岳<span>金豪</span></h1>
-      <p class="hero-desc">嵌入式开发与机器人算法工程师，专注于计算机视觉与AI算法研究，在国家级、省级机器人竞赛中屡获佳绩</p>
+      <div class="hero-eyebrow">AI & Robotics Engineer</div>
+      <h1>岳<span class="highlight">金豪</span></h1>
+      <p class="hero-desc">专注于计算机视觉与AI算法研究，在国家级、省级机器人竞赛中屡获佳绩</p>
       <div class="hero-stats">
         <div class="stat-item">
-          <div class="stat-number" data-count="27">0</div>
+          <div class="stat-number" data-count="26">0</div>
           <div class="stat-label">竞赛获奖</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number" data-count="5">0</div>
+          <div class="stat-number" data-count="9">0</div>
           <div class="stat-label">国家级奖项</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number" data-count="17">0</div>
+          <div class="stat-number" data-count="16">0</div>
           <div class="stat-label">省级奖项</div>
         </div>
       </div>
@@ -738,6 +1101,7 @@
 
   <!-- Projects Section -->
   <section id="projects">
+    <div class="floating-orb orb-1"></div>
     <div class="section-header">
       <div class="section-eyebrow">Selected Works</div>
       <h2>项目作品</h2>
@@ -748,11 +1112,11 @@
         <h3>仿人机器人视觉控制系统</h3>
         <p>中国机器人及人工智能大赛项目，基于树莓派仿人机器人平台二次开发，实现物体抓取、场地导航、自动避障等功能。基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署。针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性。</p>
         <div class="project-tech">
-          <span class="tech-tag">树莓派</span>
-          <span class="tech-tag">OpenCV</span>
-          <span class="tech-tag">YOLOv5</span>
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">C++</span>
+          <span class="tech-tag"><span>树莓派</span></span>
+          <span class="tech-tag"><span>OpenCV</span></span>
+          <span class="tech-tag"><span>YOLOv5</span></span>
+          <span class="tech-tag"><span>Python</span></span>
+          <span class="tech-tag"><span>C++</span></span>
         </div>
       </div>
       <div class="project-card">
@@ -760,9 +1124,9 @@
         <h3>危化品仓储智慧监控与安全预警系统</h3>
         <p>市级科研项目，基于计算机视觉实现危化品识别与安全预警。负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署。</p>
         <div class="project-tech">
-          <span class="tech-tag">YOLOv5</span>
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">C++</span>
+          <span class="tech-tag"><span>YOLOv5</span></span>
+          <span class="tech-tag"><span>Python</span></span>
+          <span class="tech-tag"><span>C++</span></span>
         </div>
       </div>
       <div class="project-card">
@@ -770,10 +1134,10 @@
         <h3>TI-RSLK循迹小车竞赛</h3>
         <p>京南地区人工智能与机器人创新创业大赛项目，基于TI-RSLK机器人学习套件参加循迹赛项。负责红外/光电传感器阵列数据采集与处理，实现实时循迹判断逻辑；编写C++控制代码，调试PID参数，优化小车循迹速度与稳定性。</p>
         <div class="project-tech">
-          <span class="tech-tag">C++</span>
-          <span class="tech-tag">STM32</span>
-          <span class="tech-tag">传感器</span>
-          <span class="tech-tag">PID控制</span>
+          <span class="tech-tag"><span>C++</span></span>
+          <span class="tech-tag"><span>STM32</span></span>
+          <span class="tech-tag"><span>传感器</span></span>
+          <span class="tech-tag"><span>PID控制</span></span>
         </div>
       </div>
       <div class="project-card">
@@ -781,9 +1145,9 @@
         <h3>小型人形机器人舞蹈赛项</h3>
         <p>中国机器人及人工智能大赛&其他竞赛项目，参与多项竞赛机器人舞蹈赛项，负责动作调试优化及舵机维修维护。动作序列设计、舞蹈动作调试与精细化优化；舵机日常检测、维修与更换，保障硬件稳定运行。</p>
         <div class="project-tech">
-          <span class="tech-tag">动作调试</span>
-          <span class="tech-tag">硬件维护</span>
-          <span class="tech-tag">舵机控制</span>
+          <span class="tech-tag"><span>动作调试</span></span>
+          <span class="tech-tag"><span>硬件维护</span></span>
+          <span class="tech-tag"><span>舵机控制</span></span>
         </div>
       </div>
       <div class="project-card">
@@ -791,10 +1155,10 @@
         <h3>开源技术研究与贡献</h3>
         <p>持续在GitHub跟踪研究OpenClaw、Codex、ClaudeCode等前沿开源项目，制作Skill工具并开源至个人仓库，积极探索有价值的开源技术。研究OpenClaw、Codex、ClaudeCode等前沿AI与开源工具，深入理解其实现原理与应用场景。</p>
         <div class="project-tech">
-          <span class="tech-tag">Git</span>
-          <span class="tech-tag">Linux</span>
-          <span class="tech-tag">Docker</span>
-          <span class="tech-tag">开源工具</span>
+          <span class="tech-tag"><span>Git</span></span>
+          <span class="tech-tag"><span>Linux</span></span>
+          <span class="tech-tag"><span>Docker</span></span>
+          <span class="tech-tag"><span>开源工具</span></span>
         </div>
       </div>
     </div>
@@ -802,96 +1166,135 @@
 
   <!-- Awards Section -->
   <section id="awards">
+    <div class="floating-orb orb-2"></div>
     <div class="section-header">
       <div class="section-eyebrow">Achievements</div>
       <h2>竞赛获奖</h2>
     </div>
     <div class="awards-container">
       <!-- 国家级 -->
+      <div class="award-category">国家级奖项</div>
+      
       <div class="award-item" data-cert="certificates/8847-2025-陈珂、岳金豪、陈齐兴.png">
         <div class="award-level national">国家级</div>
         <div class="award-title">中国机器人及人工智能大赛全国总决赛<span class="award-rank">仿人机器人短跑 · 二等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/8845-2025-岳金豪、屠浩然、魏兴一.png">
         <div class="award-level national">国家级</div>
         <div class="award-title">中国机器人及人工智能大赛全国总决赛<span class="award-rank">仿人机器人不规则地面运动 · 三等奖</span></div>
         <div class="award-year">2025</div>
       </div>
-      <div class="award-item" data-cert="certificates/9797-2025-魏兴一、毕可欣、岳金豪.png">
-        <div class="award-level national">国家级</div>
-        <div class="award-title">全国大学生信息安全与对抗技术竞赛全国总决赛<span class="award-rank">医疗配送机器人 · 三等奖</span></div>
-        <div class="award-year">2025</div>
-      </div>
-      <div class="award-item" data-cert="certificates/9786-2025-魏兴一、毕可欣、岳金豪.png">
-        <div class="award-level national">国家级</div>
-        <div class="award-title">全国大学生信息安全与对抗技术竞赛全国总决赛<span class="award-rank">医疗配送机器人 · 三等奖</span></div>
-        <div class="award-year">2025</div>
-      </div>
+      
       <div class="award-item" data-cert="certificates/9455-2025-陈珂、岳金豪、陈齐兴.png">
         <div class="award-level national">国家级</div>
         <div class="award-title">中国机器人及人工智能大赛全国总决赛<span class="award-rank">城市道路识别 · 优秀奖</span></div>
         <div class="award-year">2025</div>
       </div>
       
+      <div class="award-item" data-cert="certificates/8298-2024-陈齐兴、杨佳骏、岳金豪.png">
+        <div class="award-level national">国家级</div>
+        <div class="award-title">全国机器人锦标赛暨国际仿人奥林匹克大赛<span class="award-rank">舞蹈类 · 二等奖</span></div>
+        <div class="award-year">2024</div>
+      </div>
+      
+      <div class="award-item" data-cert="certificates/9786-2025-魏兴一、毕可欣、岳金豪.png">
+        <div class="award-level national">国家级</div>
+        <div class="award-title">全国大学生信息安全与对抗技术竞赛全国总决赛<span class="award-rank">医疗配送机器人 · 三等奖</span></div>
+        <div class="award-year">2025</div>
+      </div>
+      
+      <div class="award-item" data-cert="certificates/9016-2025-李燕飞、王若冰、方涛、岳金豪、苏君硕.jpg">
+        <div class="award-level national">国家级</div>
+        <div class="award-title">全国大学生数字媒体科技作品及创意竞赛<span class="award-rank">辰分四季·古韵新绘 · 二等奖</span></div>
+        <div class="award-year">2025</div>
+      </div>
+      
+      <div class="award-item" data-cert="certificates/8979-2025-方涛、岳金豪、王若冰、李燕飞、苏君硕.jpg">
+        <div class="award-level national">国家级</div>
+        <div class="award-title">全国大学生数字媒体科技作品及创意竞赛<span class="award-rank">跨模态新闻信息识别系统 · 二等奖</span></div>
+        <div class="award-year">2025</div>
+      </div>
+      
+      <div class="award-item" data-cert="certificates/9017-2025-王若冰、苏君硕、蔡东呈、方涛、岳金豪.jpg">
+        <div class="award-level national">国家级</div>
+        <div class="award-title">全国大学生数字媒体科技作品及创意竞赛<span class="award-rank">傩境万方 · 二等奖</span></div>
+        <div class="award-year">2025</div>
+      </div>
+      
+      <div class="award-item" data-cert="certificates/9148-2025-方涛、张卿郡、岳金豪、陈齐兴、毕可欣.png">
+        <div class="award-level national">国家级</div>
+        <div class="award-title">全国三维数字化创新设计大赛<span class="award-rank">北京赛区 · 一等奖</span></div>
+        <div class="award-year">2025</div>
+      </div>
+      
+      <div class="award-item" data-cert="certificates/10120-2026-梁范杰、刘瑞洲、岳金豪.jpg">
+        <div class="award-level national">国家级</div>
+        <div class="award-title">全国三维数字化创新设计大赛<span class="award-rank">北京赛区 · 一等奖</span></div>
+        <div class="award-year">2026</div>
+      </div>
+      
       <!-- 省级一等奖 -->
+      <div class="award-category">省级一等奖</div>
+      
       <div class="award-item" data-cert="certificates/7828-2024-陈齐兴、岳金豪、杨佳骏、何保森、杨京涛.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">京南地区人工智能与机器人创新创业大赛<span class="award-rank">人形机器人艺术赛（单人舞蹈） · 一等奖</span></div>
         <div class="award-year">2024</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/7856-2024-陈齐兴、岳金豪、杨佳骏、何保森、杨京涛.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">京南地区人工智能与机器人创新创业大赛<span class="award-rank">迷宫循迹赛 · 一等奖</span></div>
         <div class="award-year">2024</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/8853-2025-陈珂、岳金豪、陈齐兴.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">中国机器人及人工智能大赛北京赛区<span class="award-rank">城市道路识别 · 一等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9147-2025-陈珂、岳金豪、陈齐兴.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">中国机器人及人工智能大赛北京赛区<span class="award-rank">仿人机器人短跑 · 一等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9788-2025-陈齐兴、岳金豪、王劭书、毕可欣.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">北京市大学生机器人大赛<span class="award-rank">类人机器人竞技体育赛（点球） · 一等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9797-2025-魏兴一、毕可欣、岳金豪.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">全国大学生信息安全与对抗技术竞赛区域赛<span class="award-rank">医疗配送机器人 · 一等奖</span></div>
         <div class="award-year">2025</div>
       </div>
-      <div class="award-item" data-cert="certificates/10120-2026-梁范杰、刘瑞洲、岳金豪.jpg">
-        <div class="award-level provincial">省级</div>
-        <div class="award-title">全国三维数字化创新设计大赛北京赛区<span class="award-rank">往复运动膜组器设备 · 一等奖</span></div>
-        <div class="award-year">2025</div>
-      </div>
       
       <!-- 省级二等奖 -->
+      <div class="award-category">省级二等奖</div>
+      
       <div class="award-item" data-cert="certificates/8285-2024-岳金豪.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">京南地区人工智能与机器人创新创业大赛<span class="award-rank">机器人电学基础专题赛 · 二等奖</span></div>
         <div class="award-year">2024</div>
       </div>
-      <div class="award-item" data-cert="certificates/8298-2024-陈齐兴、杨佳骏、岳金豪.png">
-        <div class="award-level provincial">省级</div>
-        <div class="award-title">全国机器人锦标赛暨国际仿人奥林匹克大赛<span class="award-rank">舞蹈类：单人舞 · 二等奖</span></div>
-        <div class="award-year">2024</div>
-      </div>
+      
       <div class="award-item" data-cert="certificates/9150-2025-岳金豪、屠浩然、魏兴一.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">中国机器人及人工智能大赛北京赛区<span class="award-rank">仿人机器人不规则地面运动 · 二等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9167-2025-岳金豪、屠浩然、魏兴一.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">中国机器人及人工智能大赛北京赛区<span class="award-rank">仿人机器人障碍跑 · 二等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9783-2025-陈齐兴、岳金豪、王劭书、毕可欣.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">华北五省市大学生机器人大赛<span class="award-rank">类人机器人竞技体育赛（点球） · 二等奖</span></div>
@@ -899,31 +1302,32 @@
       </div>
       
       <!-- 省级三等奖 -->
+      <div class="award-category">省级三等奖</div>
+      
       <div class="award-item" data-cert="certificates/9157-2025-陈珂、岳金豪、陈齐兴.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">中国机器人及人工智能大赛北京赛区<span class="award-rank">智慧药房 · 三等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9169-2025-岳金豪、屠浩然、魏兴一.png">
         <div class="award-level provincial">省级</div>
         <div class="award-title">中国机器人及人工智能大赛北京赛区<span class="award-rank">仿人机器人点球 · 三等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9792-2025-毕可欣、张金莹、陈齐兴、冯亦琪、岳金豪、黄沛淇.jpg">
         <div class="award-level provincial">省级</div>
         <div class="award-title">中国国际大学生创新大赛北京赛区<span class="award-rank">药管先锋：智能药品调配机器人 · 三等奖</span></div>
         <div class="award-year">2025</div>
       </div>
+      
       <div class="award-item" data-cert="certificates/9025-2025-岳金豪、李莹川、马敏涛.jpg">
         <div class="award-level provincial">省级</div>
         <div class="award-title">全国大学生电子设计竞赛北京赛区<span class="award-rank">电子设计竞赛 · 三等奖</span></div>
         <div class="award-year">2025</div>
       </div>
-      <div class="award-item" data-cert="certificates/9148-2025-方涛、张卿郡、岳金豪、陈齐兴、毕可欣.png">
-        <div class="award-level provincial">省级</div>
-        <div class="award-title">全国大学生智能汽车竞赛华北赛区<span class="award-rank">完全模型组 · 三等奖</span></div>
-        <div class="award-year">2025</div>
-      </div>
+      
       <div class="award-item" data-cert="certificates/8873-2025-王若冰、陈齐兴、魏兴一、苏君硕、黄思睿、方涛、岳金豪.jpg">
         <div class="award-level provincial">省级</div>
         <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛<span class="award-rank">Truth Guard虚假新闻检测系统 · 三等奖</span></div>
@@ -931,21 +1335,8 @@
       </div>
       
       <!-- 校级 -->
-      <div class="award-item" data-cert="certificates/8979-2025-方涛、岳金豪、王若冰、李燕飞、苏君硕.jpg">
-        <div class="award-level school">校级</div>
-        <div class="award-title">全国大学生数字媒体科技作品及创意竞赛<span class="award-rank">跨模态新闻信息识别系统 · 二等奖</span></div>
-        <div class="award-year">2025</div>
-      </div>
-      <div class="award-item" data-cert="certificates/9016-2025-李燕飞、王若冰、方涛、岳金豪、苏君硕.jpg">
-        <div class="award-level school">校级</div>
-        <div class="award-title">全国大学生数字媒体科技作品及创意竞赛<span class="award-rank">辰分四季·古韵新绘 · 二等奖</span></div>
-        <div class="award-year">2025</div>
-      </div>
-      <div class="award-item" data-cert="certificates/9017-2025-王若冰、苏君硕、蔡东呈、方涛、岳金豪.jpg">
-        <div class="award-level school">校级</div>
-        <div class="award-title">全国大学生数字媒体科技作品及创意竞赛<span class="award-rank">傩境万方 · 二等奖</span></div>
-        <div class="award-year">2025</div>
-      </div>
+      <div class="award-category">校级奖项</div>
+      
       <div class="award-item" data-cert="certificates/8722-2025-王若冰、岳金豪、陈齐兴、苏君硕、黄思睿、魏兴一、方涛、李秋颖.png">
         <div class="award-level school">校级</div>
         <div class="award-title">中国国际大学生创新大赛<span class="award-rank">Truth Guard · 三等奖</span></div>
@@ -961,25 +1352,25 @@
       <h2>专业技能</h2>
     </div>
     <div class="skills-container">
-      <span class="skill-bubble">Python</span>
-      <span class="skill-bubble">C</span>
-      <span class="skill-bubble">C++</span>
-      <span class="skill-bubble">STM32</span>
-      <span class="skill-bubble">51单片机</span>
-      <span class="skill-bubble">树莓派</span>
-      <span class="skill-bubble">OpenCV</span>
-      <span class="skill-bubble">YOLOv5</span>
-      <span class="skill-bubble">Git</span>
-      <span class="skill-bubble">Linux</span>
-      <span class="skill-bubble">Docker</span>
-      <span class="skill-bubble">SolidWorks</span>
-      <span class="skill-bubble">MATLAB</span>
+      <span class="skill-bubble"><span>Python</span></span>
+      <span class="skill-bubble"><span>C</span></span>
+      <span class="skill-bubble"><span>C++</span></span>
+      <span class="skill-bubble"><span>STM32</span></span>
+      <span class="skill-bubble"><span>51单片机</span></span>
+      <span class="skill-bubble"><span>树莓派</span></span>
+      <span class="skill-bubble"><span>OpenCV</span></span>
+      <span class="skill-bubble"><span>YOLOv5</span></span>
+      <span class="skill-bubble"><span>Git</span></span>
+      <span class="skill-bubble"><span>Linux</span></span>
+      <span class="skill-bubble"><span>Docker</span></span>
+      <span class="skill-bubble"><span>SolidWorks</span></span>
+      <span class="skill-bubble"><span>MATLAB</span></span>
     </div>
   </section>
 
   <!-- Contact Section -->
   <section class="contact" id="contact">
-    <h2>Let's <span>Connect</span></h2>
+    <h2>Let's <span class="highlight">Connect</span></h2>
     <p class="contact-desc">如果你对AI、机器人技术感兴趣，或者有项目合作的想法，欢迎联系我</p>
     <div class="contact-links">
       <a href="mailto:3189311520@qq.com" class="contact-link">
@@ -999,7 +1390,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 岳金豪 · AI & Robotics Developer</p>
+    <p>© 2025 岳金豪 · AI & Robotics Engineer</p>
   </footer>
 
   <!-- Certificate Modal -->
@@ -1009,25 +1400,26 @@
   </div>
 
   <script>
-    // Lenis Smooth Scroll
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      smoothWheel: true
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
     });
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
+    // Navigation scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 100) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
     });
-    gsap.ticker.lagSmoothing(0);
 
     // Custom Cursor
     const cursor = document.querySelector('.cursor');
@@ -1043,22 +1435,22 @@
     });
 
     function animateCursor() {
-      cursorX += (mouseX - cursorX) * 0.12;
-      cursorY += (mouseY - cursorY) * 0.12;
+      cursorX += (mouseX - cursorX) * 0.15;
+      cursorY += (mouseY - cursorY) * 0.15;
       cursor.style.left = cursorX + 'px';
       cursor.style.top = cursorY + 'px';
       requestAnimationFrame(animateCursor);
     }
     animateCursor();
 
-    // Cursor hover
-    const hoverElements = document.querySelectorAll('a, button, .award-item, .project-card, .skill-bubble, .contact-link');
+    // Cursor hover effects
+    const hoverElements = document.querySelectorAll('a, button, .award-item, .project-card, .skill-bubble, .contact-link, .modal-close');
     hoverElements.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
 
-    // Three.js Organic Background - Moss/Branch inspired
+    // Three.js Cinematic Background - Advanced Particle System
     const canvas = document.getElementById('hero-canvas');
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -1066,30 +1458,23 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Organic particle system - Branch/moss like
-    const particleCount = 80;
-    const branches = [];
-    const branchGeometry = new THREE.BufferGeometry();
+    // Create advanced particle system
+    const particleCount = 150;
+    const particles = [];
+    const particleGeometry = new THREE.BufferGeometry();
     
-    // Create organic branch-like particles
     for (let i = 0; i < particleCount; i++) {
-      const branch = {
-        x: (Math.random() - 0.5) * 20,
-        y: (Math.random() - 0.5) * 20,
-        z: (Math.random() - 0.5) * 10,
-        vx: (Math.random() - 0.5) * 0.005,
-        vy: (Math.random() - 0.5) * 0.005,
-        vz: (Math.random() - 0.5) * 0.002,
+      particles.push({
+        x: (Math.random() - 0.5) * 25,
+        y: (Math.random() - 0.5) * 25,
+        z: (Math.random() - 0.5) * 15,
+        vx: (Math.random() - 0.5) * 0.01,
+        vy: (Math.random() - 0.5) * 0.01,
+        vz: (Math.random() - 0.5) * 0.005,
         phase: Math.random() * Math.PI * 2,
         amplitude: 0.3 + Math.random() * 0.4,
-        originalX: 0,
-        originalY: 0,
-        originalZ: 0
-      };
-      branch.originalX = branch.x;
-      branch.originalY = branch.y;
-      branch.originalZ = branch.z;
-      branches.push(branch);
+        size: 0.05 + Math.random() * 0.1
+      });
     }
 
     const positions = new Float32Array(particleCount * 3);
@@ -1097,106 +1482,59 @@
     const sizes = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = branches[i].x;
-      positions[i * 3 + 1] = branches[i].y;
-      positions[i * 3 + 2] = branches[i].z;
+      positions[i * 3] = particles[i].x;
+      positions[i * 3 + 1] = particles[i].y;
+      positions[i * 3 + 2] = particles[i].z;
       
-      // Warm organic colors
-      const colorVariation = Math.random();
-      colors[i * 3] = 0.77 + colorVariation * 0.1;     // R
-      colors[i * 3 + 1] = 0.65 + colorVariation * 0.08; // G
-      colors[i * 3 + 2] = 0.46 + colorVariation * 0.06; // B
+      // Cyan to purple gradient
+      const ratio = i / particleCount;
+      colors[i * 3] = 0 + ratio * 0.5;     // R
+      colors[i * 3 + 1] = 0.96 - ratio * 0.3; // G
+      colors[i * 3 + 2] = 1;             // B
       
-      sizes[i] = 3 + Math.random() * 4;
+      sizes[i] = particles[i].size;
     }
 
-    branchGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    branchGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    branchGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-    // Custom shader for organic look
-    const branchMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0, 0) },
-        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-      },
-      vertexShader: `
-        attribute float size;
-        attribute vec3 color;
-        varying vec3 vColor;
-        uniform float uTime;
-        uniform vec2 uMouse;
-        
-        void main() {
-          vColor = color;
-          vec3 pos = position;
-          
-          // Organic breathing motion
-          float breathe = sin(uTime * 0.5 + position.x * 0.3) * 0.1;
-          pos.y += breathe;
-          
-          // Mouse proximity effect - organic deformation
-          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          vec2 screenPos = mvPosition.xy / mvPosition.z;
-          float dist = distance(screenPos, uMouse * 2.0);
-          float influence = smoothstep(1.5, 0.0, dist);
-          
-          // Organic deformation towards mouse
-          pos.x += (uMouse.x * 2.0 - screenPos.x) * influence * 0.3;
-          pos.y += (uMouse.y * 2.0 - screenPos.y) * influence * 0.3;
-          
-          vec4 finalPosition = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-          gl_Position = finalPosition;
-          gl_PointSize = size * (300.0 / -mvPosition.z) * (1.0 + influence * 0.5);
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vColor;
-        
-        void main() {
-          // Organic circular shape with soft edge
-          vec2 center = gl_PointCoord - vec2(0.5);
-          float dist = length(center);
-          float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
-          
-          // Add organic texture variation
-          float noise = sin(gl_PointCoord.x * 20.0) * sin(gl_PointCoord.y * 20.0) * 0.1;
-          
-          gl_FragColor = vec4(vColor + noise, alpha * 0.8);
-        }
-      `,
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.08,
+      vertexColors: true,
       transparent: true,
-      blending: THREE.NormalBlending,
-      depthWrite: false
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
     });
 
-    const branchSystem = new THREE.Points(branchGeometry, branchMaterial);
-    scene.add(branchSystem);
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleSystem);
 
-    // Connection lines between nearby particles
+    // Connection lines with gradient
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0xC4A574,
+      color: 0x00f5ff,
       transparent: true,
-      opacity: 0.15
+      opacity: 0.08,
+      blending: THREE.AdditiveBlending
     });
 
     const linesGeometry = new THREE.BufferGeometry();
     const linesMesh = new THREE.LineSegments(linesGeometry, lineMaterial);
     scene.add(linesMesh);
 
-    camera.position.z = 8;
+    camera.position.z = 10;
 
     let mouseX3D = 0, mouseY3D = 0;
     document.addEventListener('mousemove', (e) => {
       mouseX3D = (e.clientX / window.innerWidth) * 2 - 1;
       mouseY3D = -(e.clientY / window.innerHeight) * 2 + 1;
-      branchMaterial.uniforms.uMouse.value.set(mouseX3D, mouseY3D);
     });
 
     function updateConnections() {
-      const positions = branchGeometry.attributes.position.array;
+      const positions = particleGeometry.attributes.position.array;
       const linePositions = [];
+      const lineColors = [];
       
       for (let i = 0; i < particleCount; i++) {
         for (let j = i + 1; j < particleCount; j++) {
@@ -1205,8 +1543,8 @@
           const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
           const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
           
-          if (distance < 3.5) {
-            const opacity = 1.0 - distance / 3.5;
+          if (distance < 4) {
+            const opacity = 1 - distance / 4;
             linePositions.push(
               positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
               positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
@@ -1221,35 +1559,42 @@
     let time = 0;
     function animate3D() {
       requestAnimationFrame(animate3D);
-      time += 0.01;
-      branchMaterial.uniforms.uTime.value = time;
+      time += 0.008;
       
-      const positions = branchGeometry.attributes.position.array;
+      const positions = particleGeometry.attributes.position.array;
       
       for (let i = 0; i < particleCount; i++) {
-        const branch = branches[i];
+        const p = particles[i];
         
-        // Organic floating motion
-        branch.x = branch.originalX + Math.sin(time * 0.3 + branch.phase) * branch.amplitude * 0.3;
-        branch.y = branch.originalY + Math.cos(time * 0.2 + branch.phase) * branch.amplitude * 0.2;
+        // Complex floating motion
+        p.x += p.vx + Math.sin(time * 0.5 + p.phase) * 0.003;
+        p.y += p.vy + Math.cos(time * 0.3 + p.phase) * 0.003;
+        p.z += Math.sin(time * 0.2 + p.phase) * 0.002;
         
-        // Mouse influence - organic deformation
-        const dx = mouseX3D * 10 - branch.x;
-        const dy = mouseY3D * 10 - branch.y;
+        // Mouse proximity effect with magnetic pull
+        const dx = mouseX3D * 12 - p.x;
+        const dy = mouseY3D * 12 - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const influence = Math.max(0, 1 - dist / 5) * 0.3;
+        const influence = Math.max(0, 1 - dist / 5) * 0.15;
         
-        positions[i * 3] = branch.x + dx * influence;
-        positions[i * 3 + 1] = branch.y + dy * influence;
-        positions[i * 3 + 2] = branch.z;
+        positions[i * 3] = p.x + dx * influence;
+        positions[i * 3 + 1] = p.y + dy * influence;
+        positions[i * 3 + 2] = p.z;
+        
+        // Boundary wrap with smooth transition
+        if (Math.abs(p.x) > 12) p.x *= -0.95;
+        if (Math.abs(p.y) > 12) p.y *= -0.95;
+        if (Math.abs(p.z) > 8) p.z *= -0.95;
       }
       
-      branchGeometry.attributes.position.needsUpdate = true;
+      particleGeometry.attributes.position.needsUpdate = true;
       updateConnections();
       
-      // Slow organic rotation
-      branchSystem.rotation.y += 0.0002;
+      // Slow cinematic rotation
+      particleSystem.rotation.y += 0.0002;
+      particleSystem.rotation.x += 0.0001;
       linesMesh.rotation.y += 0.0002;
+      linesMesh.rotation.x += 0.0001;
       
       renderer.render(scene, camera);
     }
@@ -1258,24 +1603,30 @@
     // GSAP Animations
     gsap.registerPlugin(ScrollTrigger);
 
-    // Hero entrance
-    const heroTl = gsap.timeline({ delay: 0.3 });
+    // Hero entrance - Cinematic
+    const heroTl = gsap.timeline({ delay: 0.5 });
     heroTl
-      .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' })
-      .to('.hero h1', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=0.5')
-      .to('.hero-desc', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
-      .to('.hero-stats', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.4')
-      .to('.scroll-hint', { opacity: 1, duration: 0.8 }, '-=0.3');
+      .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' })
+      .to('.hero h1', { opacity: 1, y: 0, duration: 1.4, ease: 'power3.out' }, '-=0.5')
+      .to('.hero-desc', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=0.8')
+      .to('.hero-stats', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=0.6')
+      .to('.scroll-hint', { opacity: 1, duration: 1 }, '-=0.4');
 
-    // Counter animation
+    // Counter animation with glow effect
     document.querySelectorAll('.stat-number').forEach(counter => {
       const target = parseInt(counter.dataset.count);
       gsap.to(counter, {
         innerHTML: target,
-        duration: 2,
-        delay: 1,
+        duration: 2.5,
+        delay: 1.2,
         snap: { innerHTML: 1 },
-        ease: 'power2.out'
+        ease: 'power2.out',
+        onUpdate: function() {
+          const current = Math.round(this.targets()[0].innerHTML);
+          if (current === target) {
+            counter.style.textShadow = '0 0 40px rgba(0, 245, 255, 0.8)';
+          }
+        }
       });
     });
 
@@ -1283,26 +1634,27 @@
     gsap.utils.toArray('.section-header').forEach(header => {
       gsap.from(header, {
         scrollTrigger: { trigger: header, start: 'top 80%', toggleActions: 'play none none reverse' },
-        y: 40,
+        y: 50,
         opacity: 0,
-        duration: 0.8,
+        duration: 1,
         ease: 'power2.out'
       });
     });
 
-    // Project cards
+    // Project cards with 3D effect
     gsap.utils.toArray('.project-card').forEach((card, i) => {
       gsap.from(card, {
         scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' },
-        y: 60,
+        y: 80,
         opacity: 0,
-        duration: 0.8,
+        rotateX: 15,
+        duration: 1,
         delay: i * 0.1,
         ease: 'power2.out'
       });
     });
 
-    // Project card 3D tilt
+    // Project card 3D tilt with enhanced effect
     document.querySelectorAll('.project-card').forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
@@ -1310,10 +1662,10 @@
         const y = e.clientY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-        const rotateX = (y - centerY) / 25;
-        const rotateY = (centerX - x) / 25;
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
         
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-12px)`;
         card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
         card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
       });
@@ -1323,45 +1675,45 @@
       });
     });
 
-    // Award items
+    // Award items with stagger
     gsap.utils.toArray('.award-item').forEach((item, i) => {
       gsap.from(item, {
         scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none reverse' },
-        x: -30,
+        x: -50,
         opacity: 0,
-        duration: 0.6,
-        delay: i * 0.03,
+        duration: 0.8,
+        delay: i * 0.02,
         ease: 'power2.out'
       });
     });
 
-    // Skill bubbles
+    // Skill bubbles with bounce
     gsap.utils.toArray('.skill-bubble').forEach((bubble, i) => {
       gsap.from(bubble, {
         scrollTrigger: { trigger: '#skills', start: 'top 70%', toggleActions: 'play none none reverse' },
-        scale: 0.8,
+        scale: 0.5,
         opacity: 0,
-        duration: 0.5,
-        delay: i * 0.03,
+        duration: 0.6,
+        delay: i * 0.04,
         ease: 'back.out(1.7)'
       });
     });
 
-    // Contact
+    // Contact section
     gsap.from('.contact h2', {
       scrollTrigger: { trigger: '.contact', start: 'top 70%', toggleActions: 'play none none reverse' },
-      y: 40,
+      y: 50,
       opacity: 0,
-      duration: 0.8,
+      duration: 1,
       ease: 'power2.out'
     });
 
     gsap.from('.contact-link', {
       scrollTrigger: { trigger: '.contact', start: 'top 60%', toggleActions: 'play none none reverse' },
-      y: 30,
+      y: 40,
       opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
+      duration: 0.8,
+      stagger: 0.15,
       ease: 'power2.out'
     });
 
@@ -1373,13 +1725,13 @@
       item.addEventListener('click', () => {
         modalImg.src = item.dataset.cert;
         modal.classList.add('active');
-        lenis.stop();
+        document.body.style.overflow = 'hidden';
       });
     });
 
     function closeModal() {
       modal.classList.remove('active');
-      lenis.start();
+      document.body.style.overflow = '';
     }
 
     modal.addEventListener('click', (e) => {
@@ -1390,21 +1742,20 @@
       if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
     });
 
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) lenis.scrollTo(target, { offset: -100 });
-      });
-    });
-
-    // Resize
+    // Resize handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-      branchMaterial.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+    });
+
+    // Parallax effect for floating orbs
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      document.querySelectorAll('.floating-orb').forEach((orb, i) => {
+        const speed = 0.1 + i * 0.05;
+        orb.style.transform = `translateY(${scrolled * speed}px)`;
+      });
     });
   </script>
 </body>
