@@ -12,24 +12,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     :root {
-      /* 深空电光主题 - 电影级配色 */
-      --bg-primary: #050508;
-      --bg-secondary: #0a0a0f;
-      --bg-tertiary: #12121a;
+      /* 炭黑 + 甜酷玫粉配色 */
+      --bg-primary: #1A1A1D;
+      --bg-secondary: #222225;
+      --bg-tertiary: #2a2a2d;
       --bg-card: rgba(255, 255, 255, 0.02);
       
       --text-primary: #ffffff;
-      --text-secondary: #a0a0b0;
-      --text-muted: #606070;
+      --text-secondary: #b0b0b8;
+      --text-muted: #707078;
       
-      /* 电光蓝紫渐变 */
-      --accent-cyan: #00f5ff;
-      --accent-blue: #0080ff;
-      --accent-purple: #8b5cf6;
-      --accent-pink: #ec4899;
+      /* 甜酷玫粉 */
+      --accent-cyan: #E6397C;
+      --accent-blue: #ff4d8f;
+      --accent-purple: #ff6b9d;
+      --accent-pink: #E6397C;
       
-      --gradient-primary: linear-gradient(135deg, #00f5ff 0%, #0080ff 50%, #8b5cf6 100%);
-      --gradient-glow: linear-gradient(135deg, rgba(0, 245, 255, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+      --gradient-primary: linear-gradient(135deg, #E6397C 0%, #ff4d8f 50%, #ff6b9d 100%);
+      --gradient-glow: linear-gradient(135deg, rgba(230, 57, 124, 0.3) 0%, rgba(255, 77, 143, 0.3) 100%);
       
       /* 玻璃效果 */
       --glass-bg: rgba(255, 255, 255, 0.03);
@@ -110,7 +110,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 9997;
-      background: radial-gradient(ellipse at center, transparent 0%, rgba(5, 5, 8, 0.8) 100%);
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(26, 26, 29, 0.8) 100%);
     }
 
     /* 扫描线效果 */
@@ -127,8 +127,8 @@
         0deg,
         transparent,
         transparent 2px,
-        rgba(0, 245, 255, 0.03) 2px,
-        rgba(0, 245, 255, 0.03) 4px
+        rgba(230, 57, 124, 0.03) 2px,
+        rgba(230, 57, 124, 0.03) 4px
       );
     }
 
@@ -930,7 +930,7 @@
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(5, 5, 8, 0.98);
+      background: rgba(26, 26, 29, 0.98);
       z-index: 10000;
       display: none;
       align-items: center;
@@ -1460,11 +1460,11 @@
       positions[i * 3 + 1] = particles[i].y;
       positions[i * 3 + 2] = particles[i].z;
       
-      // Cyan to purple gradient
+      // Rose pink gradient
       const ratio = i / particleCount;
-      colors[i * 3] = 0 + ratio * 0.5;     // R
-      colors[i * 3 + 1] = 0.96 - ratio * 0.3; // G
-      colors[i * 3 + 2] = 1;             // B
+      colors[i * 3] = 0.9 + ratio * 0.04;     // R
+      colors[i * 3 + 1] = 0.22 + ratio * 0.1; // G
+      colors[i * 3 + 2] = 0.49 + ratio * 0.1; // B
       
       sizes[i] = particles[i].size;
     }
@@ -1487,7 +1487,7 @@
 
     // Connection lines with gradient
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x00f5ff,
+      color: 0xE6397C,
       transparent: true,
       opacity: 0.08,
       blending: THREE.AdditiveBlending
