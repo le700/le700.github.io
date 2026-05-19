@@ -3,148 +3,307 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>岳金豪 | Creative Developer</title>
-  <meta name="description" content="岳金豪 - 嵌入式开发与机器人算法工程师">
+  <title>岳金豪 | Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     :root {
-      --bg: #050505;
-      --bg-secondary: #0a0a0a;
+      --bg: #0a0a0a;
       --text: #ffffff;
-      --text-secondary: #888888;
+      --text-secondary: #666666;
       --accent: #ff3366;
-      --accent-glow: rgba(255, 51, 102, 0.4);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
+    html { scroll-behavior: smooth; }
+    
     body {
       font-family: 'Inter', 'Noto Sans SC', sans-serif;
       background: var(--bg);
       color: var(--text);
+      line-height: 1.6;
       overflow-x: hidden;
-      cursor: none;
     }
 
-    /* Custom Cursor */
-    .cursor {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transition: transform 0.1s, width 0.3s, height 0.3s;
-      mix-blend-mode: difference;
-    }
-
-    .cursor.hover {
-      width: 60px;
-      height: 60px;
-      background: var(--accent);
-      opacity: 0.3;
-    }
-
-    .cursor-dot {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 10000;
-    }
-
-    /* Loading Screen */
+    /* Loading */
     .loader {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: var(--bg);
-      z-index: 9998;
+      z-index: 9999;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
+      transition: opacity 0.6s;
     }
 
-    .loader-text {
-      font-size: 14px;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      overflow: hidden;
-    }
-
-    .loader-bar {
-      width: 200px;
-      height: 2px;
-      background: rgba(255,255,255,0.1);
-      margin-top: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .loader-progress {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 0%;
-      background: var(--accent);
-      transition: width 0.3s;
-    }
+    .loader.hidden { opacity: 0; pointer-events: none; }
 
     /* Navigation */
-    .nav {
+    nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      z-index: 100;
       padding: 30px 60px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      z-index: 100;
       mix-blend-mode: difference;
     }
 
-    .nav-logo {
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 40px;
-    }
-
-    .nav-link {
-      font-size: 12px;
+    nav a {
       color: var(--text);
       text-decoration: none;
+      font-size: 13px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      position: relative;
-      padding: 5px 0;
+      margin-left: 40px;
+      transition: opacity 0.3s;
     }
 
-    .nav-link::after {
+    nav a:hover { opacity: 0.6; }
+
+    /* Hero */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      text-align: center;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: clamp(80px, 15vw, 200px);
+      font-weight: 300;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(100px);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+
+    /* Sections */
+    section {
+      padding: 150px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 100px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    .section-header span {
+      font-size: 14px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    /* Projects - Minimal List */
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(60px);
+    }
+
+    .project:nth-child(even) {
+      direction: rtl;
+    }
+
+    .project:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .project-year {
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+    }
+
+    .project h3 {
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    .project p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .project-tech span {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .project-tech span::before {
+      content: '/';
+      margin-right: 16px;
+      color: var(--accent);
+    }
+
+    .project-tech span:first-child::before {
+      content: none;
+    }
+
+    /* Awards - Clean List */
+    .awards-list {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .award {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 40px;
+      padding: 30px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.4s;
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    .award:hover {
+      padding-left: 20px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .award-level {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .award-title {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .award-detail {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    /* Skills - Simple Tags */
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .skill {
+      font-size: 16px;
+      padding: 12px 0;
+      color: var(--text-secondary);
+      transition: color 0.3s;
+      cursor: default;
+    }
+
+    .skill:hover {
+      color: var(--text);
+    }
+
+    /* Contact */
+    .contact {
+      text-align: center;
+      padding: 200px 60px;
+    }
+
+    .contact h2 {
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 300;
+      margin-bottom: 60px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .contact-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 16px;
+      position: relative;
+      padding-bottom: 8px;
+    }
+
+    .contact-links a::after {
       content: '';
       position: absolute;
       bottom: 0;
@@ -152,405 +311,56 @@
       width: 0;
       height: 1px;
       background: var(--accent);
-      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: width 0.4s;
     }
 
-    .nav-link:hover::after {
+    .contact-links a:hover::after {
       width: 100%;
     }
 
-    /* Hero Section */
-    .hero {
-      height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    #hero-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      perspective: 1000px;
-    }
-
-    .hero-label {
-      font-size: 12px;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 30px;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .hero-title {
-      font-size: clamp(60px, 12vw, 160px);
-      font-weight: 800;
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      margin-bottom: 40px;
-    }
-
-    .hero-title .char {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(100px) rotateX(-90deg);
-      transform-origin: center bottom;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(14px, 2vw, 18px);
-      color: var(--text-secondary);
-      letter-spacing: 0.2em;
-      max-width: 600px;
-      margin: 0 auto;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-    }
-
-    .hero-scroll-text {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-    }
-
-    .hero-scroll-line {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2s infinite;
-    }
-
-    @keyframes scrollPulse {
-      0%, 100% { transform: scaleY(1); opacity: 1; }
-      50% { transform: scaleY(0.5); opacity: 0.5; }
-    }
-
-    /* Section Base */
-    .section {
-      position: relative;
-      padding: 150px 60px;
-      min-height: 100vh;
-    }
-
-    .section-header {
-      margin-bottom: 80px;
-    }
-
-    .section-number {
-      font-size: 12px;
-      color: var(--accent);
-      letter-spacing: 0.3em;
-      margin-bottom: 20px;
-    }
-
-    .section-title {
-      font-size: clamp(40px, 6vw, 80px);
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    /* Projects Section */
-    .projects-container {
-      display: flex;
-      flex-direction: column;
-      gap: 200px;
-    }
-
-    .project-item {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-      opacity: 0;
-      transform: translateY(100px);
-    }
-
-    .project-item:nth-child(even) {
-      direction: rtl;
-    }
-
-    .project-item:nth-child(even) > * {
-      direction: ltr;
-    }
-
-    .project-visual {
-      position: relative;
-      aspect-ratio: 4/3;
-      background: var(--bg-secondary);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .project-visual::before {
-      content: '';
-      position: absolute;
+    /* Modal */
+    .modal {
+      position: fixed;
       inset: 0;
-      background: linear-gradient(135deg, var(--accent-glow), transparent);
-      opacity: 0;
-      transition: opacity 0.6s;
-      z-index: 1;
-    }
-
-    .project-item:hover .project-visual::before {
-      opacity: 1;
-    }
-
-    .project-visual img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .project-item:hover .project-visual img {
-      transform: scale(1.1);
-    }
-
-    .project-content {
-      padding: 40px 0;
-    }
-
-    .project-year {
-      font-size: 12px;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      margin-bottom: 20px;
-    }
-
-    .project-title {
-      font-size: clamp(28px, 3vw, 48px);
-      font-weight: 600;
-      margin-bottom: 20px;
-      line-height: 1.2;
-    }
-
-    .project-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.8;
-      margin-bottom: 30px;
-    }
-
-    .project-tech {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .project-tech span {
-      font-size: 11px;
-      padding: 8px 16px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 100px;
-      transition: all 0.3s;
-    }
-
-    .project-tech span:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Awards Section - Cinematic Grid */
-    .awards-section {
-      background: var(--bg-secondary);
-    }
-
-    .awards-cinematic {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: rgba(255,255,255,0.05);
-    }
-
-    .award-cinematic {
-      aspect-ratio: 16/10;
-      background: var(--bg);
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .award-cinematic::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--accent-glow), transparent);
-      opacity: 0;
-      transition: opacity 0.6s;
-    }
-
-    .award-cinematic:hover::before {
-      opacity: 1;
-    }
-
-    .award-cinematic:hover {
-      transform: scale(1.02);
-      z-index: 10;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-    }
-
-    .award-cinematic .level {
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      position: relative;
-      z-index: 1;
-    }
-
-    .award-cinematic .title {
-      font-size: 18px;
-      font-weight: 600;
-      line-height: 1.4;
-      position: relative;
-      z-index: 1;
-    }
-
-    .award-cinematic .detail {
-      font-size: 13px;
-      color: var(--text-secondary);
-      position: relative;
-      z-index: 1;
-    }
-
-    .award-cinematic .view-cert {
-      position: absolute;
-      bottom: 40px;
-      right: 40px;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s;
-    }
-
-    .award-cinematic:hover .view-cert {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Skills - Floating Orbs */
-    .skills-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-      padding: 50px 0;
-    }
-
-    .skill-orb {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,51,102,0.3), rgba(255,51,102,0.05));
-      border: 1px solid rgba(255,51,102,0.3);
-      display: flex;
+      background: rgba(0,0,0,0.95);
+      z-index: 10000;
+      display: none;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      font-weight: 500;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      animation: float 6s ease-in-out infinite;
     }
 
-    .skill-orb:nth-child(2n) { animation-delay: -1s; }
-    .skill-orb:nth-child(3n) { animation-delay: -2s; }
-    .skill-orb:nth-child(4n) { animation-delay: -3s; }
+    .modal.active { display: flex; }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(5deg); }
+    .modal img {
+      max-width: 85vw;
+      max-height: 85vh;
     }
 
-    .skill-orb:hover {
-      transform: scale(1.2);
-      box-shadow: 0 0 60px var(--accent-glow);
-      border-color: var(--accent);
-    }
-
-    /* Contact Section */
-    .contact-section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .contact-title {
-      font-size: clamp(40px, 8vw, 100px);
-      font-weight: 700;
-      margin-bottom: 60px;
-      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .contact-links {
-      display: flex;
-      gap: 60px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .contact-link {
-      font-size: 18px;
+    .modal-close {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: none;
+      border: none;
       color: var(--text);
-      text-decoration: none;
-      position: relative;
-      padding: 20px 0;
+      font-size: 32px;
+      cursor: pointer;
     }
 
-    .contact-link::after {
-      content: '';
+    .modal-nav {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--accent);
-      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 40px;
+      cursor: pointer;
+      padding: 20px;
     }
 
-    .contact-link:hover::after {
-      width: 100%;
-    }
+    .modal-prev { left: 20px; }
+    .modal-next { right: 20px; }
 
     /* Footer */
     footer {
@@ -562,159 +372,56 @@
     footer p {
       font-size: 12px;
       color: var(--text-secondary);
-      letter-spacing: 0.1em;
     }
-
-    /* Certificate Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.95);
-      z-index: 9997;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(20px);
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-content {
-      max-width: 85vw;
-      max-height: 85vh;
-      position: relative;
-    }
-
-    .modal-content img {
-      max-width: 100%;
-      max-height: 85vh;
-      border-radius: 8px;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: -50px;
-      right: 0;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 40px;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .modal-close:hover {
-      transform: rotate(90deg);
-    }
-
-    .modal-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.1);
-      border: none;
-      color: var(--text);
-      font-size: 30px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .modal-nav:hover {
-      background: var(--accent);
-    }
-
-    .modal-prev { left: -80px; }
-    .modal-next { right: -80px; }
 
     /* Responsive */
-    @media (max-width: 1024px) {
-      .project-item {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-      .project-item:nth-child(even) {
-        direction: ltr;
-      }
-      .awards-cinematic {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      body { cursor: auto; }
-      .cursor, .cursor-dot { display: none; }
-    }
-
     @media (max-width: 768px) {
-      .nav { padding: 20px 30px; }
-      .nav-links { display: none; }
-      .section { padding: 100px 30px; }
-      .awards-cinematic { grid-template-columns: 1fr; }
+      nav { padding: 20px 30px; }
+      nav a { margin-left: 20px; font-size: 11px; }
+      section { padding: 100px 30px; }
+      .project { grid-template-columns: 1fr; gap: 40px; }
+      .project:nth-child(even) { direction: ltr; }
+      .award { grid-template-columns: 80px 1fr; gap: 20px; }
+      .award-detail { display: none; }
+      .contact { padding: 100px 30px; }
       .contact-links { gap: 30px; }
     }
   </style>
 </head>
 <body>
-  <!-- Custom Cursor -->
-  <div class="cursor"></div>
-  <div class="cursor-dot"></div>
+  <div class="loader"></div>
 
-  <!-- Loader -->
-  <div class="loader">
-    <div class="loader-text">LOADING EXPERIENCE</div>
-    <div class="loader-bar">
-      <div class="loader-progress"></div>
-    </div>
-  </div>
-
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-logo">岳金豪</div>
-    <div class="nav-links">
-      <a href="#projects" class="nav-link">项目</a>
-      <a href="#awards" class="nav-link">获奖</a>
-      <a href="#skills" class="nav-link">技能</a>
-      <a href="#contact" class="nav-link">联系</a>
+  <nav>
+    <div>岳金豪</div>
+    <div>
+      <a href="#projects">项目</a>
+      <a href="#awards">获奖</a>
+      <a href="#skills">技能</a>
+      <a href="#contact">联系</a>
     </div>
   </nav>
 
-  <!-- Hero -->
   <section class="hero">
     <canvas id="hero-canvas"></canvas>
     <div class="hero-content">
-      <p class="hero-label">Creative Developer</p>
-      <h1 class="hero-title">
-        <span class="char">岳</span><span class="char">金</span><span class="char">豪</span>
+      <h1>
+        <span>岳</span><span>金</span><span>豪</span>
       </h1>
-      <p class="hero-subtitle">嵌入式开发与机器人算法工程师<br>专注于计算机视觉与AI算法</p>
     </div>
-    <div class="hero-scroll">
-      <span class="hero-scroll-text">Scroll</span>
-      <div class="hero-scroll-line"></div>
-    </div>
+    <div class="scroll-indicator">Scroll</div>
   </section>
 
-  <!-- Projects -->
-  <section class="section" id="projects">
+  <section id="projects">
     <div class="section-header">
-      <div class="section-number">01 / PROJECTS</div>
-      <h2 class="section-title">Selected Works</h2>
+      <span>01 / Projects</span>
+      <h2>Selected Works</h2>
     </div>
-    <div class="projects-container">
-      <div class="project-item">
-        <div class="project-visual">
-          <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e);"></div>
-        </div>
-        <div class="project-content">
+    <div class="projects-list">
+      <div class="project">
+        <div>
           <div class="project-year">2024 - 2025</div>
-          <h3 class="project-title">仿人机器人视觉控制系统</h3>
-          <p class="project-desc">基于幻尔科技树莓派仿人机器人平台进行二次开发，开发多模态视觉感知系统，实现人脸识别、物体抓取、场地导航、手势交互等功能。</p>
+          <h3>仿人机器人视觉控制系统</h3>
+          <p>基于幻尔科技树莓派仿人机器人平台进行二次开发，开发多模态视觉感知系统，实现人脸识别、物体抓取、场地导航、手势交互等功能。</p>
           <div class="project-tech">
             <span>Python</span>
             <span>OpenCV</span>
@@ -722,366 +429,292 @@
             <span>树莓派</span>
           </div>
         </div>
+        <div></div>
       </div>
-      <div class="project-item">
-        <div class="project-visual">
-          <div style="width:100%;height:100%;background:linear-gradient(135deg,#0f3460,#533483);"></div>
-        </div>
-        <div class="project-content">
+      <div class="project">
+        <div>
           <div class="project-year">持续进行</div>
-          <h3 class="project-title">开源技术研究与贡献</h3>
-          <p class="project-desc">持续在 GitHub 跟踪研究前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。</p>
+          <h3>开源技术研究与贡献</h3>
+          <p>持续在 GitHub 跟踪研究前沿开源项目，制作 Skill 工具并开源至个人仓库，积极探索有价值的开源技术。</p>
           <div class="project-tech">
             <span>Git</span>
             <span>AI Tools</span>
             <span>Open Source</span>
           </div>
         </div>
+        <div></div>
       </div>
-      <div class="project-item">
-        <div class="project-visual">
-          <div style="width:100%;height:100%;background:linear-gradient(135deg,#1e5128,#4e9f3d);"></div>
-        </div>
-        <div class="project-content">
+      <div class="project">
+        <div>
           <div class="project-year">2025</div>
-          <h3 class="project-title">危化品仓储智慧监控系统</h3>
-          <p class="project-desc">市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。</p>
+          <h3>危化品仓储智慧监控系统</h3>
+          <p>市级科研项目，开发基于计算机视觉的危化品仓储监控系统，实现危化品识别与安全预警。</p>
           <div class="project-tech">
             <span>YOLOv5</span>
             <span>STM32</span>
             <span>计算机视觉</span>
           </div>
         </div>
+        <div></div>
       </div>
     </div>
   </section>
 
-  <!-- Awards -->
-  <section class="section awards-section" id="awards">
+  <section id="awards">
     <div class="section-header">
-      <div class="section-number">02 / ACHIEVEMENTS</div>
-      <h2 class="section-title">竞赛获奖</h2>
+      <span>02 / Achievements</span>
+      <h2>竞赛获奖</h2>
     </div>
-    <div class="awards-cinematic">
-      <div class="award-cinematic" data-cert="certificates/8722-2025-王若冰、岳金豪、陈齐兴、苏君硕、黄思睿、魏兴一、方涛、李秋颖.png,certificates/8873-2025-王若冰、陈齐兴、魏兴一、苏君硕、黄思睿、方涛、岳金豪.jpg">
-        <div class="level">国家级</div>
-        <div class="title">中国机器人及人工智能大赛</div>
-        <div class="detail">二等奖、三等奖</div>
-        <div class="view-cert">查看证书 →</div>
+    <div class="awards-list">
+      <div class="award" data-cert="certificates/8722-2025-王若冰、岳金豪、陈齐兴、苏君硕、黄思睿、魏兴一、方涛、李秋颖.png">
+        <div class="award-level">国家级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 二等奖</div>
+        <div class="award-detail">2025</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/9797-2025-魏兴一、毕可欣、岳金豪.png">
-        <div class="level">国家级</div>
-        <div class="title">全国大学生信息安全与对抗技术竞赛</div>
-        <div class="detail">三等奖</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/8873-2025-王若冰、陈齐兴、魏兴一、苏君硕、黄思睿、方涛、岳金豪.jpg">
+        <div class="award-level">国家级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/7828-2024-陈齐兴、岳金豪、杨佳骏、何保森、杨京涛.png,certificates/7856-2024-陈齐兴、岳金豪、杨佳骏、何保森、杨京涛.png">
-        <div class="level">省级</div>
-        <div class="title">全国机器人锦标赛</div>
-        <div class="detail">二等奖</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/9797-2025-魏兴一、毕可欣、岳金豪.png">
+        <div class="award-level">国家级</div>
+        <div class="award-title">全国大学生信息安全与对抗技术竞赛 · 三等奖</div>
+        <div class="award-detail">2025</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/8285-2024-岳金豪.png,certificates/8298-2024-陈齐兴、杨佳骏、岳金豪.png">
-        <div class="level">省级</div>
-        <div class="title">京南地区AI与机器人创新创业大赛</div>
-        <div class="detail">一等奖 · 项目负责人</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/8285-2024-岳金豪.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">京南地区人工智能与机器人创新创业大赛 · 一等奖</div>
+        <div class="award-detail">2024 · 项目负责人</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/8845-2025-岳金豪、屠浩然、魏兴一.png,certificates/9169-2025-岳金豪、屠浩然、魏兴一.png">
-        <div class="level">省级</div>
-        <div class="title">北京市大学生机器人大赛</div>
-        <div class="detail">一等奖</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/8845-2025-岳金豪、屠浩然、魏兴一.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">北京市大学生机器人大赛 · 一等奖</div>
+        <div class="award-detail">2025</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/9783-2025-陈齐兴、岳金豪、王劭书、毕可欣.png">
-        <div class="level">省级</div>
-        <div class="title">信息安全对抗技术竞赛（区域赛）</div>
-        <div class="detail">一等奖</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/9783-2025-陈齐兴、岳金豪、王劭书、毕可欣.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国大学生信息安全与对抗技术竞赛（区域赛）· 一等奖</div>
+        <div class="award-detail">2025</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/9148-2025-方涛、张卿郡、岳金豪、陈齐兴、毕可欣.png">
-        <div class="level">省级</div>
-        <div class="title">三维数字化创新设计大赛</div>
-        <div class="detail">一等奖</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/9148-2025-方涛、张卿郡、岳金豪、陈齐兴、毕可欣.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国三维数字化创新设计大赛（北京赛区）· 一等奖</div>
+        <div class="award-detail">2025</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/8847-2025-陈珂、岳金豪、陈齐兴.png,certificates/8853-2025-陈珂、岳金豪、陈齐兴.png,certificates/9147-2025-陈珂、岳金豪、陈齐兴.png,certificates/9157-2025-陈珂、岳金豪、陈齐兴.png,certificates/9455-2025-陈珂、岳金豪、陈齐兴.png">
-        <div class="level">省级</div>
-        <div class="title">中国机器人及人工智能大赛</div>
-        <div class="detail">多奖项</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/8847-2025-陈珂、岳金豪、陈齐兴.png">
+        <div class="award-level">省级</div>
+        <div class="award-title">中国机器人及人工智能大赛 · 一等奖</div>
+        <div class="award-detail">2025</div>
       </div>
-      <div class="award-cinematic" data-cert="certificates/8979-2025-方涛、岳金豪、王若冰、李燕飞、苏君硕.jpg">
-        <div class="level">省级</div>
-        <div class="title">华北五省市大学生机器人大赛</div>
-        <div class="detail">二等奖</div>
-        <div class="view-cert">查看证书 →</div>
+      <div class="award" data-cert="certificates/8979-2025-方涛、岳金豪、王若冰、李燕飞、苏君硕.jpg">
+        <div class="award-level">省级</div>
+        <div class="award-title">华北五省市大学生机器人大赛 · 二等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <div class="award" data-cert="certificates/9016-2025-李燕飞、王若冰、方涛、岳金豪、苏君硕.jpg">
+        <div class="award-level">省级</div>
+        <div class="award-title">中国国际大学生创新大赛北京赛区 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <div class="award" data-cert="certificates/9025-2025-岳金豪、李莹川、马敏涛.jpg">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国大学生电子设计竞赛（北京赛区）· 三等奖</div>
+        <div class="award-detail">2025 · 项目负责人</div>
+      </div>
+      <div class="award" data-cert="certificates/10120-2026-梁范杰、刘瑞洲、岳金豪.jpg">
+        <div class="award-level">省级</div>
+        <div class="award-title">挑战杯首都大学生课外学术科技作品竞赛 · 三等奖</div>
+        <div class="award-detail">2026</div>
+      </div>
+      <div class="award" data-cert="certificates/9017-2025-王若冰、苏君硕、蔡东呈、方涛、岳金豪.jpg">
+        <div class="award-level">省级</div>
+        <div class="award-title">全国大学生智能汽车竞赛华北赛区 · 三等奖</div>
+        <div class="award-detail">2025</div>
+      </div>
+      <div class="award" data-cert="certificates/9150-2025-岳金豪、屠浩然、魏兴一.png">
+        <div class="award-level">校级</div>
+        <div class="award-title">全国大学生数字媒体科技作品及创意竞赛 · 二等奖</div>
+        <div class="award-detail">2025</div>
       </div>
     </div>
   </section>
 
-  <!-- Skills -->
-  <section class="section" id="skills">
+  <section id="skills">
     <div class="section-header">
-      <div class="section-number">03 / EXPERTISE</div>
-      <h2 class="section-title">技术栈</h2>
+      <span>03 / Expertise</span>
+      <h2>技术栈</h2>
     </div>
-    <div class="skills-container">
-      <div class="skill-orb">Python</div>
-      <div class="skill-orb">C/C++</div>
-      <div class="skill-orb">OpenCV</div>
-      <div class="skill-orb">YOLOv5</div>
-      <div class="skill-orb">STM32</div>
-      <div class="skill-orb">树莓派</div>
-      <div class="skill-orb">Git</div>
-      <div class="skill-orb">Linux</div>
-      <div class="skill-orb">Docker</div>
-      <div class="skill-orb">嵌入式</div>
+    <div class="skills">
+      <span class="skill">Python</span>
+      <span class="skill">C/C++</span>
+      <span class="skill">OpenCV</span>
+      <span class="skill">YOLOv5</span>
+      <span class="skill">STM32</span>
+      <span class="skill">树莓派</span>
+      <span class="skill">Git</span>
+      <span class="skill">Linux</span>
+      <span class="skill">Docker</span>
+      <span class="skill">嵌入式</span>
+      <span class="skill">计算机视觉</span>
+      <span class="skill">机器人算法</span>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section class="section contact-section" id="contact">
-    <div class="section-number">04 / CONTACT</div>
-    <h2 class="contact-title">Let's Connect</h2>
+  <section class="contact" id="contact">
+    <h2>Get in Touch</h2>
     <div class="contact-links">
-      <a href="mailto:3189311520@qq.com" class="contact-link">3189311520@qq.com</a>
-      <a href="mailto:manbujingxindele@gmail.com" class="contact-link">manbujingxindele@gmail.com</a>
-      <a href="https://github.com/le700" class="contact-link">GitHub</a>
-      <a href="tel:18637473189" class="contact-link">18637473189</a>
+      <a href="mailto:3189311520@qq.com">3189311520@qq.com</a>
+      <a href="mailto:manbujingxindele@gmail.com">manbujingxindele@gmail.com</a>
+      <a href="https://github.com/le700">GitHub</a>
+      <a href="tel:18637473189">18637473189</a>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
-    <p>© 2025 岳金豪. Crafted with passion.</p>
+    <p>© 2025 岳金豪</p>
   </footer>
 
-  <!-- Certificate Modal -->
-  <div class="modal-overlay" id="cert-modal">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal()">×</button>
-      <button class="modal-nav modal-prev" onclick="prevCert()">‹</button>
-      <img id="cert-image" src="" alt="证书">
-      <button class="modal-nav modal-next" onclick="nextCert()">›</button>
-    </div>
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <button class="modal-nav modal-prev" onclick="prevCert()">‹</button>
+    <img id="modal-img" src="" alt="">
+    <button class="modal-nav modal-next" onclick="nextCert()">›</button>
   </div>
 
   <script>
-    // ===== LOADING ANIMATION =====
-    let progress = 0;
-    const loaderProgress = document.querySelector('.loader-progress');
-    const loader = document.querySelector('.loader');
+    // Loading
+    setTimeout(() => {
+      document.querySelector('.loader').classList.add('hidden');
+      initAnimations();
+    }, 800);
 
-    const loadInterval = setInterval(() => {
-      progress += Math.random() * 15;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(loadInterval);
-        setTimeout(() => {
-          gsap.to(loader, {
-            opacity: 0,
-            duration: 0.8,
-            onComplete: () => {
-              loader.style.display = 'none';
-              initAnimations();
-            }
-          });
-        }, 300);
-      }
-      loaderProgress.style.width = progress + '%';
-    }, 100);
-
-    // ===== CUSTOM CURSOR =====
-    const cursor = document.querySelector('.cursor');
-    const cursorDot = document.querySelector('.cursor-dot');
-
-    document.addEventListener('mousemove', (e) => {
-      gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.1 });
-      gsap.to(cursorDot, { x: e.clientX - 3, y: e.clientY - 3, duration: 0.05 });
-    });
-
-    document.querySelectorAll('a, .project-item, .award-cinematic, .skill-orb').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
-
-    // ===== THREE.JS HERO BACKGROUND =====
+    // Three.js Hero
     const canvas = document.getElementById('hero-canvas');
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Create particle system
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 200;
-    const posArray = new Float32Array(particlesCount * 3);
-
-    for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 10;
+    const particles = new THREE.BufferGeometry();
+    const count = 300;
+    const positions = new Float32Array(count * 3);
+    
+    for (let i = 0; i < count * 3; i++) {
+      positions[i] = (Math.random() - 0.5) * 10;
     }
-
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-    const particlesMaterial = new THREE.PointsMaterial({
+    
+    particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    
+    const material = new THREE.PointsMaterial({
       size: 0.02,
       color: 0xff3366,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.6,
       blending: THREE.AdditiveBlending
     });
-
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-
+    
+    const mesh = new THREE.Points(particles, material);
+    scene.add(mesh);
     camera.position.z = 3;
 
-    // Mouse interaction
-    let mouseX = 0;
-    let mouseY = 0;
-
+    let mouseX = 0, mouseY = 0;
     document.addEventListener('mousemove', (e) => {
       mouseX = (e.clientX / window.innerWidth) * 2 - 1;
       mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
     });
 
-    function animateHero() {
-      requestAnimationFrame(animateHero);
-      particlesMesh.rotation.x += 0.001;
-      particlesMesh.rotation.y += 0.001;
-      particlesMesh.rotation.x += mouseY * 0.01;
-      particlesMesh.rotation.y += mouseX * 0.01;
+    function animate() {
+      requestAnimationFrame(animate);
+      mesh.rotation.x += 0.0005;
+      mesh.rotation.y += 0.0005;
+      mesh.rotation.x += mouseY * 0.005;
+      mesh.rotation.y += mouseX * 0.005;
       renderer.render(scene, camera);
     }
-    animateHero();
+    animate();
 
-    // ===== GSAP ANIMATIONS =====
+    // GSAP Animations
     function initAnimations() {
       gsap.registerPlugin(ScrollTrigger);
 
-      // Hero animations
-      gsap.to('.hero-label', { opacity: 1, y: 0, duration: 1, delay: 0.2 });
-      gsap.to('.hero-title .char', {
+      gsap.to('.hero h1 span', {
         opacity: 1,
         y: 0,
-        rotateX: 0,
-        duration: 1.2,
+        duration: 1,
         stagger: 0.1,
-        delay: 0.4,
-        ease: 'power4.out'
+        ease: 'power3.out'
       });
-      gsap.to('.hero-subtitle', { opacity: 1, y: 0, duration: 1, delay: 0.8 });
-      gsap.to('.hero-scroll', { opacity: 1, duration: 1, delay: 1.2 });
 
-      // Project items
-      gsap.utils.toArray('.project-item').forEach((item, i) => {
+      gsap.utils.toArray('.project').forEach((item, i) => {
         gsap.to(item, {
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse'
-          },
+          scrollTrigger: { trigger: item, start: 'top 80%' },
           opacity: 1,
           y: 0,
-          duration: 1,
-          delay: i * 0.1,
-          ease: 'power3.out'
-        });
-      });
-
-      // Awards cinematic
-      gsap.utils.toArray('.award-cinematic').forEach((item, i) => {
-        gsap.from(item, {
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse'
-          },
-          opacity: 0,
-          y: 50,
           duration: 0.8,
-          delay: i * 0.05,
-          ease: 'power3.out'
+          delay: i * 0.1
         });
       });
 
-      // Skill orbs
-      gsap.utils.toArray('.skill-orb').forEach((orb, i) => {
-        gsap.from(orb, {
-          scrollTrigger: {
-            trigger: orb,
-            start: 'top 90%',
-            toggleActions: 'play none none reverse'
-          },
-          opacity: 0,
-          scale: 0,
+      gsap.utils.toArray('.award').forEach((item, i) => {
+        gsap.to(item, {
+          scrollTrigger: { trigger: item, start: 'top 85%' },
+          opacity: 1,
+          x: 0,
           duration: 0.6,
-          delay: i * 0.05,
-          ease: 'back.out(1.7)'
+          delay: i * 0.05
         });
       });
     }
 
-    // ===== CERTIFICATE MODAL =====
-    let currentCerts = [];
-    let currentIndex = 0;
+    // Certificate Modal
+    let certs = [], current = 0;
 
-    document.querySelectorAll('.award-cinematic').forEach(item => {
-      item.addEventListener('click', function() {
-        const certs = this.getAttribute('data-cert');
-        if (certs) {
-          currentCerts = certs.split(',').map(c => c.trim());
-          currentIndex = 0;
-          showCert();
-          document.getElementById('cert-modal').classList.add('active');
-        }
+    document.querySelectorAll('.award').forEach(award => {
+      award.addEventListener('click', function() {
+        certs = [this.dataset.cert];
+        current = 0;
+        showCert();
+        document.getElementById('modal').classList.add('active');
       });
     });
 
     function showCert() {
-      document.getElementById('cert-image').src = currentCerts[currentIndex];
+      document.getElementById('modal-img').src = certs[current];
     }
 
     function closeModal() {
-      document.getElementById('cert-modal').classList.remove('active');
+      document.getElementById('modal').classList.remove('active');
     }
 
     function prevCert() {
-      currentIndex = (currentIndex - 1 + currentCerts.length) % currentCerts.length;
+      current = (current - 1 + certs.length) % certs.length;
       showCert();
     }
 
     function nextCert() {
-      currentIndex = (currentIndex + 1) % currentCerts.length;
+      current = (current + 1) % certs.length;
       showCert();
     }
 
-    document.getElementById('cert-modal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') closeModal();
     });
 
-    document.addEventListener('keydown', function(e) {
-      if (document.getElementById('cert-modal').classList.contains('active')) {
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('modal').classList.contains('active')) {
         if (e.key === 'Escape') closeModal();
-        if (e.key === 'ArrowLeft') prevCert();
-        if (e.key === 'ArrowRight') nextCert();
       }
     });
 
-    // ===== SMOOTH SCROLL =====
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          gsap.to(window, { duration: 1, scrollTo: { y: target, offsetY: 80 }, ease: 'power3.inOut' });
-        }
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
       });
     });
 
-    // ===== RESIZE =====
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
