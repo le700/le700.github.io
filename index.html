@@ -768,92 +768,114 @@
       z-index: 1;
     }
 
-    /* Skills - Orbital Galaxy Design */
+    /* Skills - Solar System Design */
     .skills-galaxy {
       position: relative;
       width: 100%;
-      max-width: 900px;
-      height: 500px;
+      max-width: 700px;
+      height: 600px;
       margin: 0 auto;
-      perspective: 1000px;
     }
 
     .skill-orbit {
       position: absolute;
-      border: 1px solid rgba(230, 57, 124, 0.1);
+      border: 1px solid rgba(230, 57, 124, 0.08);
       border-radius: 50%;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
-    .skill-orbit-1 { width: 200px; height: 200px; }
-    .skill-orbit-2 { width: 320px; height: 320px; }
-    .skill-orbit-3 { width: 440px; height: 440px; }
-    .skill-orbit-4 { width: 560px; height: 560px; }
+    .skill-orbit-1 { width: 150px; height: 150px; }
+    .skill-orbit-2 { width: 260px; height: 260px; }
+    .skill-orbit-3 { width: 380px; height: 380px; }
+    .skill-orbit-4 { width: 500px; height: 500px; }
 
     .skill-planet {
       position: absolute;
-      padding: 12px 24px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 100px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: var(--planet-size, 50px);
+      height: var(--planet-size, 50px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--planet-color), var(--planet-dark));
+      box-shadow: 
+        inset -5px -5px 15px rgba(0,0,0,0.3),
+        0 0 20px var(--planet-glow),
+        0 0 40px var(--planet-glow);
       cursor: pointer;
-      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .skill-planet::after {
+      content: attr(data-skill);
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: var(--text-secondary);
       white-space: nowrap;
+      opacity: 0.8;
+      transition: all 0.3s ease;
     }
 
     .skill-planet:hover {
-      background: rgba(230, 57, 124, 0.15);
-      border-color: var(--accent-cyan);
-      color: var(--text-primary);
-      transform: scale(1.15);
-      box-shadow: 0 0 30px rgba(230, 57, 124, 0.3);
+      transform: scale(1.3);
+      box-shadow: 
+        inset -5px -5px 15px rgba(0,0,0,0.3),
+        0 0 30px var(--planet-glow),
+        0 0 60px var(--planet-glow),
+        0 0 100px var(--planet-glow);
       z-index: 100;
     }
 
-    .skill-planet.core {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--gradient-primary);
-      color: white;
-      border: none;
-      font-size: 16px;
-      padding: 16px 32px;
+    .skill-planet:hover::after {
+      color: var(--accent-cyan);
+      opacity: 1;
       font-weight: 600;
     }
 
-    .skill-planet.core:hover {
-      transform: translate(-50%, -50%) scale(1.1);
-      box-shadow: 0 0 50px rgba(230, 57, 124, 0.5);
+    /* Planet colors - 甜酷玫粉色系 */
+    .planet-python { --planet-size: 55px; --planet-color: #ff6b9d; --planet-dark: #E6397C; --planet-glow: rgba(230, 57, 124, 0.4); }
+    .planet-cpp { --planet-size: 48px; --planet-color: #ff8fab; --planet-dark: #ff4d8f; --planet-glow: rgba(255, 77, 143, 0.4); }
+    .planet-stm32 { --planet-size: 42px; --planet-color: #ffb3c6; --planet-dark: #ff6b9d; --planet-glow: rgba(255, 107, 157, 0.4); }
+    .planet-opencv { --planet-size: 45px; --planet-color: #ffccd5; --planet-dark: #ff8fab; --planet-glow: rgba(255, 143, 171, 0.4); }
+    .planet-yolo { --planet-size: 40px; --planet-color: #E6397C; --planet-dark: #c91d5c; --planet-glow: rgba(230, 57, 124, 0.5); }
+    .planet-raspberry { --planet-size: 38px; --planet-color: #ff4d8f; --planet-dark: #E6397C; --planet-glow: rgba(255, 77, 143, 0.5); }
+    .planet-git { --planet-size: 35px; --planet-color: #ff6b9d; --planet-dark: #ff4d8f; --planet-glow: rgba(255, 107, 157, 0.4); }
+    .planet-linux { --planet-size: 44px; --planet-color: #ff8fab; --planet-dark: #ff6b9d; --planet-glow: rgba(255, 143, 171, 0.4); }
+    .planet-docker { --planet-size: 36px; --planet-color: #ffb3c6; --planet-dark: #ff8fab; --planet-glow: rgba(255, 179, 198, 0.4); }
+    .planet-solidworks { --planet-size: 32px; --planet-color: #ffccd5; --planet-dark: #ffb3c6; --planet-glow: rgba(255, 204, 213, 0.4); }
+    .planet-matlab { --planet-size: 34px; --planet-color: #E6397C; --planet-dark: #ff4d8f; --planet-glow: rgba(230, 57, 124, 0.5); }
+
+    /* Orbital animation */
+    @keyframes orbit {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    .skill-connector {
-      position: absolute;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(230, 57, 124, 0.3), transparent);
-      transform-origin: left center;
-      pointer-events: none;
-    }
-
-    @keyframes float-skill {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(2deg); }
+    @keyframes counter-orbit {
+      from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
     }
 
     .skill-planet {
-      animation: float-skill 4s ease-in-out infinite;
+      animation: counter-orbit linear infinite;
     }
 
-    .skill-planet:nth-child(2n) { animation-delay: 0.5s; }
-    .skill-planet:nth-child(3n) { animation-delay: 1s; }
-    .skill-planet:nth-child(4n) { animation-delay: 1.5s; }
-    .skill-planet:nth-child(5n) { animation-delay: 2s; }
+    .skill-planet:nth-child(5) { --orbit-radius: 75px; animation-duration: 20s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(6) { --orbit-radius: 75px; animation-duration: 20s; animation-delay: -10s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(7) { --orbit-radius: 130px; animation-duration: 30s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(8) { --orbit-radius: 130px; animation-duration: 30s; animation-delay: -15s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(9) { --orbit-radius: 130px; animation-duration: 30s; animation-delay: -7.5s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(10) { --orbit-radius: 190px; animation-duration: 40s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(11) { --orbit-radius: 190px; animation-duration: 40s; animation-delay: -20s; top: 50%; left: left: 50%; }
+    .skill-planet:nth-child(12) { --orbit-radius: 190px; animation-duration: 40s; animation-delay: -10s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(13) { --orbit-radius: 250px; animation-duration: 50s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(14) { --orbit-radius: 250px; animation-duration: 50s; animation-delay: -25s; top: 50%; left: 50%; }
+    .skill-planet:nth-child(15) { --orbit-radius: 250px; animation-duration: 50s; animation-delay: -12.5s; top: 50%; left: 50%; }
 
     /* Contact - Interactive Cards */
     .contact {
@@ -1543,17 +1565,17 @@
       <div class="skill-orbit skill-orbit-3"></div>
       <div class="skill-orbit skill-orbit-4"></div>
       
-      <div class="skill-planet" style="top: 35%; left: 20%;">Python</div>
-      <div class="skill-planet" style="top: 25%; left: 35%;">C/C++</div>
-      <div class="skill-planet" style="top: 65%; left: 25%;">STM32</div>
-      <div class="skill-planet" style="top: 75%; left: 40%;">OpenCV</div>
-      <div class="skill-planet" style="top: 30%; left: 55%;">YOLOv5</div>
-      <div class="skill-planet" style="top: 70%; left: 60%;">树莓派</div>
-      <div class="skill-planet" style="top: 20%; left: 70%;">Git</div>
-      <div class="skill-planet" style="top: 50%; left: 75%;">Linux</div>
-      <div class="skill-planet" style="top: 80%; left: 75%;">Docker</div>
-      <div class="skill-planet" style="top: 40%; left: 85%;">SolidWorks</div>
-      <div class="skill-planet" style="top: 60%; left: 85%;">MATLAB</div>
+      <div class="skill-planet planet-python" data-skill="Python"></div>
+      <div class="skill-planet planet-cpp" data-skill="C/C++"></div>
+      <div class="skill-planet planet-stm32" data-skill="STM32"></div>
+      <div class="skill-planet planet-opencv" data-skill="OpenCV"></div>
+      <div class="skill-planet planet-yolo" data-skill="YOLOv5"></div>
+      <div class="skill-planet planet-raspberry" data-skill="树莓派"></div>
+      <div class="skill-planet planet-git" data-skill="Git"></div>
+      <div class="skill-planet planet-linux" data-skill="Linux"></div>
+      <div class="skill-planet planet-docker" data-skill="Docker"></div>
+      <div class="skill-planet planet-solidworks" data-skill="SolidWorks"></div>
+      <div class="skill-planet planet-matlab" data-skill="MATLAB"></div>
     </div>
   </section>
 
