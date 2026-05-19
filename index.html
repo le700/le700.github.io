@@ -458,54 +458,20 @@
       line-height: 1.2;
     }
 
-    /* Projects - Bento Grid Layout */
+    /* Projects - Bento Grid with Flip Cards */
     .projects-bento {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: minmax(280px, auto);
+      grid-auto-rows: minmax(300px, auto);
       gap: 24px;
       max-width: 1200px;
       margin: 0 auto;
     }
 
     .bento-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 32px;
       position: relative;
-      overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .bento-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-        rgba(230, 57, 124, 0.15) 0%, 
-        transparent 50%
-      );
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-
-    .bento-card:hover::before {
-      opacity: 1;
-    }
-
-    .bento-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(230, 57, 124, 0.3);
-      box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(230, 57, 124, 0.15);
+      perspective: 1200px;
     }
 
     .bento-card.large {
@@ -521,26 +487,205 @@
       grid-row: span 2;
     }
 
-    .bento-icon {
-      width: 56px;
-      height: 56px;
-      background: var(--gradient-primary);
-      border-radius: 16px;
+    .bento-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-style: preserve-3d;
+    }
+
+    .bento-card.flipped .bento-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Hover tilt hint */
+    .bento-card:not(.flipped):hover .bento-inner {
+      transform: rotateY(8deg) rotateX(-2deg);
+    }
+
+    .bento-card:not(.flipped):hover .bento-front::after {
+      opacity: 1;
+    }
+
+    .bento-front, .bento-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .bento-front {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .bento-card:not(.flipped):hover .bento-front {
+      border-color: rgba(230, 57, 124, 0.3);
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(230, 57, 124, 0.15);
+    }
+
+    /* Flip hint arrow */
+    .bento-front::after {
+      content: '↻';
+      position: absolute;
+      bottom: 20px;
+      right: 24px;
+      font-size: 22px;
+      color: var(--accent-cyan);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .bento-back {
+      background: var(--bg-secondary);
+      border: 1px solid rgba(230, 57, 124, 0.3);
+      padding: 36px;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    .bento-back::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .bento-back::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .bento-back::-webkit-scrollbar-thumb {
+      background: rgba(230, 57, 124, 0.3);
+      border-radius: 2px;
+    }
+
+    .bento-back-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .bento-back-header .bento-icon {
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .bento-back-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      line-height: 1.3;
+    }
+
+    .bento-back-role {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .bento-back-role strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .bento-back-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      flex-grow: 1;
+    }
+
+    .bento-back-desc li {
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .bento-back-desc ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bento-back-desc ul li::before {
+      content: '▪';
+      color: var(--accent-cyan);
+      margin-right: 8px;
+      font-size: 12px;
+    }
+
+    .bento-back-result {
+      margin-top: 16px;
+      padding: 16px 20px;
+      background: rgba(230, 57, 124, 0.08);
+      border: 1px solid rgba(230, 57, 124, 0.15);
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .bento-back-result strong {
+      color: var(--accent-cyan);
+    }
+
+    .bento-back-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 20px;
-      transition: all 0.4s ease;
+      transition: all 0.3s ease;
+      z-index: 2;
     }
 
-    .bento-card:hover .bento-icon {
+    .bento-back-close:hover {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+    }
+
+    .bento-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--gradient-primary);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      transition: all 0.4s ease;
+      flex-shrink: 0;
+    }
+
+    .bento-card:not(.flipped):hover .bento-icon {
       transform: scale(1.1) rotate(5deg);
       box-shadow: 0 10px 30px rgba(230, 57, 124, 0.4);
     }
 
     .bento-icon svg {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       fill: white;
     }
 
@@ -549,31 +694,30 @@
       color: var(--accent-cyan);
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-weight: 600;
     }
 
-    .bento-card h3 {
+    .bento-front h3 {
       font-size: 22px;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       line-height: 1.3;
       transition: all 0.3s ease;
     }
 
-    .bento-card.large h3 {
-      font-size: 32px;
+    .bento-card.large .bento-front h3 {
+      font-size: 30px;
     }
 
-    .bento-card:hover h3 {
+    .bento-card:not(.flipped):hover .bento-front h3 {
       color: var(--accent-cyan);
     }
 
-    .bento-card p {
+    .bento-front p {
       font-size: 14px;
       color: var(--text-secondary);
       line-height: 1.7;
-      margin-bottom: 20px;
       flex-grow: 1;
     }
 
@@ -605,32 +749,15 @@
       right: 24px;
       font-size: 48px;
       font-weight: 100;
-      color: rgba(230, 57, 124, 0.2);
+      color: rgba(230, 57, 124, 0.15);
       line-height: 1;
       transition: all 0.4s ease;
+      pointer-events: none;
     }
 
-    .bento-card:hover .bento-number {
-      color: rgba(230, 57, 124, 0.4);
+    .bento-card:not(.flipped):hover .bento-number {
+      color: rgba(230, 57, 124, 0.3);
       transform: scale(1.1);
-    }
-
-    .bento-3d-element {
-      position: absolute;
-      bottom: -20px;
-      right: -20px;
-      width: 120px;
-      height: 120px;
-      background: var(--gradient-primary);
-      border-radius: 30px;
-      opacity: 0.1;
-      transform: rotate(15deg);
-      transition: all 0.5s ease;
-    }
-
-    .bento-card:hover .bento-3d-element {
-      transform: rotate(25deg) scale(1.1);
-      opacity: 0.2;
     }
 
     /* Awards - 电影级列表 */
@@ -1301,90 +1428,120 @@
       <h2>项目作品</h2>
     </div>
     <div class="projects-bento">
-      <div class="bento-card large" onmousemove="handleBentoMouseMove(event, this)" onmouseleave="handleBentoMouseLeave(this)">
-        <div class="bento-number">01</div>
-        <div class="bento-3d-element"></div>
-        <div>
-          <div class="bento-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <!-- 01 仿人机器人视觉控制系统 -->
+      <div class="bento-card large" onclick="this.classList.toggle('flipped')">
+        <div class="bento-inner">
+          <div class="bento-front">
+            <div class="bento-number">01</div>
+            <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+            <div class="bento-year">2024.12 — 2025.08</div>
+            <h3>仿人机器人视觉控制系统</h3>
+            <p>中国机器人及人工智能大赛项目，基于树莓派仿人机器人平台二次开发，实现物体抓取、场地导航、自动避障等功能。</p>
+            <div class="bento-tech"><span class="bento-tag">树莓派</span><span class="bento-tag">OpenCV</span><span class="bento-tag">YOLOv5</span><span class="bento-tag">Python</span><span class="bento-tag">C++</span></div>
           </div>
-          <div class="bento-year">2024.12 — 2025.08</div>
-          <h3>仿人机器人视觉控制系统</h3>
-          <p>中国机器人及人工智能大赛项目，基于树莓派仿人机器人平台二次开发，实现物体抓取、场地导航、自动避障等功能。</p>
-        </div>
-        <div class="bento-tech">
-          <span class="bento-tag">树莓派</span>
-          <span class="bento-tag">OpenCV</span>
-          <span class="bento-tag">YOLOv5</span>
-          <span class="bento-tag">Python</span>
+          <div class="bento-back">
+            <button class="bento-back-close" onclick="event.stopPropagation(); this.closest('.bento-card').classList.remove('flipped')">×</button>
+            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><h3>仿人机器人视觉控制系统</h3></div>
+            <div class="bento-back-role"><strong>中国机器人及人工智能大赛</strong> · 项目负责人 · 算法开发&数据采集</div>
+            <div class="bento-back-desc"><p>基于树莓派仿人机器人平台二次开发，实现物体抓取、场地导航、自动避障等功能。</p><ul><li>视觉算法开发：基于OpenCV实现人脸检测、颜色识别；使用YOLOv5进行物体检测与嵌入式部署</li><li>算法优化：针对光照变化和实时性要求，采用自适应阈值预处理+多帧融合策略提升鲁棒性</li></ul></div>
+            <div class="bento-back-result"><strong>★ 项目成果：</strong>国家级二等奖1项、三等奖1项，省级一等奖2项、二等奖2项、三等奖2项</div>
+          </div>
         </div>
       </div>
-      <div class="bento-card" onmousemove="handleBentoMouseMove(event, this)" onmouseleave="handleBentoMouseLeave(this)">
-        <div class="bento-number">02</div>
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-        </div>
-        <div class="bento-year">2025.11</div>
-        <h3>危化品仓储智慧监控</h3>
-        <p>市级科研项目，基于计算机视觉实现危化品识别与安全预警。</p>
-        <div class="bento-tech">
-          <span class="bento-tag">YOLOv5</span>
-          <span class="bento-tag">Python</span>
-        </div>
-      </div>
-      <div class="bento-card" onmousemove="handleBentoMouseMove(event, this)" onmouseleave="handleBentoMouseLeave(this)">
-        <div class="bento-number">03</div>
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z M17.5 9l-5.5 9 5.5-9z M6.5 9h11l-5.5-9-5.5 9z M12 11l-5.5 9h11l-5.5-9z"/></svg>
-        </div>
-        <div class="bento-year">2024</div>
-        <h3>TI-RSLK循迹小车</h3>
-        <p>京南地区AI与机器人创新创业大赛项目。</p>
-        <div class="bento-tech">
-          <span class="bento-tag">C++</span>
-          <span class="bento-tag">STM32</span>
-          <span class="bento-tag">PID</span>
+      <!-- 02 危化品仓储智慧监控 -->
+      <div class="bento-card" onclick="this.classList.toggle('flipped')">
+        <div class="bento-inner">
+          <div class="bento-front">
+            <div class="bento-number">02</div>
+            <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div>
+            <div class="bento-year">2025.11</div>
+            <h3>危化品仓储智慧监控</h3>
+            <p>市级科研项目，基于计算机视觉实现危化品识别与安全预警。</p>
+            <div class="bento-tech"><span class="bento-tag">YOLOv5</span><span class="bento-tag">Python</span><span class="bento-tag">C++</span></div>
+          </div>
+          <div class="bento-back">
+            <button class="bento-back-close" onclick="event.stopPropagation(); this.closest('.bento-card').classList.remove('flipped')">×</button>
+            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div><h3>危化品仓储智慧监控与安全预警系统</h3></div>
+            <div class="bento-back-role"><strong>市级科研项目</strong> · 项目成员 · 算法&数据采集</div>
+            <div class="bento-back-desc"><p>基于计算机视觉实现危化品识别与安全预警。</p><ul><li>负责YOLOv5数据集采集、标注、模型训练调优及嵌入式部署</li></ul></div>
+          </div>
         </div>
       </div>
-      <div class="bento-card wide" onmousemove="handleBentoMouseMove(event, this)" onmouseleave="handleBentoMouseLeave(this)">
-        <div class="bento-number">04</div>
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>
-        </div>
-        <div class="bento-year">2024 — 2025</div>
-        <h3>小型人形机器人舞蹈赛项</h3>
-        <p>中国机器人及人工智能大赛项目，参与多项竞赛机器人舞蹈赛项，负责动作调试优化及舵机维修维护。</p>
-        <div class="bento-tech">
-          <span class="bento-tag">动作调试</span>
-          <span class="bento-tag">硬件维护</span>
-          <span class="bento-tag">舵机控制</span>
-        </div>
-      </div>
-      <div class="bento-card" onmousemove="handleBentoMouseMove(event, this)" onmouseleave="handleBentoMouseLeave(this)">
-        <div class="bento-number">05</div>
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-        </div>
-        <div class="bento-year">2026</div>
-        <h3>软件著作权</h3>
-        <p>多维度新闻真实性评测系统，登记号：2026SR0602886。</p>
-        <div class="bento-tech">
-          <span class="bento-tag">星火大模型</span>
-          <span class="bento-tag">NLP</span>
+      <!-- 03 TI-RSLK循迹小车 -->
+      <div class="bento-card" onclick="this.classList.toggle('flipped')">
+        <div class="bento-inner">
+          <div class="bento-front">
+            <div class="bento-number">03</div>
+            <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z"/></svg></div>
+            <div class="bento-year">2024</div>
+            <h3>TI-RSLK循迹小车</h3>
+            <p>京南地区AI与机器人创新创业大赛项目。</p>
+            <div class="bento-tech"><span class="bento-tag">C++</span><span class="bento-tag">STM32</span><span class="bento-tag">PID</span></div>
+          </div>
+          <div class="bento-back">
+            <button class="bento-back-close" onclick="event.stopPropagation(); this.closest('.bento-card').classList.remove('flipped')">×</button>
+            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z"/></svg></div><h3>TI-RSLK循迹小车竞赛</h3></div>
+            <div class="bento-back-role"><strong>京南地区人工智能与机器人创新创业大赛</strong> · 参赛成员 · 传感器开发与嵌入式编程</div>
+            <div class="bento-back-desc"><p>基于TI-RSLK机器人学习套件参加循迹赛项，负责传感器数据读取与C++代码编写，最终获省级一等奖。</p><ul><li>负责红外/光电传感器阵列数据采集与处理，实现实时循迹判断逻辑</li><li>编写C++控制代码，调试PID参数，优化小车循迹速度与稳定性</li></ul></div>
+          </div>
         </div>
       </div>
-      <div class="bento-card" onmousemove="handleBentoMouseMove(event, this)" onmouseleave="handleBentoMouseLeave(this)">
-        <div class="bento-number">06</div>
-        <div class="bento-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      <!-- 04 小型人形机器人舞蹈赛项 -->
+      <div class="bento-card wide" onclick="this.classList.toggle('flipped')">
+        <div class="bento-inner">
+          <div class="bento-front">
+            <div class="bento-number">04</div>
+            <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg></div>
+            <div class="bento-year">2024 — 2025</div>
+            <h3>小型人形机器人舞蹈赛项</h3>
+            <p>中国机器人及人工智能大赛项目，参与多项竞赛机器人舞蹈赛项，负责动作调试优化及舵机维修维护。</p>
+            <div class="bento-tech"><span class="bento-tag">动作调试</span><span class="bento-tag">硬件维护</span><span class="bento-tag">舵机控制</span></div>
+          </div>
+          <div class="bento-back">
+            <button class="bento-back-close" onclick="event.stopPropagation(); this.closest('.bento-card').classList.remove('flipped')">×</button>
+            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg></div><h3>小型人形机器人舞蹈赛项</h3></div>
+            <div class="bento-back-role"><strong>中国机器人及人工智能大赛 & 其他竞赛</strong> · 参赛成员 · 动作调试与硬件维护</div>
+            <div class="bento-back-desc"><p>参与多项竞赛机器人舞蹈赛项，负责动作调试优化及舵机维修维护。</p><ul><li>动作序列设计、舞蹈动作调试与精细化优化</li><li>舵机日常检测、维修与更换，保障硬件稳定运行</li></ul></div>
+          </div>
         </div>
-        <div class="bento-year">持续进行</div>
-        <h3>开源技术研究</h3>
-        <p>GitHub跟踪研究OpenClaw、Codex、ClaudeCode等前沿开源项目。</p>
-        <div class="bento-tech">
-          <span class="bento-tag">Git</span>
-          <span class="bento-tag">Linux</span>
-          <span class="bento-tag">Docker</span>
+      </div>
+      <!-- 05 软件著作权 -->
+      <div class="bento-card" onclick="this.classList.toggle('flipped')">
+        <div class="bento-inner">
+          <div class="bento-front">
+            <div class="bento-number">05</div>
+            <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+            <div class="bento-year">2026</div>
+            <h3>软件著作权</h3>
+            <p>多维度新闻真实性评测系统</p>
+            <div class="bento-tech"><span class="bento-tag">星火大模型</span><span class="bento-tag">NLP</span></div>
+          </div>
+          <div class="bento-back">
+            <button class="bento-back-close" onclick="event.stopPropagation(); this.closest('.bento-card').classList.remove('flipped')">×</button>
+            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div><h3>多维度新闻真实性评测系统</h3></div>
+            <div class="bento-back-role"><strong>软件著作权</strong> · 基于科大讯飞星火大模型</div>
+            <div class="bento-back-desc"><p>开发结合大语言模型的智能新闻检测算法，实现多维度真实性评估与虚假新闻识别。</p></div>
+            <div class="bento-back-result"><strong>登记号：</strong>2026SR0602886</div>
+          </div>
+        </div>
+      </div>
+      <!-- 06 开源技术研究 -->
+      <div class="bento-card" onclick="this.classList.toggle('flipped')">
+        <div class="bento-inner">
+          <div class="bento-front">
+            <div class="bento-number">06</div>
+            <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
+            <div class="bento-year">持续进行</div>
+            <h3>开源技术研究</h3>
+            <p>GitHub跟踪研究OpenClaw、Codex、ClaudeCode等前沿开源项目。</p>
+            <div class="bento-tech"><span class="bento-tag">Git</span><span class="bento-tag">Linux</span><span class="bento-tag">Docker</span></div>
+          </div>
+          <div class="bento-back">
+            <button class="bento-back-close" onclick="event.stopPropagation(); this.closest('.bento-card').classList.remove('flipped')">×</button>
+            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div><h3>开源技术研究与贡献</h3></div>
+            <div class="bento-back-role"><strong>github.com/le700</strong> · 个人开发者 · 开源贡献与前沿工具研究</div>
+            <div class="bento-back-desc"><p>持续在GitHub跟踪研究OpenClaw、Codex、Claude Code等前沿开源项目，制作Skill工具并开源至个人仓库。</p><ul><li>研究OpenClaw、Codex、Claude Code等前沿AI与开源工具，深入理解其实现原理与应用场景</li><li>自主开发Skill工具并开源至github.com/le700，持续为开源社区贡献实用工具</li><li>广泛研究机器人、嵌入式、AI等领域有趣的开源项目，持续拓展技术视野</li></ul></div>
+          </div>
         </div>
       </div>
     </div>
