@@ -2767,7 +2767,7 @@
     const liquidCanvas = document.getElementById('liquidCanvas');
     const lctx = liquidCanvas.getContext('2d');
     let liquidParticles = [];
-    let mouseX = 0, mouseY = 0;
+    let liquidMouseX = 0, liquidMouseY = 0;
 
     function resizeLiquidCanvas() {
       const section = document.querySelector('.contact-liquid');
@@ -2796,8 +2796,8 @@
 
       liquidParticles.forEach(p => {
         // Gravity effect towards mouse
-        const dx = mouseX - p.x;
-        const dy = mouseY - p.y;
+        const dx = liquidMouseX - p.x;
+        const dy = liquidMouseY - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 200 && dist > 0) {
           const force = (200 - dist) / 200 * 0.02;
@@ -2853,8 +2853,8 @@
     const contactSection = document.querySelector('.contact-liquid');
     contactSection.addEventListener('mousemove', (e) => {
       const rect = contactSection.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
+      liquidMouseX = e.clientX - rect.left;
+      liquidMouseY = e.clientY - rect.top;
     });
 
     resizeLiquidCanvas();
