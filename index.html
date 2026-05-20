@@ -2214,7 +2214,7 @@
   <script>
     // Awards data
     const awardsData = [
-      { level: '国际级', type: 'international', title: '2025世界人形机器人运动会', rank: '1500m项目 · 松延动力小顽童系列机器人', year: '2025', cert: 'certificates/world-humanoid-robot-games-2025.jpg', hint: '查看记录' },
+      { level: '国际级', type: 'international', title: '2025世界人形机器人运动会', rank: '1500m项目 · 松延动力小顽童系列机器人', year: '2025', cert: 'certificates/world-humanoid-robot-games-2025.jpg', hint: '记录' },
       { level: '国家级', type: 'national', title: '中国机器人及人工智能大赛全国总决赛', rank: '仿人机器人短跑 · 二等奖', year: '2025', cert: 'certificates/8847-2025-陈珂、岳金豪、陈齐兴.png' },
       { level: '国家级', type: 'national', title: '中国机器人及人工智能大赛全国总决赛', rank: '仿人机器人不规则地面运动 · 三等奖', year: '2025', cert: 'certificates/8845-2025-岳金豪、屠浩然、魏兴一.png' },
       { level: '国家级', type: 'national', title: '全国大学生信息安全与对抗技术竞赛全国总决赛', rank: '医疗配送机器人 · 三等奖', year: '2025', cert: 'certificates/9797-2025-魏兴一、毕可欣、岳金豪.png' },
@@ -2271,7 +2271,7 @@
                 <p class="award-card-rank">${award.rank}</p>
               </div>
               <div class="award-card-footer">
-                <span class="award-card-hint">${isMobile ? '点击查看' + (award.hint || '证书') : '点击翻转查看' + (award.hint || '证书')}</span>
+                <span class="award-card-hint">${isMobile ? '点击' + (award.hint ? '查看' + award.hint : '查看证书') : '点击翻转' + (award.hint ? '查看' + award.hint : '查看证书')}</span>
               </div>
             </div>
             <div class="award-card-back">
