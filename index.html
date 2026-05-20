@@ -53,6 +53,10 @@
       cursor: none;
     }
 
+    /* 隐藏滚动条 */
+    body::-webkit-scrollbar { display: none; }
+    body { -ms-overflow-style: none; scrollbar-width: none; }
+
     /* Custom Cursor - 电影级 */
     .cursor {
       position: fixed;
@@ -1818,12 +1822,12 @@
       border-radius: 24px;
       padding: 48px;
       cursor: pointer;
-      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
       transform-style: preserve-3d;
-      backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      will-change: transform, opacity;
     }
     
     .award-card.active {
@@ -2107,18 +2111,28 @@
     
     function updateCards() {
       const cards = document.querySelectorAll('.award-card');
+      const isMobile = window.innerWidth <= 768;
       
       cards.forEach((card, index) => {
         card.classList.remove('active', 'prev', 'next', 'hidden');
         
         if (index === currentIndex) {
           card.classList.add('active');
+          card.style.display = '';
         } else if (index === (currentIndex - 1 + awardsData.length) % awardsData.length) {
           card.classList.add('prev');
+          card.style.display = '';
         } else if (index === (currentIndex + 1) % awardsData.length) {
           card.classList.add('next');
+          card.style.display = '';
         } else {
           card.classList.add('hidden');
+          // 手机端隐藏不可见卡片，减少GPU负担
+          if (isMobile) {
+            card.style.display = 'none';
+          } else {
+            card.style.display = '';
+          }
         }
       });
       
