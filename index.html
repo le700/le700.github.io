@@ -228,6 +228,30 @@
       z-index: 0;
     }
 
+    /* Hero 左右边缘渐变遮罩 - 让粒子自然淡出 */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(to right, var(--bg-primary) 0%, transparent 12%, transparent 88%, var(--bg-primary) 100%);
+    }
+
+    /* Hero 底部渐变遮罩 - 弱化与下方板块的边界 */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(to bottom, transparent 0%, var(--bg-primary) 100%);
+    }
+
     /* 光晕效果 */
     .hero-glow {
       position: absolute;
@@ -381,6 +405,7 @@
       align-items: center;
       gap: 20px;
       opacity: 0;
+      z-index: 3;
     }
 
     .scroll-hint span {
@@ -2235,7 +2260,7 @@
       <div class="contact-info-icon" id="contactInfoIcon"></div>
       <h3 id="contactInfoTitle"></h3>
       <p id="contactInfoValue"></p>
-      <button class="contact-info-copy" onclick="copyContactInfo()">复制</button>
+      <button class="contact-info-copy" id="contactInfoBtn" onclick="copyContactInfo()">复制</button>
     </div>
   </div>
 
@@ -2483,8 +2508,8 @@
         if (layerRand < 0.3) {
           // 远景星尘 - 密集小点
           layer = 0;
-          px = (Math.random() - 0.5) * 2000;
-          py = (Math.random() - 0.5) * 1200;
+          px = (Math.random() - 0.5) * 3000;
+          py = (Math.random() - 0.5) * 1400;
           pz = -Math.random() * 800 - 200;
           size = Math.random() * 1.5 + 0.3;
           alpha = Math.random() * 0.4 + 0.1;
@@ -2496,8 +2521,8 @@
           const armAngle = Math.random() * Math.PI * 4;
           const armRadius = 100 + Math.random() * 500;
           const spiralTightness = 0.8;
-          px = Math.cos(armAngle) * armRadius + (Math.random() - 0.5) * 200;
-          py = (Math.random() - 0.5) * 600;
+          px = Math.cos(armAngle) * armRadius + (Math.random() - 0.5) * 300;
+          py = (Math.random() - 0.5) * 700;
           pz = Math.sin(armAngle) * armRadius * spiralTightness + (Math.random() - 0.5) * 150;
           size = Math.random() * 5 + 1.5;
           alpha = Math.random() * 0.6 + 0.15;
@@ -2506,8 +2531,8 @@
         } else if (layerRand < 0.9) {
           // 近景亮星 - 大而亮
           layer = 2;
-          px = (Math.random() - 0.5) * 800;
-          py = (Math.random() - 0.5) * 500;
+          px = (Math.random() - 0.5) * 1200;
+          py = (Math.random() - 0.5) * 600;
           pz = Math.random() * 500 + 100;
           size = Math.random() * 12 + 4;
           alpha = Math.random() * 0.7 + 0.3;
@@ -2518,8 +2543,8 @@
           layer = 3;
           const cloudAngle = Math.random() * Math.PI * 2;
           const cloudR = Math.random() * 400;
-          px = Math.cos(cloudAngle) * cloudR + (Math.random() - 0.5) * 300;
-          py = (Math.random() - 0.5) * 400;
+          px = Math.cos(cloudAngle) * cloudR + (Math.random() - 0.5) * 400;
+          py = (Math.random() - 0.5) * 500;
           pz = Math.sin(cloudAngle) * cloudR * 0.5 + (Math.random() - 0.5) * 200;
           size = Math.random() * 25 + 10;
           alpha = Math.random() * 0.08 + 0.02;
@@ -2860,35 +2885,33 @@
       {
         name: '微信',
         value: '18637473189',
-        icon: '<svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.269-.03-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>'
+        icon: '<svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.269-.03-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>',
+        action: 'copy'
       },
       {
         name: 'QQ邮箱',
         value: '3189311520@qq.com',
         icon: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>',
-        isLink: true,
-        url: 'mailto:3189311520@qq.com'
+        action: 'mailto'
       },
       {
         name: 'Gmail',
         value: 'manbujingxindele@gmail.com',
         icon: '<svg viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73l-6.545 5.818-6.545-5.818v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 10.91l6.545-6.27 1.528-1.145C21.69 2.32 24 3.475 24 5.457z"/></svg>',
-        isLink: true,
-        url: 'mailto:manbujingxindele@gmail.com'
+        action: 'mailto'
       },
       {
         name: 'GitHub',
         value: 'github.com/le700',
         icon: '<svg viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>',
-        isLink: true,
+        action: 'link',
         url: 'https://github.com/le700'
       },
       {
         name: '电话',
         value: '18637473189',
         icon: '<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>',
-        isLink: true,
-        url: 'tel:18637473189'
+        action: 'tel'
       }
     ];
 
@@ -2908,11 +2931,7 @@
         </div>
       `;
       orb.addEventListener('click', () => {
-        if (contact.isLink) {
-          window.open(contact.url, '_blank');
-        } else {
-          showContactInfo(contact.name, contact.value, contact.icon);
-        }
+        showContactInfo(contact.name, contact.value, contact.icon, contact.action, contact.url);
       });
       liquidOrbsContainer.appendChild(orb);
     });
@@ -3015,12 +3034,68 @@
     window.addEventListener('resize', resizeLiquidCanvas);
     animateLiquid();
 
-    function showContactInfo(title, value, icon) {
+    let currentContactAction = '';
+    let currentContactUrl = '';
+    let currentContactValue = '';
+
+    function showContactInfo(title, value, icon, action, url) {
+      currentContactAction = action;
+      currentContactUrl = url || '';
+      currentContactValue = value;
       contactInfoTitle.textContent = title;
-      contactInfoValue.textContent = value;
       contactInfoIcon.innerHTML = icon;
       contactInfoModal.classList.add('active');
       document.body.style.overflow = 'hidden';
+      
+      // 根据action类型设置可点击的值和按钮文字
+      const valueElement = document.getElementById('contactInfoValue');
+      const btnElement = document.getElementById('contactInfoBtn');
+      valueElement.innerHTML = '';
+      
+      if (action === 'copy') {
+        // 微信 - 显示可复制文本
+        valueElement.textContent = value;
+        valueElement.style.cursor = 'pointer';
+        valueElement.style.color = '#007AFF';
+        valueElement.style.textDecoration = 'underline';
+        valueElement.onclick = () => {
+          navigator.clipboard.writeText(value).then(() => {
+            alert('微信号已复制到剪贴板，请打开微信添加好友');
+          });
+        };
+        btnElement.textContent = '复制微信号';
+      } else if (action === 'mailto') {
+        // 邮箱 - 点击跳转邮件客户端
+        const link = document.createElement('a');
+        link.href = 'mailto:' + value;
+        link.textContent = value;
+        link.style.color = '#007AFF';
+        link.style.textDecoration = 'underline';
+        valueElement.appendChild(link);
+        btnElement.textContent = '发送邮件';
+      } else if (action === 'tel') {
+        // 电话 - 点击跳转拨号
+        const link = document.createElement('a');
+        link.href = 'tel:' + value;
+        link.textContent = value;
+        link.style.color = '#007AFF';
+        link.style.textDecoration = 'underline';
+        valueElement.appendChild(link);
+        btnElement.textContent = '拨打电话';
+      } else if (action === 'link') {
+        // GitHub等链接 - 点击跳转
+        const link = document.createElement('a');
+        link.href = url;
+        link.textContent = value;
+        link.target = '_blank';
+        link.style.color = '#007AFF';
+        link.style.textDecoration = 'underline';
+        valueElement.appendChild(link);
+        btnElement.textContent = '访问链接';
+      } else {
+        valueElement.textContent = value;
+        btnElement.textContent = '复制';
+      }
     }
 
     function closeContactInfo() {
@@ -3029,16 +3104,39 @@
     }
 
     function copyContactInfo() {
-      const value = contactInfoValue.textContent;
-      navigator.clipboard.writeText(value).then(() => {
-        const copyBtn = document.querySelector('.contact-info-copy');
-        copyBtn.textContent = '已复制!';
-        copyBtn.classList.add('copied');
-        setTimeout(() => {
-          copyBtn.textContent = '复制';
-          copyBtn.classList.remove('copied');
-        }, 2000);
-      });
+      const copyBtn = document.querySelector('.contact-info-copy');
+      
+      if (currentContactAction === 'copy') {
+        // 微信 - 复制并提示
+        navigator.clipboard.writeText(currentContactValue).then(() => {
+          copyBtn.textContent = '已复制!';
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyBtn.textContent = '复制';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+          alert('微信号已复制到剪贴板，请打开微信添加好友');
+        });
+      } else if (currentContactAction === 'mailto') {
+        // 邮箱 - 打开邮件客户端
+        window.location.href = 'mailto:' + currentContactValue;
+      } else if (currentContactAction === 'tel') {
+        // 电话 - 打开拨号
+        window.location.href = 'tel:' + currentContactValue;
+      } else if (currentContactAction === 'link') {
+        // 链接 - 打开新窗口
+        window.open(currentContactUrl, '_blank');
+      } else {
+        // 默认复制
+        navigator.clipboard.writeText(currentContactValue).then(() => {
+          copyBtn.textContent = '已复制!';
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            copyBtn.textContent = '复制';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        });
+      }
     }
 
     contactInfoModal.addEventListener('click', (e) => {
