@@ -1032,35 +1032,40 @@
     .skill-planet:nth-child(14) { --orbit-radius: 250px; animation-duration: 50s; animation-delay: -25s; top: 50%; left: 50%; }
     .skill-planet:nth-child(15) { --orbit-radius: 250px; animation-duration: 50s; animation-delay: -12.5s; top: 50%; left: 50%; }
 
-    /* Contact - Interactive Cards */
-    .contact {
-      text-align: center;
-      padding: 180px 80px;
+    /* Contact - Liquid Metal */
+    .contact-liquid {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       position: relative;
+      overflow: hidden;
+      padding: 120px 40px;
     }
 
-    .contact::before {
-      content: '';
+    .contact-liquid-bg {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(230, 57, 124, 0.08) 0%, transparent 60%);
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(230, 57, 124, 0.05) 0%, transparent 70%);
       pointer-events: none;
     }
 
-    .contact h2 {
-      font-size: clamp(36px, 6vw, 56px);
-      font-weight: 200;
+    .contact-liquid-content {
+      text-align: center;
       margin-bottom: 60px;
-      letter-spacing: -0.02em;
       position: relative;
-      z-index: 1;
+      z-index: 10;
     }
 
-    .contact h2 .highlight {
+    .contact-liquid-title {
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 200;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .contact-liquid-title .highlight {
       font-weight: 700;
       background: var(--gradient-primary);
       -webkit-background-clip: text;
@@ -1068,128 +1073,155 @@
       background-clip: text;
     }
 
-    .contact-cards {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
+    .contact-liquid-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    #liquidCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
       z-index: 1;
     }
 
-    .contact-card {
-      width: 160px;
-      height: 200px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
+    .liquid-orbs {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      max-width: 800px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .liquid-orb {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: drop-shadow(0 20px 40px rgba(230, 57, 124, 0.3));
+    }
+
+    .liquid-orb::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(230, 57, 124, 0.6) 0%, rgba(255, 150, 180, 0.3) 50%, rgba(230, 57, 124, 0.6) 100%);
+      animation: liquid-shimmer 3s ease-in-out infinite;
+    }
+
+    .liquid-orb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #2a2a2d 0%, #1a1a1d 50%, #0f0f12 100%);
+      box-shadow: 
+        inset 8px 8px 20px rgba(255, 255, 255, 0.05),
+        inset -8px -8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .liquid-orb:hover {
+      transform: scale(1.15);
+    }
+
+    .liquid-orb:hover::before {
+      animation: liquid-pulse 0.6s ease-in-out infinite;
+    }
+
+    .liquid-orb-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      cursor: pointer;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
+      z-index: 2;
       overflow: hidden;
-      backdrop-filter: blur(10px);
     }
 
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--gradient-primary);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-
-    .contact-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gradient-primary);
-      transform: scaleX(0);
-      transition: transform 0.4s ease;
-    }
-
-    .contact-card:hover {
-      transform: translateY(-12px) scale(1.05);
-      border-color: rgba(230, 57, 124, 0.4);
-      box-shadow: 0 25px 50px rgba(230, 57, 124, 0.2);
-    }
-
-    .contact-card:hover::before {
-      opacity: 0.08;
-    }
-
-    .contact-card:hover::after {
-      transform: scaleX(1);
-    }
-
-    .contact-card-icon {
-      width: 56px;
-      height: 56px;
-      background: rgba(230, 57, 124, 0.1);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.4s ease;
-      position: relative;
-      z-index: 1;
-    }
-
-    .contact-card:hover .contact-card-icon {
-      background: var(--gradient-primary);
-      transform: scale(1.1);
-      box-shadow: 0 10px 30px rgba(230, 57, 124, 0.4);
-    }
-
-    .contact-card-icon svg {
-      width: 28px;
-      height: 28px;
+    .liquid-orb-icon {
+      width: 36px;
+      height: 36px;
       fill: var(--accent-cyan);
       transition: all 0.3s ease;
+      filter: drop-shadow(0 2px 8px rgba(230, 57, 124, 0.5));
     }
 
-    .contact-card:hover .contact-card-icon svg {
-      fill: white;
+    .liquid-orb:hover .liquid-orb-icon {
+      fill: #fff;
+      transform: scale(1.2);
     }
 
-    .contact-card-label {
-      font-size: 14px;
+    .liquid-orb-label {
+      font-size: 12px;
       font-weight: 600;
-      color: var(--text-primary);
-      position: relative;
-      z-index: 1;
+      color: var(--text-muted);
+      margin-top: 8px;
       transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
     }
 
-    .contact-card:hover .contact-card-label {
+    .liquid-orb:hover .liquid-orb-label {
+      opacity: 1;
+      transform: translateY(0);
       color: var(--accent-cyan);
     }
 
-    .contact-card-hint {
-      font-size: 11px;
-      color: var(--text-muted);
-      position: relative;
-      z-index: 1;
+    .liquid-orb-info {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #2a2a2d 0%, #1a1a1d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
+      transform: scale(0.8);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 3;
+      padding: 10px;
+      text-align: center;
     }
 
-    .contact-card:hover .contact-card-hint {
+    .liquid-orb.expanded .liquid-orb-info {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1);
     }
 
+    .liquid-orb.expanded .liquid-orb-inner {
+      opacity: 0;
+    }
+
+    .liquid-orb-value {
+      font-size: 10px;
+      color: var(--accent-cyan);
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    @keyframes liquid-shimmer {
+      0%, 100% { opacity: 0.6; transform: rotate(0deg); }
+      50% { opacity: 1; transform: rotate(180deg); }
+    }
+
+    @keyframes liquid-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    /* Contact Modal - Enhanced */
     .contact-info-modal {
       position: fixed;
       inset: 0;
@@ -1198,7 +1230,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(30px);
     }
 
     .contact-info-modal.active {
@@ -1206,13 +1238,23 @@
     }
 
     .contact-info-content {
-      background: var(--bg-secondary);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 48px 64px;
+      background: linear-gradient(145deg, #2a2a2d 0%, #1a1a1d 100%);
+      border: 1px solid rgba(230, 57, 124, 0.3);
+      border-radius: 32px;
+      padding: 60px 80px;
       text-align: center;
       max-width: 90vw;
       position: relative;
+      box-shadow: 
+        0 40px 80px rgba(0, 0, 0, 0.5),
+        0 0 100px rgba(230, 57, 124, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      animation: modal-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modal-appear {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .contact-info-content::before {
@@ -1221,34 +1263,58 @@
       top: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 60px;
+      width: 80px;
       height: 4px;
       background: var(--gradient-primary);
       border-radius: 0 0 4px 4px;
     }
 
+    .contact-info-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgba(230, 57, 124, 0.2) 0%, rgba(230, 57, 124, 0.05) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        inset 4px 4px 10px rgba(255, 255, 255, 0.05),
+        0 10px 30px rgba(230, 57, 124, 0.2);
+    }
+
+    .contact-info-icon svg {
+      width: 40px;
+      height: 40px;
+      fill: var(--accent-cyan);
+    }
+
     .contact-info-content h3 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: var(--text-muted);
       font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
     .contact-info-content p {
-      font-size: 28px;
+      font-size: clamp(20px, 4vw, 28px);
       color: var(--accent-cyan);
       font-weight: 600;
       letter-spacing: 0.02em;
+      word-break: break-all;
+      margin-bottom: 32px;
     }
 
     .contact-info-close {
       position: absolute;
-      top: 30px;
-      right: 30px;
+      top: 24px;
+      right: 24px;
       width: 48px;
       height: 48px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
+      background: rgba(230, 57, 124, 0.1);
+      border: 1px solid rgba(230, 57, 124, 0.2);
       border-radius: 50%;
       color: var(--text-primary);
       font-size: 24px;
@@ -1260,9 +1326,32 @@
     }
 
     .contact-info-close:hover {
-      background: var(--accent-cyan);
-      color: var(--bg-primary);
+      background: var(--gradient-primary);
       transform: rotate(90deg);
+    }
+
+    .contact-info-copy {
+      background: var(--gradient-primary);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 32px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(230, 57, 124, 0.3);
+    }
+
+    .contact-info-copy:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(230, 57, 124, 0.4);
+    }
+
+    .contact-info-copy.copied {
+      background: #4ade80;
+    }
+      justify-content: center;
     }
 
     /* Footer */
@@ -1463,15 +1552,20 @@
         bottom: -22px; font-size: 10px; white-space: nowrap;
       }
 
-      /* Contact */
-      .contact { padding: 80px 20px; }
-      .contact h2 { margin-bottom: 36px; }
-      .contact-cards { flex-direction: row; flex-wrap: wrap; gap: 12px; justify-content: center; }
-      .contact-card { width: calc(33.33% - 8px); height: 120px; border-radius: 14px; gap: 8px; }
-      .contact-card-icon { width: 36px; height: 36px; border-radius: 10px; }
-      .contact-card-icon svg { width: 20px; height: 20px; }
-      .contact-card-label { font-size: 12px; }
-      .contact-card-hint { font-size: 10px; }
+      /* Contact Liquid Metal */
+      .contact-liquid { padding: 80px 20px; min-height: auto; }
+      .contact-liquid-content { margin-bottom: 40px; }
+      .contact-liquid-subtitle { font-size: 12px; }
+      .liquid-orbs { gap: 24px; }
+      .liquid-orb { width: 90px; height: 90px; }
+      .liquid-orb-icon { width: 28px; height: 28px; }
+      .liquid-orb-label { font-size: 10px; margin-top: 6px; }
+      .liquid-orb-value { font-size: 8px; }
+      .contact-info-content { padding: 40px 32px; }
+      .contact-info-icon { width: 60px; height: 60px; }
+      .contact-info-icon svg { width: 30px; height: 30px; }
+      .contact-info-content p { font-size: 16px; margin-bottom: 24px; }
+      .contact-info-copy { padding: 12px 24px; font-size: 13px; }
 
       /* Award list items (old style) */
       .award-item { grid-template-columns: 1fr; gap: 12px; text-align: center; padding: 20px; }
@@ -1489,7 +1583,8 @@
       .card-stack { height: 340px; }
       .award-card { padding: 24px 20px; }
       .award-card-title { font-size: 20px; }
-      .contact-card { width: calc(50% - 6px); height: 110px; }
+      .liquid-orb { width: 75px; height: 75px; }
+      .liquid-orbs { gap: 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -2139,54 +2234,27 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section class="contact" id="contact">
-    <h2>Let's <span class="highlight">Connect</span></h2>
-    <div class="contact-cards">
-      <div class="contact-card" onclick="showContactInfo('微信', '18637473189')">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.269-.03-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>
-        </div>
-        <span class="contact-card-label">微信</span>
-        <span class="contact-card-hint">点击查看</span>
-      </div>
-      <div class="contact-card" onclick="showContactInfo('QQ邮箱', '3189311520@qq.com')">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-        </div>
-        <span class="contact-card-label">QQ邮箱</span>
-        <span class="contact-card-hint">点击查看</span>
-      </div>
-      <div class="contact-card" onclick="showContactInfo('Gmail', 'manbujingxindele@gmail.com')">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73l-6.545 5.818-6.545-5.818v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 10.91l6.545-6.27 1.528-1.145C21.69 2.32 24 3.475 24 5.457z"/></svg>
-        </div>
-        <span class="contact-card-label">Gmail</span>
-        <span class="contact-card-hint">点击查看</span>
-      </div>
-      <div class="contact-card" onclick="window.open('https://github.com/le700', '_blank')">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-        </div>
-        <span class="contact-card-label">GitHub</span>
-        <span class="contact-card-hint">点击跳转</span>
-      </div>
-      <div class="contact-card" onclick="showContactInfo('手机号', '18637473189')">
-        <div class="contact-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        </div>
-        <span class="contact-card-label">电话</span>
-        <span class="contact-card-hint">点击查看</span>
-      </div>
+  <!-- Contact Section - Liquid Metal -->
+  <section class="contact-liquid" id="contact">
+    <div class="contact-liquid-bg"></div>
+    <div class="contact-liquid-content">
+      <h2 class="contact-liquid-title">Let's <span class="highlight">Connect</span></h2>
+      <p class="contact-liquid-subtitle">悬停探索 · 点击连接</p>
+    </div>
+    <canvas id="liquidCanvas"></canvas>
+    <div class="liquid-orbs" id="liquidOrbs">
+      <!-- 液态金属球由 JS 生成 -->
     </div>
   </section>
 
   <!-- Contact Info Modal -->
   <div class="contact-info-modal" id="contactInfoModal">
-    <button class="contact-info-close" onclick="closeContactInfo()">×</button>
     <div class="contact-info-content">
+      <button class="contact-info-close" onclick="closeContactInfo()">×</button>
+      <div class="contact-info-icon" id="contactInfoIcon"></div>
       <h3 id="contactInfoTitle"></h3>
       <p id="contactInfoValue"></p>
+      <button class="contact-info-copy" onclick="copyContactInfo()">复制</button>
     </div>
   </div>
 
@@ -2637,10 +2705,166 @@
     const contactInfoModal = document.getElementById('contactInfoModal');
     const contactInfoTitle = document.getElementById('contactInfoTitle');
     const contactInfoValue = document.getElementById('contactInfoValue');
+    const contactInfoIcon = document.getElementById('contactInfoIcon');
 
-    function showContactInfo(title, value) {
+    // Contact data
+    const contactData = [
+      {
+        name: '微信',
+        value: '18637473189',
+        icon: '<svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.269-.03-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>'
+      },
+      {
+        name: 'QQ邮箱',
+        value: '3189311520@qq.com',
+        icon: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>'
+      },
+      {
+        name: 'Gmail',
+        value: 'manbujingxindele@gmail.com',
+        icon: '<svg viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73l-6.545 5.818-6.545-5.818v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 10.91l6.545-6.27 1.528-1.145C21.69 2.32 24 3.475 24 5.457z"/></svg>'
+      },
+      {
+        name: 'GitHub',
+        value: 'github.com/le700',
+        icon: '<svg viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>',
+        isLink: true,
+        url: 'https://github.com/le700'
+      },
+      {
+        name: '电话',
+        value: '18637473189',
+        icon: '<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>'
+      }
+    ];
+
+    // Generate liquid orbs
+    const liquidOrbsContainer = document.getElementById('liquidOrbs');
+    contactData.forEach((contact, index) => {
+      const orb = document.createElement('div');
+      orb.className = 'liquid-orb';
+      orb.dataset.index = index;
+      orb.innerHTML = `
+        <div class="liquid-orb-inner">
+          <div class="liquid-orb-icon">${contact.icon}</div>
+          <span class="liquid-orb-label">${contact.name}</span>
+        </div>
+        <div class="liquid-orb-info">
+          <span class="liquid-orb-value">${contact.value}</span>
+        </div>
+      `;
+      orb.addEventListener('click', () => {
+        if (contact.isLink) {
+          window.open(contact.url, '_blank');
+        } else {
+          showContactInfo(contact.name, contact.value, contact.icon);
+        }
+      });
+      liquidOrbsContainer.appendChild(orb);
+    });
+
+    // Liquid Canvas Background
+    const liquidCanvas = document.getElementById('liquidCanvas');
+    const lctx = liquidCanvas.getContext('2d');
+    let liquidParticles = [];
+    let mouseX = 0, mouseY = 0;
+
+    function resizeLiquidCanvas() {
+      const section = document.querySelector('.contact-liquid');
+      liquidCanvas.width = section.offsetWidth;
+      liquidCanvas.height = section.offsetHeight;
+      initLiquidParticles();
+    }
+
+    function initLiquidParticles() {
+      liquidParticles = [];
+      const count = Math.min(80, Math.floor((liquidCanvas.width * liquidCanvas.height) / 15000));
+      for (let i = 0; i < count; i++) {
+        liquidParticles.push({
+          x: Math.random() * liquidCanvas.width,
+          y: Math.random() * liquidCanvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          radius: Math.random() * 2 + 1,
+          alpha: Math.random() * 0.5 + 0.2
+        });
+      }
+    }
+
+    function animateLiquid() {
+      lctx.clearRect(0, 0, liquidCanvas.width, liquidCanvas.height);
+
+      liquidParticles.forEach(p => {
+        // Gravity effect towards mouse
+        const dx = mouseX - p.x;
+        const dy = mouseY - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200 && dist > 0) {
+          const force = (200 - dist) / 200 * 0.02;
+          p.vx += dx / dist * force;
+          p.vy += dy / dist * force;
+        }
+
+        // Apply velocity with damping
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.99;
+        p.vy *= 0.99;
+
+        // Wrap around
+        if (p.x < 0) p.x = liquidCanvas.width;
+        if (p.x > liquidCanvas.width) p.x = 0;
+        if (p.y < 0) p.y = liquidCanvas.height;
+        if (p.y > liquidCanvas.height) p.y = 0;
+
+        // Draw particle with glow
+        lctx.beginPath();
+        const gradient = lctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 3);
+        gradient.addColorStop(0, `rgba(230, 57, 124, ${p.alpha})`);
+        gradient.addColorStop(1, 'rgba(230, 57, 124, 0)');
+        lctx.fillStyle = gradient;
+        lctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+        lctx.fill();
+      });
+
+      // Draw connections
+      lctx.strokeStyle = 'rgba(230, 57, 124, 0.1)';
+      lctx.lineWidth = 0.5;
+      for (let i = 0; i < liquidParticles.length; i++) {
+        for (let j = i + 1; j < liquidParticles.length; j++) {
+          const dx = liquidParticles[i].x - liquidParticles[j].x;
+          const dy = liquidParticles[i].y - liquidParticles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            lctx.globalAlpha = (100 - dist) / 100 * 0.3;
+            lctx.beginPath();
+            lctx.moveTo(liquidParticles[i].x, liquidParticles[i].y);
+            lctx.lineTo(liquidParticles[j].x, liquidParticles[j].y);
+            lctx.stroke();
+          }
+        }
+      }
+      lctx.globalAlpha = 1;
+
+      requestAnimationFrame(animateLiquid);
+    }
+
+    // Track mouse in contact section
+    const contactSection = document.querySelector('.contact-liquid');
+    contactSection.addEventListener('mousemove', (e) => {
+      const rect = contactSection.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    });
+
+    resizeLiquidCanvas();
+    window.addEventListener('resize', resizeLiquidCanvas);
+    animateLiquid();
+
+    function showContactInfo(title, value, icon) {
       contactInfoTitle.textContent = title;
       contactInfoValue.textContent = value;
+      contactInfoIcon.innerHTML = icon;
       contactInfoModal.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
@@ -2648,6 +2872,19 @@
     function closeContactInfo() {
       contactInfoModal.classList.remove('active');
       document.body.style.overflow = '';
+    }
+
+    function copyContactInfo() {
+      const value = contactInfoValue.textContent;
+      navigator.clipboard.writeText(value).then(() => {
+        const copyBtn = document.querySelector('.contact-info-copy');
+        copyBtn.textContent = '已复制!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => {
+          copyBtn.textContent = '复制';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      });
     }
 
     contactInfoModal.addEventListener('click', (e) => {
