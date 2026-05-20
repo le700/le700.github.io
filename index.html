@@ -1920,7 +1920,12 @@
     /* 翻转状态 - 桌面端 */
     .award-card.flipped {
       transform: rotateY(180deg) !important;
-      z-index: 20 !important;
+      z-index: 100 !important;
+    }
+    
+    /* 确保翻转时背面可见 */
+    .award-card.flipped .award-card-back {
+      z-index: 2;
     }
     
     /* Hover 倾斜提示 */
@@ -1991,6 +1996,9 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
+      /* 确保背面不透明，不会被其他卡片穿透 */
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     
     .award-card-back img {
@@ -1999,6 +2007,8 @@
       object-fit: contain;
       border-radius: 12px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      /* 图片再翻转一次，确保翻转后图片是正的 */
+      transform: rotateY(180deg);
     }
     
     .award-card-back .back-hint {
