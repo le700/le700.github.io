@@ -1565,17 +1565,19 @@
       .awards-stack { padding: 80px 0 60px; }
       .awards-progress { font-size: 14px; }
       .awards-progress span:first-child { font-size: 20px; }
-      .card-stack-container { padding: 0 16px; min-height: 55vh; }
-      .card-stack { height: 380px; }
-      .award-card { padding: 28px 24px; border-radius: 18px; backdrop-filter: none; background: rgba(26, 26, 29, 0.95); }
-      .award-card-title { font-size: 22px; margin-bottom: 12px; }
-      .award-card-year { font-size: 32px; }
-      .award-card-level { padding: 8px 16px; font-size: 12px; }
-      .award-card-rank { font-size: 15px; }
-      .award-card-header { margin-bottom: 16px; }
-      .award-card-footer { margin-top: 16px; padding-top: 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
-      .awards-nav { margin-top: 24px; }
-      .nav-btn { width: 48px; height: 48px; font-size: 20px; }
+      .card-stack-container { padding: 0 16px; min-height: 50vh; }
+      .card-stack { height: 320px; }
+      .award-card { padding: 20px 16px; border-radius: 16px; backdrop-filter: none; background: rgba(26, 26, 29, 0.98); }
+      .award-card-title { font-size: 16px; margin-bottom: 8px; line-height: 1.4; }
+      .award-card-year { font-size: 24px; }
+      .award-card-level { padding: 6px 12px; font-size: 11px; }
+      .award-card-rank { font-size: 13px; }
+      .award-card-header { margin-bottom: 12px; }
+      .award-card-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+      .award-card-footer { margin-top: 12px; padding-top: 12px; flex-direction: column; align-items: flex-start; gap: 8px; }
+      .award-card-hint { font-size: 12px; }
+      .awards-nav { margin-top: 20px; }
+      .nav-btn { width: 44px; height: 44px; font-size: 18px; }
       .cert-modal { padding: 20px; }
       .cert-modal-close { top: -40px; }
 
@@ -1621,9 +1623,15 @@
     @media (max-width: 480px) {
       section { padding: 60px 16px; }
       .section-header { margin-bottom: 36px; }
-      .card-stack { height: 340px; }
-      .award-card { padding: 24px 20px; }
-      .award-card-title { font-size: 20px; }
+      .card-stack { height: 280px; }
+      .award-card { padding: 16px 14px; }
+      .award-card-title { font-size: 14px; margin-bottom: 6px; }
+      .award-card-year { font-size: 20px; }
+      .award-card-rank { font-size: 12px; }
+      .award-card-level { padding: 5px 10px; font-size: 10px; }
+      .award-card-header { margin-bottom: 10px; }
+      .award-card-footer { margin-top: 10px; padding-top: 10px; }
+      .award-card-hint { font-size: 11px; }
       .liquid-orb { width: 75px; height: 75px; }
       .liquid-orbs { gap: 16px; }
     }
