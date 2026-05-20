@@ -2301,55 +2301,131 @@
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
 
-    // Three.js Nebula Background - 星云星尘3D效果 (IIFE封装，避免变量冲突)
+    // Three.js Nebula Background - 螺旋星云3D (IIFE封装)
     const HeroNebula = (() => {
       const canvas = document.getElementById('hero-canvas');
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
-      camera.position.z = 300;
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 3000);
+      camera.position.set(0, 0, 500);
 
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: window.innerWidth > 768 });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setClearColor(0x000000, 0);
 
-      // 内部输入变量（不与外部 mouseX/mouseY 冲突）
       const nebulaInput = { x: 0, y: 0 };
       const currentRotation = { x: 0, y: 0 };
       let isVisible = true;
+      let nebulaPoints, nebulaMaterial;
 
-      // 着色器
+      // === 着色器 ===
       const vertexShader = `
         attribute float aSize;
         attribute vec3 aColor;
         attribute float aAlpha;
+        attribute float aSpeed;
+        attribute float aPhase;
+        attribute float aOrbitRadius;
+        attribute float aOrbitSpeed;
+        attribute float aLayer;
         uniform float uTime;
         uniform vec2 uMouse;
         uniform float uPixelRatio;
         varying vec3 vColor;
         varying float vAlpha;
         varying float vDepth;
-        float hash(float n) { return fract(sin(n) * 43758.5453); }
+
+        // Simplex-like noise
+        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+        float snoise(vec3 v) {
+          const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+          const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+          vec3 i = floor(v + dot(v, C.yyy));
+          vec3 x0 = v - i + dot(i, C.xxx);
+          vec3 g = step(x0.yzx, x0.xyz);
+          vec3 l = 1.0 - g;
+          vec3 i1 = min(g.xyz, l.zxy);
+          vec3 i2 = max(g.xyz, l.zxy);
+          vec3 x1 = x0 - i1 + C.xxx;
+          vec3 x2 = x0 - i2 + C.yyy;
+          vec3 x3 = x0 - D.yyy;
+          i = mod289(i);
+          vec4 p = permute(permute(permute(
+            i.z + vec4(0.0, i1.z, i2.z, 1.0))
+            + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+            + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+          float n_ = 0.142857142857;
+          vec3 ns = n_ * D.wyz - D.xzx;
+          vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+          vec4 x_ = floor(j * ns.z);
+          vec4 y_ = floor(j - 7.0 * x_);
+          vec4 x = x_ * ns.x + ns.yyyy;
+          vec4 y = y_ * ns.x + ns.yyyy;
+          vec4 h = 1.0 - abs(x) - abs(y);
+          vec4 b0 = vec4(x.xy, y.xy);
+          vec4 b1 = vec4(x.zw, y.zw);
+          vec4 s0 = floor(b0)*2.0 + 1.0;
+          vec4 s1 = floor(b1)*2.0 + 1.0;
+          vec4 sh = -step(h, vec4(0.0));
+          vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+          vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+          vec3 p0 = vec3(a0.xy, h.x);
+          vec3 p1 = vec3(a0.zw, h.y);
+          vec3 p2 = vec3(a1.xy, h.z);
+          vec3 p3 = vec3(a1.zw, h.w);
+          vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+          p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+          vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+          m = m * m;
+          return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+        }
+
         void main() {
           vColor = aColor;
           vAlpha = aAlpha;
           vec3 pos = position;
-          float drift = hash(pos.x * 0.1 + pos.y * 0.1);
-          pos.x += sin(uTime * 0.1 + drift * 6.28) * 2.0;
-          pos.y += cos(uTime * 0.08 + drift * 6.28) * 1.5;
-          pos.z += sin(uTime * 0.05 + drift * 3.14) * 1.0;
-          vec2 mouseWorld = uMouse * 250.0;
-          vec2 diff = mouseWorld - pos.xy;
+
+          // 螺旋轨道运动
+          float angle = aPhase + uTime * aOrbitSpeed * 0.15;
+          float spiralX = cos(angle) * aOrbitRadius;
+          float spiralZ = sin(angle) * aOrbitRadius * 0.4;
+          pos.x += spiralX;
+          pos.z += spiralZ;
+
+          // 有机噪声漂移（多层叠加）
+          float n1 = snoise(vec3(pos.x * 0.003, pos.y * 0.003, uTime * 0.05 + aPhase));
+          float n2 = snoise(vec3(pos.x * 0.008 + 100.0, pos.y * 0.008, uTime * 0.08 + aPhase * 2.0));
+          float n3 = snoise(vec3(pos.z * 0.005, pos.y * 0.005 + 50.0, uTime * 0.03));
+          pos.x += n1 * 40.0 + n2 * 15.0;
+          pos.y += n2 * 30.0 + n3 * 20.0;
+          pos.z += n3 * 25.0 + n1 * 10.0;
+
+          // 呼吸脉动
+          float pulse = sin(uTime * aSpeed * 0.3 + aPhase) * 0.5 + 0.5;
+          pos += normalize(pos + vec3(0.001)) * pulse * 8.0;
+
+          // 鼠标引力（3D空间）
+          vec3 mouseWorld = vec3(uMouse.x * 400.0, uMouse.y * 300.0, 0.0);
+          vec3 diff = mouseWorld - pos;
           float dist = length(diff);
-          float force = 30.0 / (dist + 80.0);
-          pos.xy += normalize(diff + vec2(0.001)) * force * 3.0;
+          float force = 80.0 / (dist + 120.0);
+          pos += normalize(diff + vec3(0.001)) * force * 15.0;
+
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          vDepth = smoothstep(-600.0, 100.0, mvPosition.z);
-          gl_PointSize = aSize * uPixelRatio * (250.0 / -mvPosition.z);
-          gl_PointSize = clamp(gl_PointSize, 0.5, 50.0);
+          vDepth = smoothstep(-1200.0, 200.0, mvPosition.z);
+
+          // 透视缩放 + 脉动大小
+          float sizePulse = 1.0 + sin(uTime * aSpeed * 0.5 + aPhase * 3.0) * 0.3;
+          gl_PointSize = aSize * uPixelRatio * sizePulse * (350.0 / -mvPosition.z);
+          gl_PointSize = clamp(gl_PointSize, 0.5, 80.0);
+
           gl_Position = projectionMatrix * mvPosition;
         }
       `;
+
       const fragmentShader = `
         varying vec3 vColor;
         varying float vAlpha;
@@ -2357,74 +2433,130 @@
         void main() {
           float dist = length(gl_PointCoord - vec2(0.5));
           if (dist > 0.5) discard;
-          float core = smoothstep(0.5, 0.05, dist);
-          float glow = exp(-dist * dist * 10.0);
-          float alpha = (core * 0.6 + glow * 0.4) * vAlpha;
-          alpha *= mix(0.08, 1.0, vDepth);
-          vec3 color = vColor + vec3(0.1) * vDepth;
+
+          // 多层光晕：核心 + 内晕 + 外晕
+          float core = smoothstep(0.12, 0.0, dist);
+          float inner = exp(-dist * dist * 8.0);
+          float outer = exp(-dist * dist * 3.0) * 0.5;
+          float alpha = (core * 0.8 + inner * 0.5 + outer * 0.3) * vAlpha;
+
+          // 深度雾化
+          alpha *= mix(0.03, 1.0, vDepth);
+
+          // 近处粒子提亮
+          vec3 color = vColor * (0.7 + vDepth * 0.5);
+          color += vec3(0.15, 0.05, 0.1) * core; // 核心偏暖
+
           gl_FragColor = vec4(color, alpha);
         }
       `;
 
-      // 创建粒子
+      // === 创建粒子 ===
       const isMobile = window.innerWidth < 768;
-      const farCount = isMobile ? 1500 : 3000;
-      const midCount = isMobile ? 400 : 800;
-      const nearCount = isMobile ? 50 : 100;
-      const total = farCount + midCount + nearCount;
+      const TOTAL = isMobile ? 5000 : 10000;
 
-      const positions = new Float32Array(total * 3);
-      const sizes = new Float32Array(total);
-      const colors = new Float32Array(total * 3);
-      const alphas = new Float32Array(total);
+      const positions = new Float32Array(TOTAL * 3);
+      const sizes = new Float32Array(TOTAL);
+      const colors = new Float32Array(TOTAL * 3);
+      const alphas = new Float32Array(TOTAL);
+      const speeds = new Float32Array(TOTAL);
+      const phases = new Float32Array(TOTAL);
+      const orbitRadii = new Float32Array(TOTAL);
+      const orbitSpeeds = new Float32Array(TOTAL);
+      const layers = new Float32Array(TOTAL);
 
-      const colorStops = [
-        new THREE.Color('#E6397C'),
-        new THREE.Color('#7B2FBE'),
-        new THREE.Color('#00F5FF'),
+      const palette = [
+        new THREE.Color('#E6397C'), // 玫粉
+        new THREE.Color('#FF6B9D'), // 亮粉
+        new THREE.Color('#C850C0'), // 紫粉
+        new THREE.Color('#7B2FBE'), // 紫
+        new THREE.Color('#4158D0'), // 蓝紫
+        new THREE.Color('#00B4D8'), // 蓝
+        new THREE.Color('#00F5FF'), // 青
+        new THREE.Color('#48E5C2'), // 青绿
       ];
 
-      let idx = 0;
-      // 远景星尘
-      for (let i = 0; i < farCount; i++) {
-        positions[idx * 3] = (Math.random() - 0.5) * 1200;
-        positions[idx * 3 + 1] = (Math.random() - 0.5) * 800;
-        positions[idx * 3 + 2] = -Math.random() * 500 - 100;
-        sizes[idx] = Math.random() * 2 + 0.5;
-        alphas[idx] = Math.random() * 0.3 + 0.1;
-        const c = new THREE.Color().setHSL(0.55 + Math.random() * 0.3, 0.2 + Math.random() * 0.3, 0.6 + Math.random() * 0.3);
-        colors[idx * 3] = c.r; colors[idx * 3 + 1] = c.g; colors[idx * 3 + 2] = c.b;
-        idx++;
-      }
-      // 中景星云
-      for (let i = 0; i < midCount; i++) {
-        positions[idx * 3] = (Math.random() - 0.5) * 800;
-        positions[idx * 3 + 1] = (Math.random() - 0.5) * 500;
-        positions[idx * 3 + 2] = (Math.random() - 0.5) * 200;
-        sizes[idx] = Math.random() * 6 + 2;
-        alphas[idx] = Math.random() * 0.5 + 0.2;
-        const t = Math.random();
+      for (let i = 0; i < TOTAL; i++) {
+        const layerRand = Math.random();
+        let layer, px, py, pz, size, alpha, orbitR, orbitSpd;
+
+        if (layerRand < 0.3) {
+          // 远景星尘 - 密集小点
+          layer = 0;
+          px = (Math.random() - 0.5) * 2000;
+          py = (Math.random() - 0.5) * 1200;
+          pz = -Math.random() * 800 - 200;
+          size = Math.random() * 1.5 + 0.3;
+          alpha = Math.random() * 0.4 + 0.1;
+          orbitR = Math.random() * 50;
+          orbitSpd = (Math.random() - 0.5) * 0.3;
+        } else if (layerRand < 0.7) {
+          // 中景星云 - 螺旋臂主体
+          layer = 1;
+          const armAngle = Math.random() * Math.PI * 4;
+          const armRadius = 100 + Math.random() * 500;
+          const spiralTightness = 0.8;
+          px = Math.cos(armAngle) * armRadius + (Math.random() - 0.5) * 200;
+          py = (Math.random() - 0.5) * 600;
+          pz = Math.sin(armAngle) * armRadius * spiralTightness + (Math.random() - 0.5) * 150;
+          size = Math.random() * 5 + 1.5;
+          alpha = Math.random() * 0.6 + 0.15;
+          orbitR = Math.random() * 100 + 20;
+          orbitSpd = (Math.random() - 0.5) * 0.8;
+        } else if (layerRand < 0.9) {
+          // 近景亮星 - 大而亮
+          layer = 2;
+          px = (Math.random() - 0.5) * 800;
+          py = (Math.random() - 0.5) * 500;
+          pz = Math.random() * 500 + 100;
+          size = Math.random() * 12 + 4;
+          alpha = Math.random() * 0.7 + 0.3;
+          orbitR = Math.random() * 60 + 10;
+          orbitSpd = (Math.random() - 0.5) * 0.5;
+        } else {
+          // 气体云团 - 大而淡
+          layer = 3;
+          const cloudAngle = Math.random() * Math.PI * 2;
+          const cloudR = Math.random() * 400;
+          px = Math.cos(cloudAngle) * cloudR + (Math.random() - 0.5) * 300;
+          py = (Math.random() - 0.5) * 400;
+          pz = Math.sin(cloudAngle) * cloudR * 0.5 + (Math.random() - 0.5) * 200;
+          size = Math.random() * 25 + 10;
+          alpha = Math.random() * 0.08 + 0.02;
+          orbitR = Math.random() * 30;
+          orbitSpd = (Math.random() - 0.5) * 0.2;
+        }
+
+        positions[i * 3] = px;
+        positions[i * 3 + 1] = py;
+        positions[i * 3 + 2] = pz;
+        sizes[i] = size;
+        alphas[i] = alpha;
+        speeds[i] = Math.random() * 2 + 0.5;
+        phases[i] = Math.random() * Math.PI * 2;
+        orbitRadii[i] = orbitR;
+        orbitSpeeds[i] = orbitSpd;
+        layers[i] = layer;
+
+        // 颜色：基于层级和位置
         const color = new THREE.Color();
-        if (t < 0.5) color.lerpColors(colorStops[0], colorStops[1], t * 2);
-        else color.lerpColors(colorStops[1], colorStops[2], (t - 0.5) * 2);
-        color.offsetHSL((Math.random() - 0.5) * 0.05, (Math.random() - 0.5) * 0.15, (Math.random() - 0.5) * 0.1);
-        colors[idx * 3] = color.r; colors[idx * 3 + 1] = color.g; colors[idx * 3 + 2] = color.b;
-        idx++;
-      }
-      // 近景亮星
-      for (let i = 0; i < nearCount; i++) {
-        positions[idx * 3] = (Math.random() - 0.5) * 600;
-        positions[idx * 3 + 1] = (Math.random() - 0.5) * 400;
-        positions[idx * 3 + 2] = Math.random() * 400 + 100;
-        sizes[idx] = Math.random() * 10 + 4;
-        alphas[idx] = Math.random() * 0.6 + 0.3;
-        const t = Math.random();
-        const color = new THREE.Color();
-        if (t < 0.4) color.copy(colorStops[0]);
-        else if (t < 0.7) color.copy(colorStops[2]);
-        else color.lerpColors(colorStops[0], colorStops[2], Math.random());
-        colors[idx * 3] = color.r; colors[idx * 3 + 1] = color.g; colors[idx * 3 + 2] = color.b;
-        idx++;
+        if (layer === 0) {
+          // 远景偏冷色
+          color.setHSL(0.55 + Math.random() * 0.2, 0.3 + Math.random() * 0.3, 0.5 + Math.random() * 0.4);
+        } else if (layer === 3) {
+          // 气体云团用渐变色
+          const ci = Math.floor(Math.random() * palette.length);
+          color.copy(palette[ci]);
+          color.offsetHSL((Math.random() - 0.5) * 0.1, -0.2, 0);
+        } else {
+          // 中景和近景用完整调色板
+          const ci = Math.floor(Math.random() * palette.length);
+          color.copy(palette[ci]);
+          color.offsetHSL((Math.random() - 0.5) * 0.08, (Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.15);
+        }
+        colors[i * 3] = color.r;
+        colors[i * 3 + 1] = color.g;
+        colors[i * 3 + 2] = color.b;
       }
 
       const geometry = new THREE.BufferGeometry();
@@ -2432,8 +2564,13 @@
       geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
       geometry.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
       geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
+      geometry.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
+      geometry.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
+      geometry.setAttribute('aOrbitRadius', new THREE.BufferAttribute(orbitRadii, 1));
+      geometry.setAttribute('aOrbitSpeed', new THREE.BufferAttribute(orbitSpeeds, 1));
+      geometry.setAttribute('aLayer', new THREE.BufferAttribute(layers, 1));
 
-      const material = new THREE.ShaderMaterial({
+      nebulaMaterial = new THREE.ShaderMaterial({
         vertexShader, fragmentShader,
         uniforms: {
           uTime: { value: 0 },
@@ -2445,49 +2582,55 @@
         blending: THREE.AdditiveBlending,
       });
 
-      const nebulaPoints = new THREE.Points(geometry, material);
+      nebulaPoints = new THREE.Points(geometry, nebulaMaterial);
       scene.add(nebulaPoints);
 
-      // 鼠标输入
+      // 鼠标
       document.addEventListener('mousemove', (e) => {
         nebulaInput.x = (e.clientX / window.innerWidth) * 2 - 1;
         nebulaInput.y = (e.clientY / window.innerHeight) * 2 - 1;
       });
 
-      // 窗口缩放
+      // 缩放
       window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       });
 
-      // Hero不可见时暂停渲染
+      // 可见性
       const heroEl = document.querySelector('.hero');
       if (heroEl) {
-        const observer = new IntersectionObserver(([entry]) => {
+        new IntersectionObserver(([entry]) => {
           isVisible = entry.isIntersecting;
           if (isVisible) animate();
-        }, { threshold: 0 });
-        observer.observe(heroEl);
+        }, { threshold: 0 }).observe(heroEl);
       }
 
-      // 动画循环
+      // 动画
       function animate(time) {
         if (!isVisible) return;
         requestAnimationFrame(animate);
-        material.uniforms.uTime.value = (time || 0) * 0.001;
-        material.uniforms.uMouse.value.set(nebulaInput.x, -nebulaInput.y);
-        const targetRX = nebulaInput.y * 0.1;
-        const targetRY = nebulaInput.x * 0.15;
-        currentRotation.x += (targetRX - currentRotation.x) * 0.03;
-        currentRotation.y += (targetRY - currentRotation.y) * 0.03;
+        const t = (time || 0) * 0.001;
+        nebulaMaterial.uniforms.uTime.value = t;
+        nebulaMaterial.uniforms.uMouse.value.set(nebulaInput.x, -nebulaInput.y);
+
+        // 相机缓慢环绕
+        const camAngle = t * 0.02;
+        camera.position.x = Math.sin(camAngle) * 50;
+        camera.position.y = Math.cos(camAngle * 0.7) * 30;
+        camera.lookAt(0, 0, 0);
+
+        // 视差旋转
+        currentRotation.x += (nebulaInput.y * 0.08 - currentRotation.x) * 0.02;
+        currentRotation.y += (nebulaInput.x * 0.12 - currentRotation.y) * 0.02;
         nebulaPoints.rotation.x = currentRotation.x;
         nebulaPoints.rotation.y = currentRotation.y;
+
         renderer.render(scene, camera);
       }
       animate();
 
-      // 暴露给陀螺仪代码使用
       return { nebulaPoints, nebulaInput };
     })();
 
