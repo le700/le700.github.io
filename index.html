@@ -204,33 +204,7 @@
       left: 0;
     }
 
-    /* Hamburger Menu */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
-      width: 40px;
-      height: 40px;
-      background: none;
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      cursor: pointer;
-      padding: 8px;
-      z-index: 200;
-    }
-    .hamburger span {
-      display: block;
-      width: 18px;
-      height: 1.5px;
-      background: var(--text-primary);
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-    .hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
 
     /* Hero Section - 沉浸式 */
     .hero {
@@ -1476,7 +1450,6 @@
     @media (max-width: 768px) {
       /* Navigation */
       nav { top: 16px; padding: 12px 20px; gap: 16px; border-radius: 16px; z-index: 200; }
-      .hamburger { display: flex; }
       .nav-links {
         display: none;
         position: fixed;
@@ -1615,9 +1588,6 @@
       <a href="#skills">技能</a>
       <a href="#contact">联系</a>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="菜单">
-      <span></span><span></span><span></span>
-    </button>
   </nav>
 
   <!-- Hero Section -->
@@ -2270,22 +2240,6 @@
   </div>
 
   <script>
-    // Hamburger Menu
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      navLinks.classList.toggle('open');
-      document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
-    });
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-    });
-
     // Smooth Scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
