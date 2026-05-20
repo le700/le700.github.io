@@ -156,6 +156,44 @@
       transition: all 0.4s ease;
     }
 
+    /* 访问量统计 */
+    .visitor-counter {
+      position: fixed;
+      top: 40px;
+      right: 40px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 100px;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s ease;
+    }
+
+    .visitor-counter:hover {
+      border-color: rgba(0, 245, 255, 0.15);
+      color: var(--text-secondary);
+    }
+
+    .visitor-counter svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0.6;
+    }
+
+    .visitor-counter .count {
+      font-variant-numeric: tabular-nums;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
     nav.scrolled {
       padding: 12px 32px;
       background: rgba(10, 10, 15, 0.9);
@@ -1480,6 +1518,7 @@
       /* Navigation */
       nav { display: none; }
       .nav-logo { display: none; }
+      .visitor-counter { display: none; }
       .nav-links {
         display: none;
         position: fixed;
@@ -1619,6 +1658,12 @@
       <a href="#contact">联系</a>
     </div>
   </nav>
+
+  <!-- 访问量统计 -->
+  <div class="visitor-counter">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span class="count" id="busuanzi_value_site_pv">-</span>
+  </div>
 
   <!-- Hero Section -->
   <section class="hero">
@@ -3163,5 +3208,6 @@
       });
     });
   </script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
