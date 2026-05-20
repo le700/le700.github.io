@@ -1503,7 +1503,7 @@
       .awards-progress span:first-child { font-size: 20px; }
       .card-stack-container { padding: 0 16px; min-height: 55vh; }
       .card-stack { height: 380px; }
-      .award-card { padding: 28px 24px; border-radius: 18px; }
+      .award-card { padding: 28px 24px; border-radius: 18px; backdrop-filter: none; background: rgba(26, 26, 29, 0.95); }
       .award-card-title { font-size: 22px; margin-bottom: 12px; }
       .award-card-year { font-size: 32px; }
       .award-card-level { padding: 8px 16px; font-size: 12px; }
@@ -1810,6 +1810,7 @@
       width: 100%;
       max-width: 900px;
       height: 500px;
+      margin: 0 auto;
       perspective: 1500px;
     }
     
@@ -1824,6 +1825,7 @@
       cursor: pointer;
       transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
       transform-style: preserve-3d;
+      backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
