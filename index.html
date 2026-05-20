@@ -710,6 +710,17 @@
     .bento-back-result strong {
       color: var(--accent-cyan);
     }
+    
+    .bento-back-result.cert-clickable {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .bento-back-result.cert-clickable:hover {
+      background: rgba(230, 57, 124, 0.15);
+      border-color: rgba(230, 57, 124, 0.3);
+      transform: translateX(4px);
+    }
 
     .bento-back-close {
       position: absolute;
@@ -1788,7 +1799,7 @@
             <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div><h3>多维度新闻真实性评测系统</h3></div>
             <div class="bento-back-role"><strong>软件著作权</strong> · 基于科大讯飞星火大模型</div>
             <div class="bento-back-desc"><p>开发结合大语言模型的智能新闻检测算法，实现多维度真实性评估与虚假新闻识别。</p></div>
-            <div class="bento-back-result"><strong>登记号：</strong>2026SR0602886</div>
+            <div class="bento-back-result cert-clickable" onclick="event.stopPropagation(); openCertModal('certificates/software-copyright-2026SR0602886.jpg')"><strong>登记号：</strong>2026SR0602886 <span style="color: var(--accent-cyan); margin-left: 8px;">📎</span></div>
           </div>
         </div>
       </div>
