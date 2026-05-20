@@ -1574,7 +1574,6 @@
       .award-card-rank { font-size: 15px; }
       .award-card-header { margin-bottom: 16px; }
       .award-card-footer { margin-top: 16px; padding-top: 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
-      .view-cert-btn { padding: 10px 20px; font-size: 13px; }
       .awards-nav { margin-top: 24px; }
       .nav-btn { width: 48px; height: 48px; font-size: 20px; }
       .cert-modal { padding: 20px; }
@@ -1888,17 +1887,9 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 48px;
       cursor: pointer;
       transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
       transform-style: preserve-3d;
-      backdrop-filter: blur(20px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
       will-change: transform, opacity;
     }
     
@@ -1926,9 +1917,85 @@
       z-index: 0;
     }
     
-    .award-card:hover {
+    /* 翻转状态 */
+    .award-card.flipped {
+      transform: rotateY(180deg) !important;
+      opacity: 1 !important;
+      z-index: 20 !important;
+    }
+    
+    /* Hover 倾斜提示 */
+    .award-card.active:not(.flipped):hover {
+      transform: rotateY(6deg) rotateX(-2deg);
+    }
+    
+    .award-card-front, .award-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    
+    .award-card-front {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    
+    .award-card.active:not(.flipped):hover .award-card-front {
       border-color: var(--accent-cyan);
       box-shadow: 0 0 40px rgba(230, 57, 124, 0.2);
+    }
+    
+    /* 翻转提示箭头 */
+    .award-card-front::after {
+      content: '↻';
+      position: absolute;
+      bottom: 24px;
+      right: 32px;
+      font-size: 24px;
+      color: var(--accent-cyan);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .award-card.active:not(.flipped):hover .award-card-front::after {
+      opacity: 1;
+    }
+    
+    .award-card-back {
+      background: var(--bg-secondary);
+      border: 1px solid rgba(230, 57, 124, 0.3);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    
+    .award-card-back img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    
+    .award-card-back .back-hint {
+      position: absolute;
+      bottom: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
     }
     
     .award-card-header {
@@ -1987,25 +2054,6 @@
       margin-top: 24px;
       padding-top: 24px;
       border-top: 1px solid var(--glass-border);
-    }
-    
-    .view-cert-btn {
-      padding: 12px 28px;
-      background: transparent;
-      border: 1px solid var(--accent-cyan);
-      border-radius: 30px;
-      color: var(--accent-cyan);
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .view-cert-btn:hover {
-      background: var(--accent-cyan);
-      color: #fff;
     }
     
     .award-card-hint {
@@ -2102,7 +2150,7 @@
   <script>
     // Awards data
     const awardsData = [
-      { level: '国际级', type: 'international', title: '2025世界人形机器人运动会', rank: '1500m项目 · 松延动力小顽童系列机器人', year: '2025', cert: 'certificates/world-humanoid-robot-games-2025.jpg', certLabel: '查看记录' },
+      { level: '国际级', type: 'international', title: '2025世界人形机器人运动会', rank: '1500m项目 · 松延动力小顽童系列机器人', year: '2025', cert: 'certificates/world-humanoid-robot-games-2025.jpg' },
       { level: '国家级', type: 'national', title: '中国机器人及人工智能大赛全国总决赛', rank: '仿人机器人短跑 · 二等奖', year: '2025', cert: 'certificates/8847-2025-陈珂、岳金豪、陈齐兴.png' },
       { level: '国家级', type: 'national', title: '中国机器人及人工智能大赛全国总决赛', rank: '仿人机器人不规则地面运动 · 三等奖', year: '2025', cert: 'certificates/8845-2025-岳金豪、屠浩然、魏兴一.png' },
       { level: '国家级', type: 'national', title: '全国大学生信息安全与对抗技术竞赛全国总决赛', rank: '医疗配送机器人 · 三等奖', year: '2025', cert: 'certificates/9797-2025-魏兴一、毕可欣、岳金豪.png' },
@@ -2146,28 +2194,34 @@
         card.className = 'award-card';
         card.dataset.index = index;
         card.innerHTML = `
-          <div class="award-card-header">
-            <div class="award-card-level ${award.type}">${award.level}</div>
-            <div class="award-card-year">${award.year}</div>
+          <div class="award-card-front">
+            <div class="award-card-header">
+              <div class="award-card-level ${award.type}">${award.level}</div>
+              <div class="award-card-year">${award.year}</div>
+            </div>
+            <div class="award-card-body">
+              <h3 class="award-card-title">${award.title}</h3>
+              <p class="award-card-rank">${award.rank}</p>
+            </div>
+            <div class="award-card-footer">
+              <span class="award-card-hint">点击翻转查看证书</span>
+            </div>
           </div>
-          <div class="award-card-body">
-            <h3 class="award-card-title">${award.title}</h3>
-            <p class="award-card-rank">${award.rank}</p>
-          </div>
-          <div class="award-card-footer">
-            <button class="view-cert-btn" onclick="event.stopPropagation(); openCertModal('${award.cert}')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              ${award.certLabel || '查看证书'}
-            </button>
+          <div class="award-card-back">
+            <img src="${award.cert}" alt="${award.title} 证书" loading="lazy">
+            <span class="back-hint">点击翻回</span>
           </div>
         `;
         
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
+          // 如果当前卡片已翻转，翻回来
+          if (card.classList.contains('flipped')) {
+            card.classList.remove('flipped');
+            return;
+          }
+          // 如果点击的是当前active卡片，翻转
           if (index === currentIndex) {
-            nextAward();
+            card.classList.toggle('flipped');
           } else if (index === (currentIndex + 1) % awardsData.length) {
             nextAward();
           } else if (index === (currentIndex - 1 + awardsData.length) % awardsData.length) {
@@ -2186,7 +2240,7 @@
       const isMobile = window.innerWidth <= 768;
       
       cards.forEach((card, index) => {
-        card.classList.remove('active', 'prev', 'next', 'hidden');
+        card.classList.remove('active', 'prev', 'next', 'hidden', 'flipped');
         
         if (index === currentIndex) {
           card.classList.add('active');
