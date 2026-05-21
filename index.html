@@ -3087,6 +3087,12 @@
         url: 'https://github.com/le700'
       },
       {
+        name: 'QQ',
+        value: '3189311520',
+        icon: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2V7zm0 8h2v2h-2v-2z"/></svg>',
+        action: 'copy'
+      },
+      {
         name: '电话',
         value: '18637473189',
         icon: '<svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>',
@@ -3239,10 +3245,10 @@
         valueElement.style.textDecoration = 'underline';
         valueElement.onclick = () => {
           navigator.clipboard.writeText(value).then(() => {
-            alert('微信号已复制到剪贴板，请打开微信添加好友');
+            alert(title + '已复制到剪贴板');
           });
         };
-        btnElement.textContent = '复制微信号';
+        btnElement.textContent = '复制' + title;
       } else if (action === 'mailto') {
         // 邮箱 - 点击跳转邮件客户端
         const link = document.createElement('a');
@@ -3294,7 +3300,7 @@
             copyBtn.textContent = '复制';
             copyBtn.classList.remove('copied');
           }, 2000);
-          alert('微信号已复制到剪贴板，请打开微信添加好友');
+          alert('已复制到剪贴板');
         });
       } else if (currentContactAction === 'mailto') {
         // 邮箱 - 打开邮件客户端
