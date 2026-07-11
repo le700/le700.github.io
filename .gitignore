@@ -9,3 +9,26 @@ _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
+
+# 敏感文件
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+credentials*
+*secret*
+
+# 临时文件和构建产物
+*.log
+*.db
+*.sqlite
+*.bak
+*.backup
+node_modules/
+__pycache__/
+dist/
+build/
