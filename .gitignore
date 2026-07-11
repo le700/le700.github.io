@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
