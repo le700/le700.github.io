@@ -970,14 +970,86 @@
       z-index: 1;
     }
 
-    /* Skills - Icon Grid (troy-y.org style) */
-    .skill { padding: 7px 0; width: 100%; }
-    .skill img { width: 100%; height: 100%; object-fit: contain; }
-    .skill #skillWap { display: none; }
+    /* Skills - Icon Grid with Labels (troy-y.org style) */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 16px;
+      max-width: 750px;
+      margin: 0 auto;
+    }
 
-    @media (max-width: 800px) {
-      .skill #skillPc { display: none; }
-      .skill #skillWap { display: block; }
+    .skill-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: default;
+      transition: transform 0.3s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .skill-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .skill-card-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .skill-card:hover .skill-card-icon {
+      box-shadow: 0 4px 16px rgba(230, 57, 124, 0.25);
+    }
+
+    .skill-card-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+    }
+
+    .skill-card:hover .skill-card-label {
+      color: var(--accent-cyan);
+    }
+
+    @media (max-width: 768px) {
+      .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+        gap: 12px;
+      }
+      .skill-card-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+      .skill-card-label {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+        gap: 10px;
+      }
+      .skill-card-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+      }
+      .skill-card-label {
+        font-size: 10px;
+      }
     }
 
     /* Contact - Liquid Metal */
@@ -2279,9 +2351,79 @@
       <div class="section-eyebrow">Expertise</div>
       <h2>专业技能</h2>
     </div>
-    <div class="skill">
-      <img id="skillPc" src="./static/svg/skillPc.svg" alt="技能图标" />
-      <img id="skillWap" src="./static/svg/skillWap.svg" alt="技能图标" />
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#3776AB"/><path d="M24 6c-8 0-7.8 3.5-7.8 3.5v4.2h9v1.3H11.5S6 9 6 18c0 9 5.3 8.6 5.3 8.6h3.2v-4.1s-.2-4.9 5.2-4.9h9s5 .1 5-4.6V9.5S34 6 24 6ZM19.2 8.8c.9 0 1.6.7 1.6 1.6s-.7 1.6-1.6 1.6-1.6-.7-1.6-1.6.7-1.6 1.6-1.6Z" fill="#FFD845"/><path d="M24.8 42c7.7 0 7.4-3.5 7.4-3.5v-4.2h-9v-1.3h11.3s5.9 5.8 5.9-3.2c0-9-5.3-8.6-5.3-8.6H32v4.1s.2 4.9-5.2 4.9h-9s-5-.1-5 4.6v3.2S17.1 42 24.8 42Zm5-2.8c-.9 0-1.6-.7-1.6-1.6s.7-1.6 1.6-1.6 1.6.7 1.6 1.6-.7 1.6-1.6 1.6Z" fill="#fff"/></svg></div>
+        <span class="skill-card-label">Python</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#00599C"/><text x="24" y="22" text-anchor="middle" font-size="16" font-weight="900" fill="#fff" font-family="sans-serif">C</text><text x="24" y="38" text-anchor="middle" font-size="9" font-weight="700" fill="#00599C" font-family="sans-serif">++</text></svg></div>
+        <span class="skill-card-label">C/C++</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#03234B"/><rect x="12" y="12" width="24" height="24" rx="3" fill="none" stroke="#fff" stroke-width="2"/><rect x="17" y="17" width="14" height="14" rx="2" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="24" cy="24" r="5" fill="#fff"/></svg></div>
+        <span class="skill-card-label">STM32</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#5C3EE8"/><circle cx="24" cy="24" r="11" fill="none" stroke="#fff" stroke-width="2.5"/><circle cx="24" cy="24" r="5.5" fill="#fff"/><circle cx="24" cy="24" r="2.5" fill="#5C3EE8"/></svg></div>
+        <span class="skill-card-label">OpenCV</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#00A86B"/><rect x="10" y="10" width="12" height="12" rx="2" fill="#fff" opacity=".9"/><rect x="26" y="10" width="12" height="12" rx="2" fill="#fff" opacity=".9"/><rect x="10" y="26" width="12" height="12" rx="2" fill="#fff" opacity=".9"/><rect x="26" y="26" width="12" height="12" rx="2" fill="#fff" opacity=".9"/></svg></div>
+        <span class="skill-card-label">YOLOv5</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#A22846"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fff" stroke-width="2"/><circle cx="19" cy="19" r="2.5" fill="#fff"/><circle cx="29" cy="19" r="2.5" fill="#fff"/><circle cx="19" cy="29" r="2.5" fill="#fff"/><circle cx="29" cy="29" r="2.5" fill="#fff"/></svg></div>
+        <span class="skill-card-label">树莓派</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#F05032"/><circle cx="24" cy="15" r="3.5" fill="#fff"/><circle cx="15" cy="33" r="3.5" fill="#fff"/><circle cx="33" cy="33" r="3.5" fill="#fff"/><line x1="24" y1="18.5" x2="24" y2="24" stroke="#fff" stroke-width="2"/><line x1="24" y1="24" x2="15" y2="29.5" stroke="#fff" stroke-width="2"/><line x1="24" y1="24" x2="33" y2="29.5" stroke="#fff" stroke-width="2"/></svg></div>
+        <span class="skill-card-label">Git</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#FCC624"/><ellipse cx="24" cy="18" rx="10" ry="6" fill="#000"/><ellipse cx="24" cy="18" rx="6" ry="4" fill="#FCC624"/><path d="M17 34c-2.5-3 3-7 7-7s9.5 4 7 7" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <span class="skill-card-label">Linux</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#2496ED"/><rect x="8" y="14" width="32" height="5" rx="2.5" fill="#fff"/><rect x="10" y="22" width="28" height="5" rx="2.5" fill="#fff" opacity=".9"/><rect x="12" y="30" width="24" height="5" rx="2.5" fill="#fff" opacity=".8"/></svg></div>
+        <span class="skill-card-label">Docker</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#E34F26"/><path d="M24 8L40 17v14L24 40 8 31V17L24 8Z" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M24 8v32" stroke="#fff" stroke-width="1.2" opacity=".5"/></svg></div>
+        <span class="skill-card-label">SolidWorks</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#0076A8"/><path d="M8 32c4-8 6-16 8-20s4-6 6-2 3 12 6 16 4 2 6-2 3-8 6-12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><line x1="8" y1="36" x2="40" y2="36" stroke="#fff" stroke-width="1.5"/></svg></div>
+        <span class="skill-card-label">MATLAB</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#8B5CF6"/><text x="24" y="30" text-anchor="middle" font-size="20" font-weight="800" fill="#fff" font-family="sans-serif">VLA</text></svg></div>
+        <span class="skill-card-label">VLA</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#1E1E1E"/><text x="24" y="30" text-anchor="middle" font-size="22" font-weight="800" fill="#fff" font-family="sans-serif">π₀</text></svg></div>
+        <span class="skill-card-label">π₀</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#374151"/><text x="24" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="sans-serif">π₀.₅</text></svg></div>
+        <span class="skill-card-label">π₀.₅</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#0891B2"/><text x="24" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="sans-serif">UMI</text></svg></div>
+        <span class="skill-card-label">UMI</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#2563EB"/><path d="M12 18h24M12 18c4-2 14-2 24 0M12 18v12M36 18v12M12 30h24M12 30c4 2 14 2 24 0M24 18v12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <span class="skill-card-label">Remote SSH</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#22314E"/><circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M24 10c-2 4-3 9-3 14s1 10 3 14M24 38c2-4 3-9 3-14s-1-10-3-14M10 24h28" stroke="#fff" stroke-width="1.5" opacity=".6"/></svg></div>
+        <span class="skill-card-label">ROS</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#1A2744"/><circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-width="2.5"/><circle cx="24" cy="24" r="6" fill="#fff" opacity=".3"/><path d="M24 10c-2 4-3 9-3 14s1 10 3 14M24 38c2-4 3-9 3-14s-1-10-3-14" stroke="#fff" stroke-width="1.5" opacity=".6"/></svg></div>
+        <span class="skill-card-label">ROS2</span>
+      </div>
     </div>
   </section>
 
@@ -2864,13 +3006,16 @@
       });
     });
 
-    // Skills image fade in
-    gsap.from('.skill img', {
-      scrollTrigger: { trigger: '#skills', start: 'top 70%', toggleActions: 'play none none reverse' },
-      opacity: 0,
-      y: 20,
-      duration: 0.8,
-      ease: 'power2.out'
+    // Skills cards stagger in
+    gsap.utils.toArray('.skill-card').forEach((card, i) => {
+      gsap.from(card, {
+        scrollTrigger: { trigger: '#skills', start: 'top 70%', toggleActions: 'play none none reverse' },
+        opacity: 0,
+        y: 20,
+        duration: 0.3,
+        delay: i * 0.03,
+        ease: 'power2.out'
+      });
     });
 
     // Contact section
