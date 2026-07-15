@@ -970,114 +970,73 @@
       z-index: 1;
     }
 
-    /* Skills - Solar System Design */
-    .skills-galaxy {
-      position: relative;
-      width: 100%;
+    /* Skills - Grade Bar Style (troy-y.org inspired) */
+    .skills-grid {
       max-width: 700px;
-      height: 600px;
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .skill-orbit {
-      position: absolute;
-      border: 1px solid rgba(230, 57, 124, 0.08);
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    .skill-orbit-1 { width: 150px; height: 150px; }
-    .skill-orbit-2 { width: 260px; height: 260px; }
-    .skill-orbit-3 { width: 380px; height: 380px; }
-    .skill-orbit-4 { width: 500px; height: 500px; }
-
-    .skill-planet {
-      position: absolute;
-      width: var(--planet-size, 50px);
-      height: var(--planet-size, 50px);
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, var(--planet-color), var(--planet-dark));
-      box-shadow: 
-        inset -5px -5px 15px rgba(0,0,0,0.3),
-        0 0 20px var(--planet-glow),
-        0 0 40px var(--planet-glow);
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    .skill-row {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 16px;
     }
 
-    .skill-planet::after {
-      content: attr(data-skill);
-      position: absolute;
-      bottom: -28px;
-      left: 50%;
-      transform: translateX(-50%);
+    .skill-label {
+      width: 90px;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    .skill-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+
+    .skill-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent-cyan), #bd34fe, #e0321b);
+      background-size: 200% 100%;
+      animation: skillBarShimmer 3s ease-in-out infinite;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes skillBarShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .skill-grade {
+      width: 70px;
+      flex-shrink: 0;
       font-size: 12px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      opacity: 0.8;
-      transition: all 0.3s ease;
+      color: var(--text-muted);
+      text-align: left;
+      font-weight: 500;
+      letter-spacing: 0.02em;
     }
 
-    .skill-planet:hover {
-      transform: scale(1.3);
-      box-shadow: 
-        inset -5px -5px 15px rgba(0,0,0,0.3),
-        0 0 30px var(--planet-glow),
-        0 0 60px var(--planet-glow),
-        0 0 100px var(--planet-glow);
-      z-index: 100;
+    @media (max-width: 768px) {
+      .skills-grid { gap: 12px; }
+      .skill-label { width: 70px; font-size: 13px; }
+      .skill-grade { width: 60px; font-size: 11px; }
     }
 
-    .skill-planet:hover::after {
-      color: var(--accent-cyan);
-      opacity: 1;
-      font-weight: 600;
+    @media (max-width: 480px) {
+      .skill-label { width: 60px; font-size: 12px; }
+      .skill-row { gap: 10px; }
     }
-
-    /* Planet colors - 甜酷玫粉色系 */
-    .planet-python { --planet-size: 55px; --planet-color: #ff6b9d; --planet-dark: #E6397C; --planet-glow: rgba(230, 57, 124, 0.4); }
-    .planet-cpp { --planet-size: 48px; --planet-color: #ff8fab; --planet-dark: #ff4d8f; --planet-glow: rgba(255, 77, 143, 0.4); }
-    .planet-stm32 { --planet-size: 42px; --planet-color: #ffb3c6; --planet-dark: #ff6b9d; --planet-glow: rgba(255, 107, 157, 0.4); }
-    .planet-opencv { --planet-size: 45px; --planet-color: #ffccd5; --planet-dark: #ff8fab; --planet-glow: rgba(255, 143, 171, 0.4); }
-    .planet-yolo { --planet-size: 40px; --planet-color: #E6397C; --planet-dark: #c91d5c; --planet-glow: rgba(230, 57, 124, 0.5); }
-    .planet-raspberry { --planet-size: 38px; --planet-color: #ff4d8f; --planet-dark: #E6397C; --planet-glow: rgba(255, 77, 143, 0.5); }
-    .planet-git { --planet-size: 35px; --planet-color: #ff6b9d; --planet-dark: #ff4d8f; --planet-glow: rgba(255, 107, 157, 0.4); }
-    .planet-linux { --planet-size: 44px; --planet-color: #ff8fab; --planet-dark: #ff6b9d; --planet-glow: rgba(255, 143, 171, 0.4); }
-    .planet-docker { --planet-size: 36px; --planet-color: #ffb3c6; --planet-dark: #ff8fab; --planet-glow: rgba(255, 179, 198, 0.4); }
-    .planet-solidworks { --planet-size: 32px; --planet-color: #ffccd5; --planet-dark: #ffb3c6; --planet-glow: rgba(255, 204, 213, 0.4); }
-    .planet-matlab { --planet-size: 34px; --planet-color: #E6397C; --planet-dark: #ff4d8f; --planet-glow: rgba(230, 57, 124, 0.5); }
-
-    /* Orbital animation */
-    @keyframes orbit {
-      from { transform: translate(-50%, -50%) rotate(0deg); }
-      to { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-
-    @keyframes counter-orbit {
-      from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
-      to { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
-    }
-
-    .skill-planet {
-      animation: counter-orbit linear infinite;
-    }
-
-    .skill-planet:nth-child(5) { --orbit-radius: 75px; animation-duration: 20s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(6) { --orbit-radius: 75px; animation-duration: 20s; animation-delay: -10s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(7) { --orbit-radius: 130px; animation-duration: 30s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(8) { --orbit-radius: 130px; animation-duration: 30s; animation-delay: -15s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(9) { --orbit-radius: 130px; animation-duration: 30s; animation-delay: -7.5s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(10) { --orbit-radius: 190px; animation-duration: 40s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(11) { --orbit-radius: 190px; animation-duration: 40s; animation-delay: -20s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(12) { --orbit-radius: 190px; animation-duration: 40s; animation-delay: -10s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(13) { --orbit-radius: 250px; animation-duration: 50s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(14) { --orbit-radius: 250px; animation-duration: 50s; animation-delay: -25s; top: 50%; left: 50%; }
-    .skill-planet:nth-child(15) { --orbit-radius: 250px; animation-duration: 50s; animation-delay: -12.5s; top: 50%; left: 50%; }
 
     /* Contact - Liquid Metal */
     .contact-liquid {
@@ -1512,8 +1471,6 @@
       .projects-bento { grid-template-columns: repeat(2, 1fr); }
       .bento-card.large { grid-column: span 2; grid-row: span 1; }
       .bento-card.wide { grid-column: span 2; }
-      .skills-galaxy { height: 400px; }
-      .skill-planet { font-size: 12px; padding: 10px 18px; }
       .award-item { grid-template-columns: 90px 1fr 70px; padding: 28px 32px; gap: 32px; }
       section { padding: 140px 40px; }
       .contact-cards { gap: 20px; }
@@ -1589,20 +1546,6 @@
       .nav-btn { width: 44px; height: 44px; font-size: 18px; }
       .cert-modal { padding: 20px; }
       .cert-modal-close { top: -40px; }
-
-      /* Skills */
-      .skills-galaxy { height: auto; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; padding: 20px 0; }
-      .skill-orbit { display: none; }
-      .skill-planet {
-        position: relative !important;
-        top: auto !important; left: auto !important;
-        display: flex; align-items: center; justify-content: center;
-        margin: 0; animation: none !important;
-        width: 60px !important; height: 60px !important;
-      }
-      .skill-planet::after {
-        bottom: -22px; font-size: 10px; white-space: nowrap;
-      }
 
       /* Contact Liquid Metal */
       .contact-liquid { padding: 80px 20px; min-height: auto; }
@@ -2394,23 +2337,62 @@
       <div class="section-eyebrow">Expertise</div>
       <h2>专业技能</h2>
     </div>
-    <div class="skills-galaxy">
-      <div class="skill-orbit skill-orbit-1"></div>
-      <div class="skill-orbit skill-orbit-2"></div>
-      <div class="skill-orbit skill-orbit-3"></div>
-      <div class="skill-orbit skill-orbit-4"></div>
-      
-      <div class="skill-planet planet-python" data-skill="Python"></div>
-      <div class="skill-planet planet-cpp" data-skill="C/C++"></div>
-      <div class="skill-planet planet-stm32" data-skill="STM32"></div>
-      <div class="skill-planet planet-opencv" data-skill="OpenCV"></div>
-      <div class="skill-planet planet-yolo" data-skill="YOLOv5"></div>
-      <div class="skill-planet planet-raspberry" data-skill="树莓派"></div>
-      <div class="skill-planet planet-git" data-skill="Git"></div>
-      <div class="skill-planet planet-linux" data-skill="Linux"></div>
-      <div class="skill-planet planet-docker" data-skill="Docker"></div>
-      <div class="skill-planet planet-solidworks" data-skill="SolidWorks"></div>
-      <div class="skill-planet planet-matlab" data-skill="MATLAB"></div>
+    <div class="skills-grid">
+      <div class="skill-row">
+        <span class="skill-label">STM32</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        <span class="skill-grade">Grade 10</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">C/C++</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        <span class="skill-grade">Grade 9</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Python</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        <span class="skill-grade">Grade 8</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">树莓派</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        <span class="skill-grade">Grade 8</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Git</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        <span class="skill-grade">Grade 8</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Linux</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        <span class="skill-grade">Grade 8</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">OpenCV</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        <span class="skill-grade">Grade 7</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">YOLOv5</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        <span class="skill-grade">Grade 7</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">MATLAB</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        <span class="skill-grade">Grade 7</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">SolidWorks</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+        <span class="skill-grade">Grade 6</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Docker</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+        <span class="skill-grade">Grade 6</span>
+      </div>
     </div>
   </section>
 
@@ -2494,7 +2476,7 @@
     animateCursor();
 
     // Cursor hover effects
-    const hoverElements = document.querySelectorAll('a, button, .award-item, .project-card, .skill-bubble, .contact-link, .modal-close');
+    const hoverElements = document.querySelectorAll('a, button, .award-item, .project-card, .contact-link, .modal-close');
     hoverElements.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -2993,15 +2975,15 @@
       });
     });
 
-    // Skill bubbles with bounce
-    gsap.utils.toArray('.skill-bubble').forEach((bubble, i) => {
-      gsap.from(bubble, {
+    // Skill rows stagger in
+    gsap.utils.toArray('.skill-row').forEach((row, i) => {
+      gsap.from(row, {
         scrollTrigger: { trigger: '#skills', start: 'top 70%', toggleActions: 'play none none reverse' },
-        scale: 0.5,
+        x: -30,
         opacity: 0,
-        duration: 0.6,
-        delay: i * 0.04,
-        ease: 'back.out(1.7)'
+        duration: 0.4,
+        delay: i * 0.06,
+        ease: 'power2.out'
       });
     });
 
