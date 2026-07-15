@@ -970,72 +970,14 @@
       z-index: 1;
     }
 
-    /* Skills - Grade Bar Style (troy-y.org inspired) */
-    .skills-grid {
-      max-width: 700px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+    /* Skills - Icon Grid (troy-y.org style) */
+    .skill { padding: 7px 0; width: 100%; }
+    .skill img { width: 100%; height: 100%; object-fit: contain; }
+    .skill #skillWap { display: none; }
 
-    .skill-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .skill-label {
-      width: 90px;
-      flex-shrink: 0;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-primary);
-      text-align: right;
-    }
-
-    .skill-bar {
-      flex: 1;
-      height: 8px;
-      background: var(--bg-secondary);
-      border-radius: 4px;
-      overflow: hidden;
-      border: 1px solid var(--glass-border);
-    }
-
-    .skill-fill {
-      height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, var(--accent-cyan), #bd34fe, #e0321b);
-      background-size: 200% 100%;
-      animation: skillBarShimmer 3s ease-in-out infinite;
-      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes skillBarShimmer {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    .skill-grade {
-      width: 70px;
-      flex-shrink: 0;
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: left;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-    }
-
-    @media (max-width: 768px) {
-      .skills-grid { gap: 12px; }
-      .skill-label { width: 70px; font-size: 13px; }
-      .skill-grade { width: 60px; font-size: 11px; }
-    }
-
-    @media (max-width: 480px) {
-      .skill-label { width: 60px; font-size: 12px; }
-      .skill-row { gap: 10px; }
+    @media (max-width: 800px) {
+      .skill #skillPc { display: none; }
+      .skill #skillWap { display: block; }
     }
 
     /* Contact - Liquid Metal */
@@ -2337,62 +2279,9 @@
       <div class="section-eyebrow">Expertise</div>
       <h2>专业技能</h2>
     </div>
-    <div class="skills-grid">
-      <div class="skill-row">
-        <span class="skill-label">STM32</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
-        <span class="skill-grade">Grade 10</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">C/C++</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
-        <span class="skill-grade">Grade 9</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">Python</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
-        <span class="skill-grade">Grade 8</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">树莓派</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
-        <span class="skill-grade">Grade 8</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">Git</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
-        <span class="skill-grade">Grade 8</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">Linux</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
-        <span class="skill-grade">Grade 8</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">OpenCV</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
-        <span class="skill-grade">Grade 7</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">YOLOv5</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
-        <span class="skill-grade">Grade 7</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">MATLAB</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
-        <span class="skill-grade">Grade 7</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">SolidWorks</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
-        <span class="skill-grade">Grade 6</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">Docker</span>
-        <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
-        <span class="skill-grade">Grade 6</span>
-      </div>
+    <div class="skill">
+      <img id="skillPc" src="./static/svg/skillPc.svg" alt="技能图标" />
+      <img id="skillWap" src="./static/svg/skillWap.svg" alt="技能图标" />
     </div>
   </section>
 
@@ -2975,16 +2864,13 @@
       });
     });
 
-    // Skill rows stagger in
-    gsap.utils.toArray('.skill-row').forEach((row, i) => {
-      gsap.from(row, {
-        scrollTrigger: { trigger: '#skills', start: 'top 70%', toggleActions: 'play none none reverse' },
-        x: -30,
-        opacity: 0,
-        duration: 0.4,
-        delay: i * 0.06,
-        ease: 'power2.out'
-      });
+    // Skills image fade in
+    gsap.from('.skill img', {
+      scrollTrigger: { trigger: '#skills', start: 'top 70%', toggleActions: 'play none none reverse' },
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      ease: 'power2.out'
     });
 
     // Contact section
