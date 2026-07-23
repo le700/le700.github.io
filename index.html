@@ -68,9 +68,9 @@
     }
 
     :root[data-theme="light"] {
-      --bg-primary: #D1D5DB;
-      --bg-secondary: #E5E7EB;
-      --bg-tertiary: #F3F4F6;
+      --bg-primary: #C3C8D0;
+      --bg-secondary: #D1D5DB;
+      --bg-tertiary: #E5E7EB;
       --bg-card: rgba(0, 0, 0, 0.02);
       
       --text-primary: #1E293B;
@@ -101,13 +101,13 @@
       --accent-intense: rgba(14, 165, 233, 0.7);
       --accent-light: rgba(125, 211, 252, 0.3);
       
-      --nav-bg: rgba(209, 213, 219, 0.85);
-      --nav-scrolled-bg: rgba(195, 200, 208, 0.92);
+      --nav-bg: rgba(195, 200, 208, 0.85);
+      --nav-scrolled-bg: rgba(180, 185, 195, 0.92);
       --nav-scrolled-border: rgba(14, 165, 233, 0.15);
       
-      --vignette-color: rgba(180, 185, 195, 0.3);
+      --vignette-color: rgba(170, 175, 185, 0.3);
       
-      --logo-frame-bg: #E5E7EB;
+      --logo-frame-bg: #D1D5DB;
       
       --card-shadow: rgba(0, 0, 0, 0.08);
       
@@ -3767,6 +3767,15 @@
     let liquidParticles = [];
     let liquidMouseX = 0, liquidMouseY = 0;
 
+    // Get current accent color as RGB from CSS variable
+    function getAccentRGB() {
+      const hex = getComputedStyle(document.documentElement).getPropertyValue('--accent-cyan').trim();
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return { r, g, b };
+    }
+
     function resizeLiquidCanvas() {
       const section = document.querySelector('.contact-liquid');
       liquidCanvas.width = section.offsetWidth;
@@ -3791,6 +3800,8 @@
 
     function animateLiquid() {
       lctx.clearRect(0, 0, liquidCanvas.width, liquidCanvas.height);
+
+      const accent = getAccentRGB();
 
       liquidParticles.forEach(p => {
         // Gravity effect towards mouse
@@ -3818,15 +3829,15 @@
         // Draw particle with glow
         lctx.beginPath();
         const gradient = lctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 3);
-        gradient.addColorStop(0, `rgba(230, 57, 124, ${p.alpha})`);
-        gradient.addColorStop(1, 'rgba(230, 57, 124, 0)');
+        gradient.addColorStop(0, `rgba(${accent.r}, ${accent.g}, ${accent.b}, ${p.alpha})`);
+        gradient.addColorStop(1, `rgba(${accent.r}, ${accent.g}, ${accent.b}, 0)`);
         lctx.fillStyle = gradient;
         lctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
         lctx.fill();
       });
 
       // Draw connections
-      lctx.strokeStyle = 'rgba(230, 57, 124, 0.1)';
+      lctx.strokeStyle = `rgba(${accent.r}, ${accent.g}, ${accent.b}, 0.1)`;
       lctx.lineWidth = 0.5;
       for (let i = 0; i < liquidParticles.length; i++) {
         for (let j = i + 1; j < liquidParticles.length; j++) {
@@ -4014,7 +4025,7 @@
         );
 
         // Set overlay background to match TARGET theme's bg
-        overlay.style.background = isLight ? '#1A1A1D' : '#D1D5DB';
+        overlay.style.background = isLight ? '#1A1A1D' : '#C3C8D0';
 
         // Always expand circle from toggle button to full screen
         overlay.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
