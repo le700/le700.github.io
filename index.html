@@ -114,6 +114,13 @@
       --link-color: #0EA5E9;
     }
 
+    /* 浅色模式下隐藏暗角/噪点/扫描线 */
+    :root[data-theme="light"] .vignette,
+    :root[data-theme="light"] .grain-overlay,
+    :root[data-theme="light"] .scanlines {
+      display: none;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { 
