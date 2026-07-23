@@ -1052,6 +1052,103 @@
       }
     }
 
+    /* Education - Compact Card */
+    .education-section {
+      position: relative;
+      padding: 100px 24px 60px;
+    }
+
+    .edu-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      overflow: hidden;
+      transition: border-color 0.4s ease;
+    }
+
+    .edu-card:hover {
+      border-color: rgba(230,57,124,0.2);
+    }
+
+    .edu-card-inner {
+      display: flex;
+      align-items: center;
+      padding: 40px 48px;
+      gap: 36px;
+    }
+
+    .edu-logo-frame {
+      flex-shrink: 0;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    }
+
+    .edu-logo {
+      width: 100%;
+      height: auto;
+    }
+
+    .edu-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .edu-school {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .edu-major {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .edu-years {
+      font-size: 13px;
+      color: var(--accent-cyan);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* Education - Responsive */
+    @media (max-width: 768px) {
+      .education-section {
+        padding: 80px 16px 40px;
+      }
+
+      .edu-card-inner {
+        flex-direction: column;
+        text-align: center;
+        padding: 32px 24px;
+        gap: 20px;
+      }
+
+      .edu-logo-frame {
+        width: 72px;
+        height: 72px;
+        padding: 10px;
+      }
+
+      .edu-school {
+        font-size: 19px;
+      }
+    }
+
     /* Experience - Immersive Card */
     .experience-section {
       position: relative;
@@ -1875,6 +1972,7 @@
       <a href="#projects">项目</a>
       <a href="#awards">获奖</a>
       <a href="#skills">技能</a>
+      <a href="#education">教育</a>
       <a href="#experience">实习</a>
       <a href="#contact">联系</a>
     </div>
@@ -2713,6 +2811,27 @@
     </div>
   </section>
 
+  <!-- Education Section -->
+  <section id="education" class="education-section">
+    <div class="section-header">
+      <div class="section-eyebrow">Education</div>
+      <h2>教育经历</h2>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-card-inner">
+        <div class="edu-logo-frame">
+          <img src="static/bipt-logo.png" alt="BIPT" class="edu-logo">
+        </div>
+        <div class="edu-card-body">
+          <h3 class="edu-school">北京石油化工学院</h3>
+          <p class="edu-major">电气工程及其自动化 · 本科</p>
+          <p class="edu-years">2023 — 2027（预计）</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Experience Section -->
   <section id="experience" class="experience-section">
     <div class="floating-orb orb-3"></div>
@@ -3348,6 +3467,15 @@
         delay: i * 0.03,
         ease: 'power2.out'
       });
+    });
+
+    // Education card animation
+    gsap.from('.edu-card', {
+      scrollTrigger: { trigger: '#education', start: 'top 65%', toggleActions: 'play none none reverse' },
+      opacity: 0,
+      y: 30,
+      duration: 0.7,
+      ease: 'power3.out'
     });
 
     // Experience card animation
