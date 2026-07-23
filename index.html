@@ -121,6 +121,62 @@
       display: none;
     }
 
+    /* ===== 浅色模式下覆盖硬编码深色背景 ===== */
+    :root[data-theme="light"] .liquid-orb::after {
+      background: linear-gradient(145deg, #E5E7EB 0%, #D1D5DB 50%, #C3C8D0 100%);
+      box-shadow: inset 8px 8px 20px rgba(255,255,255,0.4), inset -8px -8px 20px rgba(0,0,0,0.08);
+    }
+    :root[data-theme="light"] .liquid-orb-info {
+      background: linear-gradient(145deg, #E5E7EB 0%, #D1D5DB 100%);
+    }
+    :root[data-theme="light"] .copy-toast {
+      background: rgba(209, 213, 219, 0.95);
+      color: #1E293B;
+      border-color: #0EA5E9;
+    }
+    :root[data-theme="light"] .contact-info-modal {
+      background: rgba(195, 200, 208, 0.95);
+    }
+    :root[data-theme="light"] .contact-info-content {
+      background: linear-gradient(145deg, #E5E7EB 0%, #D1D5DB 100%);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+    }
+    :root[data-theme="light"] .modal {
+      background: rgba(209, 213, 219, 0.98);
+    }
+    :root[data-theme="light"] .cert-modal {
+      background: rgba(195, 200, 208, 0.92);
+    }
+    :root[data-theme="light"] .cert-modal-close {
+      color: #1E293B;
+    }
+    :root[data-theme="light"] .modal img {
+      box-shadow: 0 60px 120px rgba(0,0,0,0.12);
+    }
+    :root[data-theme="light"] .cert-modal-content img {
+      box-shadow: 0 25px 80px rgba(0,0,0,0.1);
+    }
+    :root[data-theme="light"] .award-card-back img {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+    :root[data-theme="light"] .edu-logo-wrapper {
+      background: #D1D5DB;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    :root[data-theme="light"] .bento-icon svg {
+      fill: #fff;
+    }
+
+    /* 浅色模式下移动端导航/卡片 */
+    @media (max-width: 768px) {
+      :root[data-theme="light"] .nav-links {
+        background: rgba(209, 213, 219, 0.97);
+      }
+      :root[data-theme="light"] .award-card {
+        background: rgba(209, 213, 219, 0.98);
+      }
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { 
@@ -399,6 +455,7 @@
       position: absolute;
       inset: 0;
       z-index: 0;
+      background: transparent;
     }
 
     /* Hero 左右边缘渐变遮罩 - 让粒子自然淡出 */
