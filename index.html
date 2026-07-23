@@ -1052,6 +1052,228 @@
       }
     }
 
+    /* Experience - Immersive Card */
+    .experience-section {
+      position: relative;
+      min-height: 100vh;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+
+    .exp-card {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .exp-card-glow {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 25% 50%, rgba(230,57,124,0.06) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .exp-card-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      padding: 48px;
+      gap: 40px;
+    }
+
+    .exp-card-company {
+      flex: 0 0 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    .exp-logo-frame {
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .exp-logo {
+      width: 100%;
+      height: auto;
+      filter: brightness(1);
+    }
+
+    .exp-company-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .exp-company-sub {
+      font-size: 13px;
+      color: var(--accent-cyan);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .exp-card-divider {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--glass-border), transparent);
+      flex-shrink: 0;
+    }
+
+    .exp-card-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .exp-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .exp-timeline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .exp-timeline svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--accent-cyan);
+    }
+
+    .exp-duration {
+      font-size: 12px;
+      color: var(--accent-cyan);
+      background: rgba(230,57,124,0.1);
+      border: 1px solid rgba(230,57,124,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .exp-details {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .exp-details li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .exp-bullet {
+      flex-shrink: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      margin-top: 10px;
+    }
+
+    .exp-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .exp-tag {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: all 0.3s ease;
+    }
+
+    .exp-tag:hover {
+      background: rgba(230,57,124,0.08);
+      border-color: rgba(230,57,124,0.3);
+      color: var(--accent-cyan);
+    }
+
+    /* Experience - Responsive */
+    @media (max-width: 768px) {
+      .experience-section {
+        padding: 100px 16px 60px;
+      }
+
+      .exp-card-inner {
+        flex-direction: column;
+        padding: 32px 24px;
+        gap: 28px;
+      }
+
+      .exp-card-company {
+        flex: 0 0 auto;
+        flex-direction: row;
+        gap: 16px;
+        align-items: center;
+        text-align: left;
+        padding-top: 0;
+      }
+
+      .exp-logo-frame {
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+        padding: 10px;
+        margin-bottom: 0;
+      }
+
+      .exp-company-name {
+        font-size: 16px;
+        margin-bottom: 2px;
+      }
+
+      .exp-company-sub {
+        font-size: 12px;
+      }
+
+      .exp-card-divider {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+      }
+    }
+
     /* Contact - Liquid Metal */
     .contact-liquid {
       min-height: 100vh;
@@ -1628,6 +1850,7 @@
       <a href="#projects">项目</a>
       <a href="#awards">获奖</a>
       <a href="#skills">技能</a>
+      <a href="#experience">实习</a>
       <a href="#contact">联系</a>
     </div>
   </nav>
@@ -2429,10 +2652,6 @@
         <span class="skill-card-label">Meta Quest</span>
       </div>
       <div class="skill-card">
-        <div class="skill-card-icon" style="background:#1A1A2E"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M12 4c-1.5 3-2 6-2 8s.5 5 2 8M12 20c1.5-3 2-6 2-8s-.5-5-2-8" stroke="#fff" stroke-width=".8" opacity=".6"/><circle cx="12" cy="12" r="2.5" fill="#fff"/><path d="M12 4v2M12 18v2" stroke="#fff" stroke-width="1" opacity=".5"/></svg></div>
-        <span class="skill-card-label">空间鼠标</span>
-      </div>
-      <div class="skill-card">
         <div class="skill-card-icon" style="background:#009999"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.478 10.016c.24 0 .59.046 1.046.14v.726a2.465 2.465 0 0 0-.946-.213c-.41 0-.615.118-.615.354 0 .088.041.16.124.216.069.045.258.14.568.286.446.208.743.388.89.541.176.182.264.417.264.705 0 .415-.172.73-.516.949-.279.176-.64.264-1.085.264-.375 0-.753-.046-1.133-.139v-.755c.41.135.774.203 1.09.203.437 0 .655-.121.655-.362a.302.302 0 0 0-.095-.227c-.065-.065-.232-.155-.5-.27-.481-.208-.795-.384-.94-.53a.999.999 0 0 1-.284-.73c0-.377.137-.666.413-.864.272-.196.626-.294 1.064-.294zm21.19 0c.246 0 .565.04.956.123l.09.016v.727a2.471 2.471 0 0 0-.948-.213c-.409 0-.612.118-.612.354 0 .088.04.16.123.216.066.043.256.139.57.286.443.208.74.388.889.541.176.182.264.417.264.705 0 .415-.172.73-.514.949-.28.176-.643.264-1.087.264-.376 0-.754-.046-1.134-.139v-.755c.407.135.77.203 1.09.203.437 0 .655-.121.655-.362 0-.09-.03-.166-.092-.227-.066-.065-.233-.155-.503-.27-.48-.206-.793-.382-.94-.53a.997.997 0 0 1-.284-.732c0-.376.137-.664.413-.862.272-.196.627-.294 1.064-.294zm-12.674.066l.92 2.444.942-2.444h1.257v3.825h-.968v-2.708l-1.072 2.747h-.632l-1.052-2.747v2.708H8.67v-3.825zm-5.587 0v3.825H3.386v-3.825zm3.554 0v.692H6.327v.864H7.75v.63H6.327v.908h1.677v.73h-2.66v-3.824zm8.707 0v.692h-1.634v.864h1.422v.63h-1.422v.908h1.677v.73H14.05v-3.824zm1.898 0l1.255 2.56v-2.56h.719v3.825h-1.15l-1.288-2.595v2.595h-.72v-3.825z" fill="#fff"/></svg></div>
         <span class="skill-card-label">TIA Portal</span>
       </div>
@@ -2466,6 +2685,52 @@
       </div>
 
 <!-- Total: 28 cards -->
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="experience-section">
+    <div class="floating-orb orb-3"></div>
+    
+    <div class="section-header">
+      <div class="section-eyebrow">Experience</div>
+      <h2>实习经历</h2>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-card-glow"></div>
+      <div class="exp-card-inner">
+        <div class="exp-card-company">
+          <div class="exp-logo-frame">
+            <img src="static/samsung-logo.jpg" alt="Samsung" class="exp-logo">
+          </div>
+          <div class="exp-company-name">三星电子中国研究院</div>
+          <div class="exp-company-sub">SRCB · Robot T/F</div>
+        </div>
+        <div class="exp-card-divider"></div>
+        <div class="exp-card-info">
+          <div class="exp-meta">
+            <span class="exp-timeline">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+              2026.06.02 — 2026.08.31
+            </span>
+            <span class="exp-duration">3个月</span>
+          </div>
+          <ul class="exp-details">
+            <li>
+              <span class="exp-bullet"></span>
+              基于 UMI Ego（Meta Quest）的 RB-Y1 机器人（Rainbow Robotics）在插水管、插电路板等场景下的数据采集，数据转换（rosbag → LeRobot）
+            </li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">UMI</span>
+            <span class="exp-tag">Meta Quest</span>
+            <span class="exp-tag">ROS2</span>
+            <span class="exp-tag">Rainbow Robotics</span>
+            <span class="exp-tag">LeRobot</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -3058,6 +3323,15 @@
         delay: i * 0.03,
         ease: 'power2.out'
       });
+    });
+
+    // Experience card animation
+    gsap.from('.exp-card', {
+      scrollTrigger: { trigger: '#experience', start: 'top 60%', toggleActions: 'play none none reverse' },
+      opacity: 0,
+      y: 40,
+      duration: 0.8,
+      ease: 'power3.out'
     });
 
     // Contact section
