@@ -1453,6 +1453,31 @@
       line-height: 1.4;
     }
 
+    /* Toast */
+    .copy-toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(30, 30, 35, 0.95);
+      border: 1px solid var(--accent-cyan);
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 9999;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     @keyframes liquid-shimmer {
       0%, 100% { opacity: 0.6; transform: rotate(0deg); }
       50% { opacity: 1; transform: rotate(180deg); }
@@ -3430,20 +3455,47 @@
       const orb = document.createElement('div');
       orb.className = 'liquid-orb';
       orb.dataset.index = index;
+      const isPrivate = (contact.action === 'copy' || contact.action === 'tel');
+      const displayValue = isPrivate ? '点击复制' : contact.value;
       orb.innerHTML = `
         <div class="liquid-orb-inner">
           <div class="liquid-orb-icon">${contact.icon}</div>
           <span class="liquid-orb-label">${contact.name}</span>
         </div>
         <div class="liquid-orb-info">
-          <span class="liquid-orb-value">${contact.value}</span>
+          <span class="liquid-orb-value">${displayValue}</span>
         </div>
       `;
       orb.addEventListener('click', () => {
-        showContactInfo(contact.name, contact.value, contact.icon, contact.action, contact.url);
+        if (contact.action === 'copy') {
+          navigator.clipboard.writeText(contact.value).then(() => {
+            showToast('已复制 ' + contact.name);
+          });
+        } else if (contact.action === 'tel') {
+          navigator.clipboard.writeText(contact.value).then(() => {
+            showToast('已复制电话号码');
+          });
+        } else {
+          showContactInfo(contact.name, contact.value, contact.icon, contact.action, contact.url);
+        }
       });
       liquidOrbsContainer.appendChild(orb);
     });
+
+    // Toast notification
+    function showToast(msg) {
+      let toast = document.getElementById('copyToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'copyToast';
+        toast.className = 'copy-toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
 
     // Liquid Canvas Background
     const liquidCanvas = document.getElementById('liquidCanvas');
