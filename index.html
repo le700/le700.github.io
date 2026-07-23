@@ -12,7 +12,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     :root {
-      /* 炭黑 + 甜酷玫粉配色 */
+      /* 深色模式（默认） */
       --bg-primary: #1A1A1D;
       --bg-secondary: #222225;
       --bg-tertiary: #2a2a2d;
@@ -35,6 +35,83 @@
       --glass-bg: rgba(255, 255, 255, 0.03);
       --glass-border: rgba(255, 255, 255, 0.06);
       --glass-highlight: rgba(255, 255, 255, 0.1);
+      
+      /* 标签 */
+      --tag-bg: rgba(255, 255, 255, 0.04);
+      --tag-border: rgba(255, 255, 255, 0.08);
+      
+      /* 强调色衍生 */
+      --accent-dim: rgba(230, 57, 124, 0.1);
+      --accent-border: rgba(230, 57, 124, 0.2);
+      --accent-glow: rgba(230, 57, 124, 0.06);
+      --accent-shadow: rgba(230, 57, 124, 0.3);
+      --accent-bright: rgba(230, 57, 124, 0.5);
+      --accent-intense: rgba(230, 57, 124, 0.8);
+      --accent-light: rgba(255, 150, 180, 0.3);
+      
+      /* 导航 */
+      --nav-bg: rgba(26, 26, 29, 0.85);
+      --nav-scrolled-bg: rgba(10, 10, 15, 0.9);
+      --nav-scrolled-border: rgba(230, 57, 124, 0.1);
+      
+      /* 暗角 */
+      --vignette-color: rgba(26, 26, 29, 0.8);
+      
+      /* Logo 框架 */
+      --logo-frame-bg: #000;
+      
+      /* 阴影 */
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      
+      /* 链接色 */
+      --link-color: #007AFF;
+    }
+
+    :root[data-theme="light"] {
+      --bg-primary: #F8FAFC;
+      --bg-secondary: #F1F5F9;
+      --bg-tertiary: #E2E8F0;
+      --bg-card: rgba(0, 0, 0, 0.02);
+      
+      --text-primary: #1E293B;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      
+      /* 雾蓝 */
+      --accent-cyan: #0EA5E9;
+      --accent-blue: #38BDF8;
+      --accent-purple: #7DD3FC;
+      --accent-pink: #0EA5E9;
+      
+      --gradient-primary: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 50%, #7DD3FC 100%);
+      --gradient-glow: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(56, 189, 248, 0.2) 100%);
+      
+      --glass-bg: rgba(0, 0, 0, 0.03);
+      --glass-border: rgba(0, 0, 0, 0.06);
+      --glass-highlight: rgba(0, 0, 0, 0.06);
+      
+      --tag-bg: rgba(0, 0, 0, 0.04);
+      --tag-border: rgba(0, 0, 0, 0.08);
+      
+      --accent-dim: rgba(14, 165, 233, 0.1);
+      --accent-border: rgba(14, 165, 233, 0.2);
+      --accent-glow: rgba(14, 165, 233, 0.06);
+      --accent-shadow: rgba(14, 165, 233, 0.2);
+      --accent-bright: rgba(14, 165, 233, 0.4);
+      --accent-intense: rgba(14, 165, 233, 0.7);
+      --accent-light: rgba(125, 211, 252, 0.3);
+      
+      --nav-bg: rgba(248, 250, 252, 0.85);
+      --nav-scrolled-bg: rgba(241, 245, 249, 0.92);
+      --nav-scrolled-border: rgba(14, 165, 233, 0.15);
+      
+      --vignette-color: rgba(200, 210, 220, 0.3);
+      
+      --logo-frame-bg: #F1F5F9;
+      
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      
+      --link-color: #0EA5E9;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -69,7 +146,7 @@
       transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, background 0.3s ease, border-color 0.3s ease;
       transform: translate(-50%, -50%);
       mix-blend-mode: difference;
-      box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+      box-shadow: 0 0 20px var(--accent-bright);
     }
 
     .cursor-dot {
@@ -87,7 +164,7 @@
     .cursor.hover {
       width: 60px;
       height: 60px;
-      background: rgba(0, 245, 255, 0.1);
+      background: var(--accent-dim);
       border-color: var(--accent-purple);
       box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
     }
@@ -114,7 +191,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 9997;
-      background: radial-gradient(ellipse at center, transparent 0%, rgba(26, 26, 29, 0.8) 100%);
+      background: radial-gradient(ellipse at center, transparent 0%, var(--vignette-color) 100%);
     }
 
     /* 扫描线效果 */
@@ -151,7 +228,7 @@
       border: 1px solid var(--glass-border);
       border-radius: 100px;
       box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.3),
+        0 4px 30px var(--card-shadow),
         inset 0 1px 0 var(--glass-highlight);
       transition: all 0.4s ease;
     }
@@ -173,12 +250,12 @@
       font-size: 12px;
       color: var(--text-muted);
       letter-spacing: 0.05em;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 30px var(--card-shadow);
       transition: all 0.4s ease;
     }
 
     .visitor-counter:hover {
-      border-color: rgba(0, 245, 255, 0.15);
+      border-color: var(--accent-dim);
       color: var(--text-secondary);
     }
 
@@ -196,8 +273,8 @@
 
     nav.scrolled {
       padding: 12px 32px;
-      background: rgba(10, 10, 15, 0.9);
-      border-color: rgba(0, 245, 255, 0.1);
+      background: var(--nav-scrolled-bg);
+      border-color: var(--nav-scrolled-border);
     }
 
     .nav-logo {
@@ -238,13 +315,48 @@
 
     .nav-links a:hover {
       color: var(--accent-cyan);
-      text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+      text-shadow: 0 0 20px var(--accent-bright);
     }
 
     .nav-links a:hover::after {
       width: 100%;
       left: 0;
     }
+
+    /* 主题切换按钮 */
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      color: var(--accent-cyan);
+      background: var(--accent-glow);
+    }
+
+    .theme-toggle svg {
+      width: 18px;
+      height: 18px;
+      position: absolute;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .theme-icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
+    .theme-icon-moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+
+    :root[data-theme="light"] .theme-icon-sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
+    :root[data-theme="light"] .theme-icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
 
 
 
@@ -295,7 +407,7 @@
       position: absolute;
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, rgba(0, 245, 255, 0.15) 0%, transparent 70%);
+      background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
       z-index: 1;
@@ -345,7 +457,7 @@
 
     .hero h1 .char:hover {
       color: var(--accent-cyan);
-      text-shadow: 0 0 30px rgba(0, 245, 255, 0.8);
+      text-shadow: 0 0 30px var(--accent-intense);
       transform: translateY(-5px);
     }
 
@@ -592,10 +704,10 @@
     }
 
     .bento-card:not(.flipped):hover .bento-front {
-      border-color: rgba(230, 57, 124, 0.3);
+      border-color: var(--accent-shadow);
       box-shadow: 
         0 30px 60px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(230, 57, 124, 0.15);
+        0 0 40px var(--accent-dim);
     }
 
     /* Flip hint arrow */
@@ -613,7 +725,7 @@
 
     .bento-back {
       background: var(--bg-secondary);
-      border: 1px solid rgba(230, 57, 124, 0.3);
+      border: 1px solid var(--accent-shadow);
       padding: 36px;
       transform: rotateY(180deg);
       display: flex;
@@ -631,7 +743,7 @@
     }
 
     .bento-back::-webkit-scrollbar-thumb {
-      background: rgba(230, 57, 124, 0.3);
+      background: var(--accent-shadow);
       border-radius: 2px;
     }
 
@@ -694,8 +806,8 @@
     .bento-back-result {
       margin-top: 16px;
       padding: 16px 20px;
-      background: rgba(230, 57, 124, 0.08);
-      border: 1px solid rgba(230, 57, 124, 0.15);
+      background: var(--accent-glow);
+      border: 1px solid var(--accent-dim);
       border-radius: 12px;
       font-size: 13px;
       color: var(--text-secondary);
@@ -712,8 +824,8 @@
     }
     
     .bento-back-result.cert-clickable:hover {
-      background: rgba(230, 57, 124, 0.15);
-      border-color: rgba(230, 57, 124, 0.3);
+      background: var(--accent-dim);
+      border-color: var(--accent-shadow);
       transform: translateX(4px);
     }
 
@@ -755,7 +867,7 @@
 
     .bento-card:not(.flipped):hover .bento-icon {
       transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 10px 30px rgba(230, 57, 124, 0.4);
+      box-shadow: 0 10px 30px var(--accent-bright);
     }
 
     .bento-icon svg {
@@ -805,8 +917,8 @@
     .bento-tag {
       font-size: 11px;
       padding: 6px 14px;
-      background: rgba(230, 57, 124, 0.1);
-      border: 1px solid rgba(230, 57, 124, 0.2);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
       border-radius: 100px;
       color: var(--accent-cyan);
       font-weight: 500;
@@ -814,7 +926,7 @@
     }
 
     .bento-tag:hover {
-      background: rgba(230, 57, 124, 0.2);
+      background: var(--accent-border);
       transform: translateY(-2px);
     }
 
@@ -824,14 +936,14 @@
       right: 24px;
       font-size: 48px;
       font-weight: 100;
-      color: rgba(230, 57, 124, 0.15);
+      color: var(--accent-dim);
       line-height: 1;
       transition: all 0.4s ease;
       pointer-events: none;
     }
 
     .bento-card:not(.flipped):hover .bento-number {
-      color: rgba(230, 57, 124, 0.3);
+      color: var(--accent-shadow);
       transform: scale(1.1);
     }
 
@@ -847,7 +959,7 @@
     }
 
     .award-category {
-      background: rgba(0, 245, 255, 0.05);
+      background: var(--accent-glow);
       padding: 24px 40px;
       font-size: 12px;
       letter-spacing: 0.3em;
@@ -886,7 +998,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(0, 245, 255, 0.03) 0%, transparent 50%);
+      background: linear-gradient(90deg, var(--accent-glow) 0%, transparent 50%);
       opacity: 0;
       transition: opacity 0.4s ease;
     }
@@ -918,10 +1030,10 @@
     }
 
     .award-level.national {
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+      background: linear-gradient(135deg, var(--accent-dim) 0%, rgba(139, 92, 246, 0.15) 100%);
       color: var(--accent-cyan);
-      border: 1px solid rgba(0, 245, 255, 0.3);
-      box-shadow: 0 0 20px rgba(0, 245, 255, 0.1);
+      border: 1px solid var(--accent-shadow);
+      box-shadow: 0 0 20px var(--accent-dim);
     }
 
     .award-level.provincial {
@@ -1007,7 +1119,7 @@
     }
 
     .skill-card:hover .skill-card-icon {
-      box-shadow: 0 4px 16px rgba(230, 57, 124, 0.25);
+      box-shadow: 0 4px 16px var(--accent-shadow);
     }
 
     .skill-card-label {
@@ -1071,7 +1183,7 @@
     }
 
     .edu-card:hover {
-      border-color: rgba(230,57,124,0.2);
+      border-color: var(--accent-border);
     }
 
     .edu-card-inner {
@@ -1175,7 +1287,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(ellipse at 25% 50%, rgba(230,57,124,0.06) 0%, transparent 60%);
+      background: radial-gradient(ellipse at 25% 50%, var(--accent-glow) 0%, transparent 60%);
       pointer-events: none;
       z-index: 0;
     }
@@ -1201,13 +1313,13 @@
       width: 100px;
       height: 100px;
       border-radius: 20px;
-      background: #000;
+      background: var(--logo-frame-bg);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 16px;
       margin-bottom: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid var(--tag-border);
     }
 
     .exp-logo {
@@ -1269,8 +1381,8 @@
     .exp-duration {
       font-size: 12px;
       color: var(--accent-cyan);
-      background: rgba(230,57,124,0.1);
-      border: 1px solid rgba(230,57,124,0.2);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
       padding: 4px 12px;
       border-radius: 20px;
       font-weight: 500;
@@ -1312,8 +1424,8 @@
       font-size: 12px;
       padding: 6px 14px;
       border-radius: 20px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
       color: var(--text-secondary);
       font-weight: 500;
       letter-spacing: 0.02em;
@@ -1321,8 +1433,8 @@
     }
 
     .exp-tag:hover {
-      background: rgba(230,57,124,0.08);
-      border-color: rgba(230,57,124,0.3);
+      background: var(--accent-glow);
+      border-color: var(--accent-shadow);
       color: var(--accent-cyan);
     }
 
@@ -1386,7 +1498,7 @@
     .contact-liquid-bg {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, rgba(230, 57, 124, 0.05) 0%, transparent 70%);
+      background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -1446,7 +1558,7 @@
       position: relative;
       cursor: pointer;
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      filter: drop-shadow(0 20px 40px rgba(230, 57, 124, 0.3));
+      filter: drop-shadow(0 20px 40px var(--accent-shadow));
     }
 
     .liquid-orb::before {
@@ -1454,7 +1566,7 @@
       position: absolute;
       inset: -4px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(230, 57, 124, 0.6) 0%, rgba(255, 150, 180, 0.3) 50%, rgba(230, 57, 124, 0.6) 100%);
+      background: linear-gradient(135deg, var(--accent-intense) 0%, var(--accent-light) 50%, var(--accent-intense) 100%);
       animation: liquid-shimmer 3s ease-in-out infinite;
     }
 
@@ -1465,7 +1577,7 @@
       border-radius: 50%;
       background: linear-gradient(145deg, #2a2a2d 0%, #1a1a1d 50%, #0f0f12 100%);
       box-shadow: 
-        inset 8px 8px 20px rgba(255, 255, 255, 0.05),
+        inset 8px 8px 20px var(--glass-highlight),
         inset -8px -8px 20px rgba(0, 0, 0, 0.5);
     }
 
@@ -1494,7 +1606,7 @@
       height: 36px;
       fill: var(--accent-cyan);
       transition: all 0.3s ease;
-      filter: drop-shadow(0 2px 8px rgba(230, 57, 124, 0.5));
+      filter: drop-shadow(0 2px 8px var(--accent-bright));
     }
 
     .liquid-orb:hover .liquid-orb-icon {
@@ -1603,7 +1715,7 @@
 
     .contact-info-content {
       background: linear-gradient(145deg, #2a2a2d 0%, #1a1a1d 100%);
-      border: 1px solid rgba(230, 57, 124, 0.3);
+      border: 1px solid var(--accent-shadow);
       border-radius: 32px;
       padding: 60px 80px;
       text-align: center;
@@ -1611,8 +1723,8 @@
       position: relative;
       box-shadow: 
         0 40px 80px rgba(0, 0, 0, 0.5),
-        0 0 100px rgba(230, 57, 124, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 0 100px var(--accent-dim),
+        inset 0 1px 0 var(--glass-highlight);
       animation: modal-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
@@ -1638,13 +1750,13 @@
       height: 80px;
       margin: 0 auto 24px;
       border-radius: 50%;
-      background: linear-gradient(145deg, rgba(230, 57, 124, 0.2) 0%, rgba(230, 57, 124, 0.05) 100%);
+      background: linear-gradient(145deg, var(--accent-border) 0%, var(--accent-glow) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 
-        inset 4px 4px 10px rgba(255, 255, 255, 0.05),
-        0 10px 30px rgba(230, 57, 124, 0.2);
+        inset 4px 4px 10px var(--glass-highlight),
+        0 10px 30px var(--accent-border);
     }
 
     .contact-info-icon svg {
@@ -1677,8 +1789,8 @@
       right: 24px;
       width: 48px;
       height: 48px;
-      background: rgba(230, 57, 124, 0.1);
-      border: 1px solid rgba(230, 57, 124, 0.2);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
       border-radius: 50%;
       color: var(--text-primary);
       font-size: 24px;
@@ -1704,12 +1816,12 @@
       color: white;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(230, 57, 124, 0.3);
+      box-shadow: 0 10px 30px var(--accent-shadow);
     }
 
     .contact-info-copy:hover {
       transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(230, 57, 124, 0.4);
+      box-shadow: 0 15px 40px var(--accent-bright);
     }
 
     .contact-info-copy.copied {
@@ -1757,7 +1869,7 @@
       border-radius: 20px;
       box-shadow: 
         0 60px 120px rgba(0, 0, 0, 0.6),
-        0 0 60px rgba(0, 245, 255, 0.1);
+        0 0 60px var(--accent-dim);
       transform: scale(0.9);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -1789,7 +1901,7 @@
       background: var(--accent-cyan);
       color: var(--bg-primary);
       transform: rotate(90deg);
-      box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+      box-shadow: 0 0 30px var(--accent-bright);
     }
 
     /* 浮动装饰元素 */
@@ -1804,7 +1916,7 @@
     .orb-1 {
       width: 400px;
       height: 400px;
-      background: rgba(0, 245, 255, 0.1);
+      background: var(--accent-dim);
       top: 20%;
       right: -100px;
       animation: float-orb 8s ease-in-out infinite;
@@ -1976,6 +2088,10 @@
       <a href="#experience">实习</a>
       <a href="#contact">联系</a>
     </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换深色/浅色模式">
+      <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
   </nav>
 
   <!-- 访问量统计 -->
@@ -2288,7 +2404,7 @@
     
     .award-card.active:not(.flipped):hover .award-card-front {
       border-color: var(--accent-cyan);
-      box-shadow: 0 0 40px rgba(230, 57, 124, 0.2);
+      box-shadow: 0 0 40px var(--accent-border);
     }
     
     /* 翻转提示箭头 */
@@ -2310,7 +2426,7 @@
     
     .award-card-back {
       background: var(--bg-secondary);
-      border: 1px solid rgba(230, 57, 124, 0.3);
+      border: 1px solid var(--accent-shadow);
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
@@ -2459,7 +2575,7 @@
     
     .nav-btn:hover {
       border-color: var(--accent-cyan);
-      background: rgba(230, 57, 124, 0.1);
+      background: var(--accent-dim);
       transform: scale(1.1);
     }
     
@@ -2508,8 +2624,8 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.1);
+      border: 1px solid var(--accent-shadow);
+      background: var(--glass-highlight);
       color: #fff;
       font-size: 24px;
       cursor: pointer;
@@ -3400,7 +3516,7 @@
         onUpdate: function() {
           const current = Math.round(this.targets()[0].innerHTML);
           if (current === target) {
-            counter.style.textShadow = '0 0 40px rgba(0, 245, 255, 0.8)';
+            counter.style.textShadow = '0 0 40px var(--accent-intense)';
           }
         }
       });
@@ -3744,7 +3860,7 @@
         // 微信 - 显示可复制文本
         valueElement.textContent = value;
         valueElement.style.cursor = 'pointer';
-        valueElement.style.color = '#007AFF';
+        valueElement.style.color = 'var(--link-color)';
         valueElement.style.textDecoration = 'underline';
         valueElement.onclick = () => {
           navigator.clipboard.writeText(value).then(() => {
@@ -3757,7 +3873,7 @@
         const link = document.createElement('a');
         link.href = 'mailto:' + value;
         link.textContent = value;
-        link.style.color = '#007AFF';
+        link.style.color = 'var(--link-color)';
         link.style.textDecoration = 'underline';
         valueElement.appendChild(link);
         btnElement.textContent = '发送邮件';
@@ -3766,7 +3882,7 @@
         const link = document.createElement('a');
         link.href = 'tel:' + value;
         link.textContent = value;
-        link.style.color = '#007AFF';
+        link.style.color = 'var(--link-color)';
         link.style.textDecoration = 'underline';
         valueElement.appendChild(link);
         btnElement.textContent = '拨打电话';
@@ -3776,7 +3892,7 @@
         link.href = url;
         link.textContent = value;
         link.target = '_blank';
-        link.style.color = '#007AFF';
+        link.style.color = 'var(--link-color)';
         link.style.textDecoration = 'underline';
         valueElement.appendChild(link);
         btnElement.textContent = '访问链接';
@@ -3850,6 +3966,24 @@
         orb.style.transform = `translateY(${scrolled * speed}px)`;
       });
     });
+
+    // Theme Toggle
+    (function() {
+      const html = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light') html.setAttribute('data-theme', 'light');
+      toggle.addEventListener('click', () => {
+        const isLight = html.getAttribute('data-theme') === 'light';
+        if (isLight) {
+          html.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          html.setAttribute('data-theme', 'light');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+    })();
   </script>
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
