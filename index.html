@@ -10,7 +10,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     :root {
       /* 深色模式（默认） */
@@ -359,8 +358,8 @@
     :root[data-theme="light"] .theme-icon-sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
     :root[data-theme="light"] .theme-icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
 
-    /* 主题切换覆盖层 Canvas */
-    #themeRevealCanvas {
+    /* 主题切换覆盖层 */
+    #themeRevealOverlay {
       position: fixed;
       top: 0;
       left: 0;
@@ -368,7 +367,11 @@
       height: 100vh;
       z-index: 99999;
       pointer-events: none;
-      display: none;
+      clip-path: circle(0px at 0px 0px);
+      transition: none;
+    }
+    #themeRevealOverlay.active {
+      transition: clip-path 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
 
@@ -3984,8 +3987,7 @@
     (function() {
       const html = document.documentElement;
       const toggle = document.getElementById('themeToggle');
-      const canvas = document.getElementById('themeRevealCanvas');
-      const ctx = canvas.getContext('2d');
+      const overlay = document.getElementById('themeRevealOverlay');
       const saved = localStorage.getItem('theme');
       if (saved === 'light') html.setAttribute('data-theme', 'light');
 
@@ -4000,86 +4002,54 @@
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        canvas.style.display = 'block';
+        // Max radius to cover entire screen
+        const maxR = Math.sqrt(
+          Math.max(cx, window.innerWidth - cx) ** 2 +
+          Math.max(cy, window.innerHeight - cy) ** 2
+        );
 
-        html2canvas(document.body, {
-          useCORS: true,
-          scale: 1,
-          logging: false,
-          backgroundColor: null
-        }).then(screenshot => {
-          // Switch theme underneath
-          if (isLight) {
-            html.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'dark');
-          } else {
-            html.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-          }
+        // Set overlay background to match current theme's bg
+        overlay.style.background = isLight ? '#F8FAFC' : '#1A1A1D';
 
-          // Maximum radius from click point to furthest corner
-          const maxR = Math.sqrt(
-            Math.max(cx, canvas.width - cx) ** 2 +
-            Math.max(cy, canvas.height - cy) ** 2
-          );
+        // Expand: start small at button, end at full screen
+        // Shrink: start at full screen, end small at button
+        if (isLight) {
+          // Light → Dark: shrink circle (show dark bg, then reveal nothing)
+          overlay.style.clipPath = `circle(${maxR}px at ${cx}px ${cy}px)`;
+          overlay.style.transition = 'none';
+          overlay.offsetHeight; // force reflow
+          overlay.classList.add('active');
+          overlay.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
+        } else {
+          // Dark → Light: expand circle
+          overlay.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
+          overlay.style.transition = 'none';
+          overlay.offsetHeight; // force reflow
+          overlay.classList.add('active');
+          overlay.style.clipPath = `circle(${maxR}px at ${cx}px ${cy}px)`;
+        }
 
-          const duration = 450;
-          const start = performance.now();
+        // Switch theme underneath immediately
+        if (isLight) {
+          html.removeAttribute('data-theme');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          html.setAttribute('data-theme', 'light');
+          localStorage.setItem('theme', 'light');
+        }
 
-          function animate(now) {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-
-            // Ease: ease-out for expand, ease-in for shrink
-            let eased;
-            if (isLight) {
-              // Light → Dark: shrink to button (ease-in)
-              eased = 1 - Math.pow(1 - progress, 3);
-            } else {
-              // Dark → Light: expand from button (ease-out)
-              eased = 1 - Math.pow(1 - progress, 3);
-            }
-
-            let r;
-            if (isLight) {
-              // Shrink: from maxR to 0
-              r = (1 - eased) * maxR;
-            } else {
-              // Expand: from 0 to maxR
-              r = eased * maxR;
-            }
-
-            // Draw screenshot
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(screenshot, 0, 0);
-
-            // Cut circle hole to reveal new theme
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(cx, cy, Math.max(r, 0), 0, Math.PI * 2);
-            ctx.fill();
-
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            } else {
-              canvas.style.display = 'none';
-              ctx.globalCompositeOperation = 'source-over';
-              animating = false;
-            }
-          }
-
-          requestAnimationFrame(animate);
-        }).catch(() => {
-          // Fallback: instant switch if screenshot fails
-          canvas.style.display = 'none';
+        // Cleanup after animation
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          overlay.style.transition = 'none';
+          overlay.style.clipPath = 'circle(0px at 0px 0px)';
+          overlay.style.background = '';
           animating = false;
-        });
+        }, 500);
       });
     })();
   </script>
-  <canvas id="themeRevealCanvas"></canvas>
+  <div id="themeRevealOverlay"></div>
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
