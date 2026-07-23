@@ -2084,6 +2084,7 @@
   </style>
 </head>
 <body>
+  <div id="themeRevealOverlay"></div>
   <!-- Custom Cursor -->
   <div class="cursor"></div>
   <div class="cursor-dot"></div>
@@ -2372,7 +2373,6 @@
     
     /* 翻转状态 - 桌面端 */
     .award-card.flipped {
-      transform: rotateY(180deg) !important;
       z-index: 100 !important;
     }
     
@@ -2460,8 +2460,6 @@
       object-fit: contain;
       border-radius: 12px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      /* 图片再翻转一次，确保翻转后图片是正的 */
-      transform: rotateY(180deg);
     }
     
     .award-card-back .back-hint {
@@ -4008,26 +4006,15 @@
           Math.max(cy, window.innerHeight - cy) ** 2
         );
 
-        // Set overlay background to match current theme's bg
-        overlay.style.background = isLight ? '#F8FAFC' : '#1A1A1D';
+        // Set overlay background to match TARGET theme's bg
+        overlay.style.background = isLight ? '#1A1A1D' : '#F8FAFC';
 
-        // Expand: start small at button, end at full screen
-        // Shrink: start at full screen, end small at button
-        if (isLight) {
-          // Light → Dark: shrink circle (show dark bg, then reveal nothing)
-          overlay.style.clipPath = `circle(${maxR}px at ${cx}px ${cy}px)`;
-          overlay.style.transition = 'none';
-          overlay.offsetHeight; // force reflow
-          overlay.classList.add('active');
-          overlay.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
-        } else {
-          // Dark → Light: expand circle
-          overlay.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
-          overlay.style.transition = 'none';
-          overlay.offsetHeight; // force reflow
-          overlay.classList.add('active');
-          overlay.style.clipPath = `circle(${maxR}px at ${cx}px ${cy}px)`;
-        }
+        // Always expand circle from toggle button to full screen
+        overlay.style.clipPath = `circle(0px at ${cx}px ${cy}px)`;
+        overlay.style.transition = 'none';
+        overlay.offsetHeight; // force reflow
+        overlay.classList.add('active');
+        overlay.style.clipPath = `circle(${maxR}px at ${cx}px ${cy}px)`;
 
         // Switch theme underneath immediately
         if (isLight) {
@@ -4049,7 +4036,6 @@
       });
     })();
   </script>
-  <div id="themeRevealOverlay"></div>
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
