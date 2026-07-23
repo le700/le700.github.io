@@ -10,6 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     :root {
       /* 深色模式（默认） */
@@ -357,6 +358,18 @@
 
     :root[data-theme="light"] .theme-icon-sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
     :root[data-theme="light"] .theme-icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+
+    /* 主题切换覆盖层 Canvas */
+    #themeRevealCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 99999;
+      pointer-events: none;
+      display: none;
+    }
 
 
 
@@ -3967,24 +3980,106 @@
       });
     });
 
-    // Theme Toggle
+    // Theme Toggle - Telegram-style circle reveal
     (function() {
       const html = document.documentElement;
       const toggle = document.getElementById('themeToggle');
+      const canvas = document.getElementById('themeRevealCanvas');
+      const ctx = canvas.getContext('2d');
       const saved = localStorage.getItem('theme');
       if (saved === 'light') html.setAttribute('data-theme', 'light');
+
+      let animating = false;
+
       toggle.addEventListener('click', () => {
+        if (animating) return;
+        animating = true;
+
         const isLight = html.getAttribute('data-theme') === 'light';
-        if (isLight) {
-          html.removeAttribute('data-theme');
-          localStorage.setItem('theme', 'dark');
-        } else {
-          html.setAttribute('data-theme', 'light');
-          localStorage.setItem('theme', 'light');
-        }
+        const rect = toggle.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.display = 'block';
+
+        html2canvas(document.body, {
+          useCORS: true,
+          scale: 1,
+          logging: false,
+          backgroundColor: null
+        }).then(screenshot => {
+          // Switch theme underneath
+          if (isLight) {
+            html.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'dark');
+          } else {
+            html.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+          }
+
+          // Maximum radius from click point to furthest corner
+          const maxR = Math.sqrt(
+            Math.max(cx, canvas.width - cx) ** 2 +
+            Math.max(cy, canvas.height - cy) ** 2
+          );
+
+          const duration = 450;
+          const start = performance.now();
+
+          function animate(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Ease: ease-out for expand, ease-in for shrink
+            let eased;
+            if (isLight) {
+              // Light → Dark: shrink to button (ease-in)
+              eased = 1 - Math.pow(1 - progress, 3);
+            } else {
+              // Dark → Light: expand from button (ease-out)
+              eased = 1 - Math.pow(1 - progress, 3);
+            }
+
+            let r;
+            if (isLight) {
+              // Shrink: from maxR to 0
+              r = (1 - eased) * maxR;
+            } else {
+              // Expand: from 0 to maxR
+              r = eased * maxR;
+            }
+
+            // Draw screenshot
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(screenshot, 0, 0);
+
+            // Cut circle hole to reveal new theme
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(cx, cy, Math.max(r, 0), 0, Math.PI * 2);
+            ctx.fill();
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              canvas.style.display = 'none';
+              ctx.globalCompositeOperation = 'source-over';
+              animating = false;
+            }
+          }
+
+          requestAnimationFrame(animate);
+        }).catch(() => {
+          // Fallback: instant switch if screenshot fails
+          canvas.style.display = 'none';
+          animating = false;
+        });
       });
     })();
   </script>
+  <canvas id="themeRevealCanvas"></canvas>
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
