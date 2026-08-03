@@ -1014,6 +1014,98 @@
       transition: all 0.3s ease;
     }
 
+    /* Demo button */
+    .bento-demo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent-cyan);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      align-self: flex-start;
+      font-family: inherit;
+    }
+    .bento-demo-btn:hover {
+      background: var(--accent-cyan);
+      color: #fff;
+      border-color: var(--accent-cyan);
+    }
+    .bento-demo-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Video Modal */
+    .video-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .video-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .video-modal {
+      position: relative;
+      width: 90vw;
+      max-width: 900px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+    }
+    .video-modal video {
+      display: block;
+      width: 100%;
+      max-height: 80vh;
+    }
+    .video-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 2;
+    }
+    .video-modal-close:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+    .video-modal-label {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+      z-index: 2;
+      pointer-events: none;
+    }
+
     .bento-tag:hover {
       background: var(--accent-border);
       transform: translateY(-2px);
@@ -2315,6 +2407,7 @@
             <h3>TonyPi 仿人机器人视觉系统</h3>
             <p>基于 Raspberry Pi 5 + 幻尔 TonyPi 仿人机器人，开发视觉感知与自主控制系统，实现目标搬运、避障短跑、点球、阶梯行走等竞赛任务。</p>
             <div class="bento-tech"><span class="bento-tag">YOLOv5n</span><span class="bento-tag">OpenCV</span><span class="bento-tag">ONNX</span><span class="bento-tag">RPi 5</span><span class="bento-tag">Python</span></div>
+            <button class="bento-demo-btn" onclick="event.stopPropagation(); openVideoModal('demo_video_1.mp4', 'TonyPi 仿人机器人 · Demo 1')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>演示视频</button>
           </div>
           <div class="bento-back">
             <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><h3>TonyPi 仿人机器人视觉感知与自主控制系统</h3></div>
@@ -4107,5 +4200,35 @@
     })();
   </script>
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <!-- Video Modal -->
+  <div class="video-modal-overlay" id="videoModal" onclick="closeVideoModal(event)">
+    <div class="video-modal" onclick="event.stopPropagation()">
+      <button class="video-modal-close" onclick="closeVideoModal()">✕</button>
+      <div class="video-modal-label" id="videoModalLabel"></div>
+      <video id="videoModalPlayer" controls playsinline></video>
+    </div>
+  </div>
+  <script>
+    function openVideoModal(src, label) {
+      const overlay = document.getElementById('videoModal');
+      const player = document.getElementById('videoModalPlayer');
+      const labelEl = document.getElementById('videoModalLabel');
+      player.querySelector('source')?.remove();
+      player.src = src;
+      labelEl.textContent = label;
+      overlay.classList.add('active');
+      player.play().catch(() => {});
+    }
+    function closeVideoModal(e) {
+      if (e && e.target !== document.getElementById('videoModal')) return;
+      const overlay = document.getElementById('videoModal');
+      const player = document.getElementById('videoModalPlayer');
+      player.pause();
+      overlay.classList.remove('active');
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeVideoModal();
+    });
+  </script>
 </body>
 </html>
