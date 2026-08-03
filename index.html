@@ -727,7 +727,7 @@
     .projects-bento {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: minmax(340px, auto);
+      grid-auto-rows: minmax(300px, auto);
       gap: 24px;
       max-width: 1200px;
       margin: 0 auto;
@@ -791,7 +791,10 @@
       padding: 32px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
       transition: border-color 0.4s ease, box-shadow 0.4s ease;
     }
 
@@ -800,6 +803,18 @@
       box-shadow: 
         0 30px 60px rgba(0, 0, 0, 0.4),
         0 0 40px var(--accent-dim);
+    }
+
+    /* Scrollbar for bento front */
+    .bento-front::-webkit-scrollbar {
+      width: 4px;
+    }
+    .bento-front::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .bento-front::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
     }
 
     /* Flip hint arrow */
@@ -1004,6 +1019,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-top: auto;
     }
 
     .bento-tag {
