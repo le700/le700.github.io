@@ -2466,15 +2466,24 @@
             <div class="bento-number">02</div>
             <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div>
             <div class="bento-year">2025.11</div>
-            <h3>仓库智能视觉安全检测</h3>
-            <p>实验室科研项目，基于计算机视觉实现安全帽、防护服、烟火、泄漏等多场景安全检测，Web 端实时展示。</p>
-            <div class="bento-tech"><span class="bento-tag">YOLOv5n</span><span class="bento-tag">OpenCV</span><span class="bento-tag">ONNX</span><span class="bento-tag">ROS</span><span class="bento-tag">树莓派</span></div>
+            <h3>智慧仓储安全监控系统</h3>
+            <p>面向危化品仓储场景，构建 YOLOv5 视觉安全监控系统，负责数据集构建、标注、模型训练与优化，部署至树莓派 ROS 平台。</p>
+            <div class="bento-tech"><span class="bento-tag">YOLOv5n</span><span class="bento-tag">PyTorch</span><span class="bento-tag">LabelImg</span><span class="bento-tag">ONNX</span><span class="bento-tag">树莓派</span></div>
             <button class="bento-demo-btn" onclick="event.stopPropagation(); openGalleryModal(['demo_warehouse_1.png','demo_warehouse_2.png','demo_warehouse_3.png','demo_warehouse_4.png'], '智慧仓储安全检测')"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>演示截图</button>
           </div>
           <div class="bento-back">
-            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div><h3>实验室仓库智能视觉安全检测系统</h3></div>
-            <div class="bento-back-role"><strong>实验室科研项目</strong> · 项目成员 · 视觉数据构建 & 模型训练</div>
-            <div class="bento-back-desc"><p>面向实验室仓库安全监测场景，覆盖人员安全装备检测与环境异常检测。</p><ul><li>检测场景：安全帽检测、防护服检测、烟火检测、泄漏检测</li><li>使用 YOLOv5n 进行数据集采集标注、模型训练，导出 ONNX 部署至树莓派 ROS 移动机器人平台</li><li>Web 网页端实时显示检测结果，数据集规模约 4000 张图像</li></ul></div>
+            <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div><h3>智慧仓储安全监控系统</h3></div>
+            <div class="bento-back-role"><strong>实验室科研项目</strong> · 工业视觉数据集构建 · 模型训练与优化</div>
+            <div class="bento-back-desc">
+              <p>面向危化品仓储场景，构建基于 YOLOv5 的智能视觉安全监控系统，实现对人员、安全防护装备、烟火、泄漏等关键目标的自动识别。</p>
+              <ul>
+                <li><strong>数据集构建：</strong>从原始视频中抽帧、筛选、清洗，删除低质量样本与冗余帧，保留困难样本（远距离、小尺度、遮挡、复杂背景），构建约 4000 张图像的高质量工业视觉数据集</li>
+                <li><strong>数据标注：</strong>使用 LabelImg 完成 YOLO 格式标注，设计人员/安全帽/防护服/烟火/泄漏五大类别，制定标注规范，完成人工复查确保标注一致性</li>
+                <li><strong>模型训练：</strong>负责 YOLOv5n 训练全流程，包括数据加载配置、超参数调优（batch size / learning rate / image size / epoch），通过 loss / Precision / Recall / mAP 分析模型收敛</li>
+                <li><strong>效果优化：</strong>针对漏检（小目标、遮挡、光照不足）与误检（背景相似、反光区域），通过"数据分析 → 样本补充 → 重新训练 → 效果验证"闭环迭代提升模型性能</li>
+                <li><strong>部署支持：</strong>将训练完成的模型导出 ONNX，部署至树莓派 ROS 移动机器人平台，实现仓储环境实时检测与 Web 端结果展示</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
