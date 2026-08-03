@@ -4234,37 +4234,48 @@
     })();
   </script>
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-  <!-- Video Modal -->
+  <!-- Video/Image Modal -->
   <div class="video-modal-overlay" id="videoModal" onclick="closeVideoModal(event)">
     <div class="video-modal" id="videoModalBox" onclick="event.stopPropagation()">
       <button class="video-modal-close" onclick="closeVideoModal()">✕</button>
       <div class="video-modal-label" id="videoModalLabel"></div>
-      <video id="videoModalPlayer" controls playsinline style="display:none"></video>
+      <div id="videoModalContainer" style="display:none"></div>
       <div class="gallery-grid" id="galleryGrid" style="display:none"></div>
     </div>
   </div>
   <script>
     function showVideoElements() {
-      document.getElementById('videoModalPlayer').style.display = 'block';
+      document.getElementById('videoModalContainer').style.display = 'block';
       document.getElementById('galleryGrid').style.display = 'none';
     }
     function showGalleryElements() {
-      document.getElementById('videoModalPlayer').style.display = 'none';
+      document.getElementById('videoModalContainer').style.display = 'none';
       document.getElementById('galleryGrid').style.display = 'grid';
     }
     function openVideoModal(src, label) {
       var overlay = document.getElementById('videoModal');
-      var player = document.getElementById('videoModalPlayer');
       showVideoElements();
-      player.querySelector('source')?.remove();
-      player.src = src;
+      var container = document.getElementById('videoModalContainer');
+      container.innerHTML = '';
+      var video = document.createElement('video');
+      video.id = 'videoModalPlayer';
+      video.controls = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+      video.style.display = 'block';
+      video.style.width = '100%';
+      video.style.maxHeight = '80vh';
+      video.src = src;
+      container.appendChild(video);
       document.getElementById('videoModalLabel').textContent = label;
       overlay.classList.add('active');
-      player.play().catch(function(){});
+      video.play().catch(function(){});
     }
     function openGalleryModal(images, label) {
       var overlay = document.getElementById('videoModal');
       showGalleryElements();
+      var container = document.getElementById('videoModalContainer');
+      container.innerHTML = '';
       var grid = document.getElementById('galleryGrid');
       grid.innerHTML = '';
       images.forEach(function(src) {
@@ -4280,8 +4291,14 @@
     function closeVideoModal(e) {
       if (e && e.target !== document.getElementById('videoModal')) return;
       var overlay = document.getElementById('videoModal');
-      var player = document.getElementById('videoModalPlayer');
-      player.pause();
+      var container = document.getElementById('videoModalContainer');
+      var video = container.querySelector('video');
+      if (video) {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        video.remove();
+      }
       overlay.classList.remove('active');
     }
     document.addEventListener('keydown', function(e) {
