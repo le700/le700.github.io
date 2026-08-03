@@ -1126,42 +1126,25 @@
     }
 
     /* Image Gallery */
-    .gallery-modal-img {
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 8px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .gallery-grid img {
       display: block;
       width: 100%;
-      max-height: 80vh;
-      object-fit: contain;
-    }
-    .gallery-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.5);
-      border: none;
-      color: #fff;
-      font-size: 22px;
+      border-radius: 8px;
+      object-fit: cover;
+      aspect-ratio: 16/10;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      z-index: 2;
+      transition: transform 0.2s;
     }
-    .gallery-nav:hover { background: rgba(0, 0, 0, 0.8); }
-    .gallery-nav.prev { left: 12px; }
-    .gallery-nav.next { right: 12px; }
-    .gallery-counter {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      z-index: 2;
-      pointer-events: none;
+    .gallery-grid img:hover {
+      transform: scale(1.02);
     }
 
     .bento-tag:hover {
@@ -2486,7 +2469,7 @@
             <h3>仓库智能视觉安全检测</h3>
             <p>实验室科研项目，基于计算机视觉实现安全帽、防护服、烟火、泄漏等多场景安全检测，Web 端实时展示。</p>
             <div class="bento-tech"><span class="bento-tag">YOLOv5n</span><span class="bento-tag">OpenCV</span><span class="bento-tag">ONNX</span><span class="bento-tag">ROS</span><span class="bento-tag">树莓派</span></div>
-            <button class="bento-demo-btn" onclick="event.stopPropagation(); openGalleryModal(['demo_warehouse_1.png','demo_warehouse_2.png','demo_warehouse_3.png','demo_warehouse_4.png'], 0, '智慧仓储安全检测')"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>演示截图</button>
+            <button class="bento-demo-btn" onclick="event.stopPropagation(); openGalleryModal(['demo_warehouse_1.png','demo_warehouse_2.png','demo_warehouse_3.png','demo_warehouse_4.png'], '智慧仓储安全检测')"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>演示截图</button>
           </div>
           <div class="bento-back">
             <div class="bento-back-header"><div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div><h3>实验室仓库智能视觉安全检测系统</h3></div>
@@ -4248,36 +4231,17 @@
       <button class="video-modal-close" onclick="closeVideoModal()">✕</button>
       <div class="video-modal-label" id="videoModalLabel"></div>
       <video id="videoModalPlayer" controls playsinline style="display:none"></video>
-      <img id="galleryModalImg" class="gallery-modal-img" style="display:none" alt="" />
-      <button class="gallery-nav prev" id="galleryPrev" style="display:none" onclick="event.stopPropagation(); galleryPrev()">‹</button>
-      <button class="gallery-nav next" id="galleryNext" style="display:none" onclick="event.stopPropagation(); galleryNext()">›</button>
-      <div class="gallery-counter" id="galleryCounter" style="display:none"></div>
+      <div class="gallery-grid" id="galleryGrid" style="display:none"></div>
     </div>
   </div>
   <script>
-    var galleryImages = [];
-    var galleryIndex = 0;
-    var modalMode = '';
-
     function showVideoElements() {
       document.getElementById('videoModalPlayer').style.display = 'block';
-      document.getElementById('galleryModalImg').style.display = 'none';
-      document.getElementById('galleryPrev').style.display = 'none';
-      document.getElementById('galleryNext').style.display = 'none';
-      document.getElementById('galleryCounter').style.display = 'none';
-      modalMode = 'video';
+      document.getElementById('galleryGrid').style.display = 'none';
     }
     function showGalleryElements() {
       document.getElementById('videoModalPlayer').style.display = 'none';
-      document.getElementById('galleryModalImg').style.display = 'block';
-      document.getElementById('galleryPrev').style.display = 'flex';
-      document.getElementById('galleryNext').style.display = 'flex';
-      document.getElementById('galleryCounter').style.display = 'block';
-      modalMode = 'gallery';
-    }
-    function updateGallery() {
-      document.getElementById('galleryModalImg').src = galleryImages[galleryIndex];
-      document.getElementById('galleryCounter').textContent = (galleryIndex + 1) + ' / ' + galleryImages.length;
+      document.getElementById('galleryGrid').style.display = 'grid';
     }
     function openVideoModal(src, label) {
       var overlay = document.getElementById('videoModal');
@@ -4289,24 +4253,20 @@
       overlay.classList.add('active');
       player.play().catch(function(){});
     }
-    function openGalleryModal(images, startIdx, label) {
-      galleryImages = images;
-      galleryIndex = startIdx;
+    function openGalleryModal(images, label) {
       var overlay = document.getElementById('videoModal');
       showGalleryElements();
-      updateGallery();
+      var grid = document.getElementById('galleryGrid');
+      grid.innerHTML = '';
+      images.forEach(function(src) {
+        var img = document.createElement('img');
+        img.src = src;
+        img.alt = label;
+        img.loading = 'lazy';
+        grid.appendChild(img);
+      });
       document.getElementById('videoModalLabel').textContent = label;
       overlay.classList.add('active');
-    }
-    function galleryPrev() {
-      if (galleryImages.length === 0) return;
-      galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
-      updateGallery();
-    }
-    function galleryNext() {
-      if (galleryImages.length === 0) return;
-      galleryIndex = (galleryIndex + 1) % galleryImages.length;
-      updateGallery();
     }
     function closeVideoModal(e) {
       if (e && e.target !== document.getElementById('videoModal')) return;
@@ -4317,8 +4277,6 @@
     }
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeVideoModal();
-      if (e.key === 'ArrowLeft' && modalMode === 'gallery') galleryPrev();
-      if (e.key === 'ArrowRight' && modalMode === 'gallery') galleryNext();
     });
   </script>
 </body>
