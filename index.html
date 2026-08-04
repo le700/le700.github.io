@@ -1724,6 +1724,16 @@
       border-color: var(--accent-shadow);
     }
 
+    .exp-toggle:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .exp-toggle:disabled:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+    }
+
     .exp-toggle svg {
       width: 14px;
       height: 14px;
@@ -2453,7 +2463,7 @@
             <span class="exp-duration">3个月</span>
           </div>
           <div class="exp-role">具身智能数据工程实习生</div>
-          <button class="exp-toggle" onclick="toggleExpDetails(this)">
+          <button class="exp-toggle" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
             展开详情
           </button>
