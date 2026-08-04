@@ -1702,6 +1702,50 @@
       color: var(--accent-cyan);
     }
 
+    .exp-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 8px 20px;
+      border: 1px solid var(--accent-border);
+      border-radius: 24px;
+      background: var(--accent-dim);
+      color: var(--accent-cyan);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: fit-content;
+    }
+
+    .exp-toggle:hover {
+      background: var(--accent-glow);
+      border-color: var(--accent-shadow);
+    }
+
+    .exp-toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.3s ease;
+    }
+
+    .exp-toggle.expanded svg {
+      transform: rotate(180deg);
+    }
+
+    .exp-expandable {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.4s ease;
+    }
+
+    .exp-expandable.show {
+      max-height: 2000px;
+      opacity: 1;
+    }
+
     /* Experience - Responsive */
     @media (max-width: 768px) {
       .experience-section {
@@ -2409,44 +2453,50 @@
             <span class="exp-duration">3个月</span>
           </div>
           <div class="exp-role">具身智能数据工程实习生</div>
-          <ul class="exp-details">
-            <li>
-              <span class="exp-bullet"></span>
-              参与面向工业装配场景的具身智能机器人项目，围绕 RBY1 双臂机器人开展真实环境操作数据建设，支撑基于 Pi0/Pi0.5 架构的视觉－语言－动作模型训练、ForceVLA 力觉融合实验及 RTC 实时控制验证
-            </li>
-            <li>
-              <span class="exp-bullet"></span>
-              负责水管插孔、线缆装配等精细操作任务的机器人示教数据采集，依据任务流程完成抓取、对准、插入和释放等多阶段动作演示，构建包含多视角图像、机器人关节状态、动作序列及末端执行信息的时序数据
-            </li>
-            <li>
-              <span class="exp-bullet"></span>
-              参与机器人操作数据采集规范设计与迭代，控制初始位姿、目标位置、操作速度、运动轨迹及环境扰动等变量，提升数据在位置偏差、姿态偏差和不同执行状态下的覆盖度与多样性
-            </li>
-            <li>
-              <span class="exp-bullet"></span>
-              面向模型部署中的失败案例开展针对性补充采集，通过复现模型偏航、抓取偏差、对孔失败和插入不稳定等情况，采集人工修正轨迹并补充至训练数据集，支持 DAgger 式数据闭环迭代
-            </li>
-            <li>
-              <span class="exp-bullet"></span>
-              对采集数据进行完整性与有效性检查，排查图像缺帧、状态与动作不同步、轨迹停顿、无效动作、异常终止及任务未完成等问题，并按照任务成功状态完成数据筛选和质量复核
-            </li>
-            <li>
-              <span class="exp-bullet"></span>
-              配合算法团队开展多版本数据集迭代，围绕轨迹流畅度、任务成功率和场景覆盖度分析模型表现，针对数据分布不足及特定失败模式补充高价值样本，支撑水管插孔任务从早期数据版本逐步迭代至千秒级训练数据规模
-            </li>
-            <li>
-              <span class="exp-bullet"></span>
-              参与机器人端模型部署测试与效果验证，记录不同模型检查点在任务成功率、执行时长、动作连续性和插入稳定性等方面的表现，为模型训练配置、数据版本选择和实时控制优化提供实验依据
-            </li>
-          </ul>
-          <div class="exp-tags">
-            <span class="exp-tag">Teleoperation</span>
-            <span class="exp-tag">Pi0/Pi0.5</span>
-            <span class="exp-tag">ForceVLA</span>
-            <span class="exp-tag">DAgger</span>
-            <span class="exp-tag">RTC</span>
-            <span class="exp-tag">VLA</span>
-            <span class="exp-tag">Rainbow Robotics</span>
+          <button class="exp-toggle" onclick="toggleExpDetails(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            展开详情
+          </button>
+          <div class="exp-expandable">
+            <ul class="exp-details">
+              <li>
+                <span class="exp-bullet"></span>
+                参与面向工业装配场景的具身智能机器人项目，围绕 RBY1 双臂机器人开展真实环境操作数据建设，支撑基于 Pi0/Pi0.5 架构的视觉－语言－动作模型训练、ForceVLA 力觉融合实验及 RTC 实时控制验证
+              </li>
+              <li>
+                <span class="exp-bullet"></span>
+                负责水管插孔、线缆装配等精细操作任务的机器人示教数据采集，依据任务流程完成抓取、对准、插入和释放等多阶段动作演示，构建包含多视角图像、机器人关节状态、动作序列及末端执行信息的时序数据
+              </li>
+              <li>
+                <span class="exp-bullet"></span>
+                参与机器人操作数据采集规范设计与迭代，提升数据在位置偏差、姿态偏差和不同执行状态下的覆盖度与多样性
+              </li>
+              <li>
+                <span class="exp-bullet"></span>
+                面向模型部署中的失败案例开展针对性补充采集，通过复现模型偏航、抓取偏差、对孔失败和插入不稳定等情况，采集人工修正轨迹并补充至训练数据集，支持 DAgger 式数据闭环迭代
+              </li>
+              <li>
+                <span class="exp-bullet"></span>
+                对采集数据进行完整性与有效性检查，排查图像缺帧、状态与动作不同步、轨迹停顿、无效动作、异常终止及任务未完成等问题，并按照任务成功状态完成数据筛选和质量复核
+              </li>
+              <li>
+                <span class="exp-bullet"></span>
+                配合算法团队开展多版本数据集迭代，围绕轨迹流畅度、任务成功率和场景覆盖度分析模型表现，针对数据分布不足及特定失败模式补充高价值样本
+              </li>
+              <li>
+                <span class="exp-bullet"></span>
+                参与机器人端模型部署测试与效果验证，为模型训练配置、数据版本选择和实时控制优化提供实验依据
+              </li>
+            </ul>
+            <div class="exp-tags">
+              <span class="exp-tag">Teleoperation</span>
+              <span class="exp-tag">Pi0/Pi0.5</span>
+              <span class="exp-tag">ForceVLA</span>
+              <span class="exp-tag">DAgger</span>
+              <span class="exp-tag">RTC</span>
+              <span class="exp-tag">VLA</span>
+              <span class="exp-tag">Rainbow Robotics</span>
+            </div>
           </div>
         </div>
       </div>
@@ -3092,6 +3142,20 @@
     }
     
     // Certificate modal
+    function toggleExpDetails(btn) {
+      const expandable = btn.nextElementSibling;
+      const isExpanded = btn.classList.contains('expanded');
+      if (isExpanded) {
+        btn.classList.remove('expanded');
+        expandable.classList.remove('show');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>展开详情';
+      } else {
+        btn.classList.add('expanded');
+        expandable.classList.add('show');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>收起详情';
+      }
+    }
+
     function openCertModal(certPath) {
       const modal = document.getElementById('certModal');
       const img = document.getElementById('certImage');
