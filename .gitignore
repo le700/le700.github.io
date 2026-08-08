@@ -35,3 +35,4 @@ build/
 
 # Local visual-brainstorming session data
 .superpowers/
+.worktrees/
