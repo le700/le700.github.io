@@ -7,11 +7,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     :root {
+      --ambient-offset-x: 0px;
+      --ambient-offset-y: 0px;
+      --ambient-strength: 0.32;
+      --ambient-one-opacity: 0.09;
+      --ambient-two-opacity: 0.07;
+      --ambient-three-opacity: 0.05;
       /* 深色模式（默认） */
       --bg-primary: #1A1A1D;
       --bg-secondary: #222225;
@@ -456,6 +461,153 @@
       inset: 0;
       z-index: 0;
       background: transparent;
+    }
+
+    /* 全页环境光场：仅背景响应，内容保持静止 */
+    #ambient-field {
+      position: fixed;
+      inset: -20vmax;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.95;
+    }
+
+    .ambient-layer {
+      position: absolute;
+      display: block;
+      width: 68vmax;
+      height: 68vmax;
+      border-radius: 50%;
+      filter: blur(72px);
+      will-change: transform;
+      transform: translate3d(var(--ambient-offset-x), var(--ambient-offset-y), 0);
+    }
+
+    .ambient-layer--one {
+      top: -28vmax;
+      left: -18vmax;
+      opacity: var(--ambient-one-opacity);
+      background: radial-gradient(circle, var(--accent-cyan) 0%, rgba(230, 57, 124, 0.18) 35%, transparent 70%);
+      animation: ambient-drift-one 30s ease-in-out infinite alternate;
+    }
+
+    .ambient-layer--two {
+      top: 14vh;
+      right: -30vmax;
+      opacity: var(--ambient-two-opacity);
+      background: radial-gradient(circle, var(--accent-purple) 0%, rgba(255, 77, 143, 0.14) 39%, transparent 72%);
+      animation: ambient-drift-two 38s ease-in-out infinite alternate;
+    }
+
+    .ambient-layer--three {
+      bottom: -38vmax;
+      left: 18vw;
+      width: 74vmax;
+      height: 74vmax;
+      opacity: var(--ambient-three-opacity);
+      background: radial-gradient(circle, var(--accent-blue) 0%, rgba(255, 107, 157, 0.1) 42%, transparent 70%);
+      animation: ambient-drift-three 46s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambient-drift-one {
+      from { margin: 0; }
+      to { margin: 7vmax 4vmax; }
+    }
+
+    @keyframes ambient-drift-two {
+      from { margin: 0; }
+      to { margin: -5vmax 6vmax; }
+    }
+
+    @keyframes ambient-drift-three {
+      from { margin: 0; }
+      to { margin: -4vmax -5vmax; }
+    }
+
+    .hero-explorer-link {
+      position: absolute;
+      z-index: 3;
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      color: var(--accent-cyan);
+      opacity: 0.04;
+      text-decoration: none;
+      border: 1px solid transparent;
+      border-radius: 50%;
+      transform: scale(0.9);
+      transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), background 0.45s ease, box-shadow 0.45s ease;
+    }
+
+    .hero-explorer-link svg {
+      width: 25px;
+      height: 25px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.45;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .hero-explorer-link::after {
+      position: absolute;
+      top: calc(100% + 9px);
+      left: 50%;
+      color: var(--text-secondary);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      content: attr(data-label);
+      opacity: 0;
+      transform: translate(-50%, -4px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .hero-explorer-link:hover,
+    .hero-explorer-link:focus-visible,
+    .hero-explorer-link.is-near {
+      opacity: 1;
+      outline: none;
+      border-color: var(--accent-border);
+      background: var(--accent-glow);
+      box-shadow: 0 0 28px var(--accent-shadow), inset 0 0 18px var(--accent-glow);
+      transform: scale(1);
+    }
+
+    .hero-explorer-link:hover::after,
+    .hero-explorer-link:focus-visible::after,
+    .hero-explorer-link.is-near::after {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .hero-explorer-link--experience { top: 25%; left: 13%; }
+    .hero-explorer-link--projects { top: 61%; left: 20%; }
+    .hero-explorer-link--awards { top: 77%; left: 43%; }
+    .hero-explorer-link--skills { top: 27%; right: 15%; }
+    .hero-explorer-link--education { top: 58%; right: 21%; }
+    .hero-explorer-link--contact { top: 77%; right: 42%; }
+
+    .nav-menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      background: var(--glass-bg);
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .nav-menu-toggle span {
+      display: block;
+      width: 16px;
+      height: 1px;
+      margin: 4px auto;
+      background: currentColor;
+      transition: transform 0.25s ease;
     }
 
     /* Hero 左右边缘渐变遮罩 - 让粒子自然淡出 */
@@ -2267,8 +2419,19 @@
 
     @media (max-width: 768px) {
       /* Navigation */
-      nav { display: none; }
+      nav {
+        display: flex;
+        top: 16px;
+        left: 16px;
+        right: auto;
+        padding: 0;
+        transform: none;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
       .nav-logo { display: none; }
+      .nav-menu-toggle { display: block; }
       .visitor-counter { display: none; }
       .nav-links {
         display: none;
@@ -2287,6 +2450,7 @@
       }
       .nav-links.open { display: flex; }
       .nav-links a { font-size: 24px; font-weight: 500; }
+      .hero-explorer-link { display: none; }
 
       /* Sections */
       section { padding: 80px 20px; max-width: 100%; }
@@ -2382,6 +2546,13 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
       }
+      #ambient-field { display: none; }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      #ambient-field { opacity: 0.3; }
+      .ambient-layer { animation: none; }
+      .hero-explorer-link { display: none; }
     }
   </style>
 </head>
@@ -2395,10 +2566,18 @@
   <div class="grain-overlay"></div>
   <div class="vignette"></div>
   <div class="scanlines"></div>
+  <div id="ambient-field" aria-hidden="true">
+    <span class="ambient-layer ambient-layer--one"></span>
+    <span class="ambient-layer ambient-layer--two"></span>
+    <span class="ambient-layer ambient-layer--three"></span>
+  </div>
 
   <!-- Navigation -->
   <nav id="mainNav">
     <div class="nav-logo">Yue</div>
+    <button id="navMenuToggle" class="nav-menu-toggle" type="button" aria-label="打开导航菜单" aria-controls="navLinks" aria-expanded="false">
+      <span></span><span></span>
+    </button>
     <div class="nav-links" id="navLinks">
       <a href="#experience">实习</a>
       <a href="#projects">项目</a>
@@ -2423,6 +2602,24 @@
   <section class="hero">
     <canvas id="hero-canvas"></canvas>
     <div class="hero-glow"></div>
+    <a class="hero-explorer-link hero-explorer-link--experience" href="#experience" aria-label="前往实习经历" data-label="实习">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19h14M7 19v-4l3-3 2 2 3-3 2 2v6M7 15 5 13l3-3 2 2M12 12l2-2 2 2"/></svg>
+    </a>
+    <a class="hero-explorer-link hero-explorer-link--projects" href="#projects" aria-label="前往项目" data-label="项目">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8 12 4l8 4-8 4-8-4Zm0 8 8 4 8-4M4 8v8M20 8v8M12 12v8"/></svg>
+    </a>
+    <a class="hero-explorer-link hero-explorer-link--awards" href="#awards" aria-label="前往获奖" data-label="获奖">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Zm0 2H5v2a3 3 0 0 0 3 3M16 6h3v2a3 3 0 0 1-3 3M12 13v4M8 20h8"/></svg>
+    </a>
+    <a class="hero-explorer-link hero-explorer-link--skills" href="#skills" aria-label="前往技能" data-label="技能">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="m8 11 8-4M8 13l8 4"/></svg>
+    </a>
+    <a class="hero-explorer-link hero-explorer-link--education" href="#education" aria-label="前往教育经历" data-label="教育">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3.5 3.5 0 0 1 8 5c2 0 4 1.5 4 3.5C12 6.5 14 5 16 5a3.5 3.5 0 0 1 4 .5v13a3.5 3.5 0 0 0-4-.5c-2 0-4 1.5-4 3.5 0-2-2-3.5-4-3.5a3.5 3.5 0 0 0-4 .5v-13Z"/></svg>
+    </a>
+    <a class="hero-explorer-link hero-explorer-link--contact" href="#contact" aria-label="前往联系" data-label="联系">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4V5Z"/><path d="M9 9h6M9 12h4"/></svg>
+    </a>
     <div class="hero-content">
       <div class="hero-eyebrow">Personal Portfolio</div>
       <h1><span class="hero-gradient-name">Yue</span></h1>
@@ -3350,8 +3547,29 @@
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.pushState(null, '', this.getAttribute('href'));
         }
       });
+    });
+
+    const navMenuToggle = document.getElementById('navMenuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    function closeNavMenu() {
+      navLinks.classList.remove('open');
+      navMenuToggle.setAttribute('aria-expanded', 'false');
+      navMenuToggle.setAttribute('aria-label', '打开导航菜单');
+    }
+
+    navMenuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      navMenuToggle.setAttribute('aria-expanded', String(isOpen));
+      navMenuToggle.setAttribute('aria-label', isOpen ? '关闭导航菜单' : '打开导航菜单');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', closeNavMenu));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeNavMenu();
     });
 
     // Navigation scroll effect
@@ -3387,14 +3605,118 @@
     animateCursor();
 
     // Cursor hover effects
-    const hoverElements = document.querySelectorAll('a, button, .award-item, .project-card, .contact-link, .modal-close');
+    const hoverElements = document.querySelectorAll('a, button, .award-item, .project-card, .contact-link, .modal-close, .hero-explorer-link');
     hoverElements.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
 
+    const AmbientField = (() => {
+      const root = document.documentElement;
+      const hero = document.querySelector('.hero');
+      const shortcuts = [...document.querySelectorAll('.hero-explorer-link')];
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+      const current = { x: 0, y: 0 };
+      const target = { x: 0, y: 0 };
+      let frameId = 0;
+
+      function render() {
+        current.x += (target.x - current.x) * 0.045;
+        current.y += (target.y - current.y) * 0.045;
+        root.style.setProperty('--ambient-offset-x', (current.x * 42).toFixed(2) + 'px');
+        root.style.setProperty('--ambient-offset-y', (current.y * 32).toFixed(2) + 'px');
+        frameId = requestAnimationFrame(render);
+      }
+
+      function stop() {
+        cancelAnimationFrame(frameId);
+        frameId = 0;
+        target.x = 0;
+        target.y = 0;
+        current.x = 0;
+        current.y = 0;
+        root.style.setProperty('--ambient-offset-x', '0px');
+        root.style.setProperty('--ambient-offset-y', '0px');
+      }
+
+      function syncMotion() {
+        stop();
+        if (!reduceMotion.matches && finePointer.matches) frameId = requestAnimationFrame(render);
+      }
+
+      function setPointer(event) {
+        if (!finePointer.matches || reduceMotion.matches) return;
+        target.x = (event.clientX / window.innerWidth - 0.5) * 2;
+        target.y = (event.clientY / window.innerHeight - 0.5) * 2;
+      }
+
+      function resetPointer() {
+        target.x = 0;
+        target.y = 0;
+      }
+
+      function revealNearestShortcut(event) {
+        if (!finePointer.matches || reduceMotion.matches) return;
+        let nearest = null;
+        let nearestDistance = Infinity;
+        shortcuts.forEach(link => {
+          const bounds = link.getBoundingClientRect();
+          const distance = Math.hypot(event.clientX - (bounds.left + bounds.width / 2), event.clientY - (bounds.top + bounds.height / 2));
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearest = link;
+          }
+        });
+        shortcuts.forEach(link => link.classList.toggle('is-near', link === nearest && nearestDistance <= 140));
+      }
+
+      function clearShortcutReveal() {
+        shortcuts.forEach(link => link.classList.remove('is-near'));
+      }
+
+      function applyStrength(strength) {
+        root.style.setProperty('--ambient-strength', String(strength));
+        root.style.setProperty('--ambient-one-opacity', (0.28 * strength).toFixed(3));
+        root.style.setProperty('--ambient-two-opacity', (0.22 * strength).toFixed(3));
+        root.style.setProperty('--ambient-three-opacity', (0.16 * strength).toFixed(3));
+      }
+
+      function setSectionIntensity(entries) {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const id = visible.target.id;
+        applyStrength(id === 'projects' || id === 'awards' ? 0.12 : visible.target === hero ? 1 : 0.32);
+      }
+
+      const observer = new IntersectionObserver(setSectionIntensity, { threshold: [0.2, 0.5, 0.8] });
+      observer.observe(hero);
+      document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
+
+      document.addEventListener('pointermove', setPointer, { passive: true });
+      hero.addEventListener('pointermove', revealNearestShortcut, { passive: true });
+      hero.addEventListener('pointerleave', () => {
+        resetPointer();
+        clearShortcutReveal();
+      });
+      shortcuts.forEach(link => {
+        link.addEventListener('focus', () => link.classList.add('is-near'));
+        link.addEventListener('blur', () => link.classList.remove('is-near'));
+      });
+      window.addEventListener('blur', resetPointer);
+      reduceMotion.addEventListener('change', syncMotion);
+      finePointer.addEventListener('change', syncMotion);
+      syncMotion();
+
+      return { resetPointer, syncMotion };
+    })();
+
+    // Legacy particle runtime retained as inactive source during this focused interaction change.
+    if (false) {
     // Three.js Nebula Background - 螺旋星云3D (IIFE封装)
-    const HeroNebula = (() => {
+    const LegacyNebula = (() => {
       const canvas = document.getElementById('hero-canvas');
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 3000);
@@ -3796,15 +4118,16 @@
         }
 
         // 星云系统跟随
-        if (HeroNebula && HeroNebula.nebulaPoints) {
-          HeroNebula.nebulaPoints.rotation.x += (tiltY * 0.1 - HeroNebula.nebulaPoints.rotation.x) * 0.05;
-          HeroNebula.nebulaPoints.rotation.y += (tiltX * 0.1 - HeroNebula.nebulaPoints.rotation.y) * 0.05;
+        if (LegacyNebula && LegacyNebula.nebulaPoints) {
+          LegacyNebula.nebulaPoints.rotation.x += (tiltY * 0.1 - LegacyNebula.nebulaPoints.rotation.x) * 0.05;
+          LegacyNebula.nebulaPoints.rotation.y += (tiltX * 0.1 - LegacyNebula.nebulaPoints.rotation.y) * 0.05;
         }
 
         requestAnimationFrame(animateTilt);
       }
       animateTilt();
     })();
+    }
 
     // GSAP Animations
     gsap.registerPlugin(ScrollTrigger);
